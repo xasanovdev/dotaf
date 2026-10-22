@@ -1,0 +1,18 @@
+{
+  "name": "dotaf",
+  "version": "0.0.0",
+  "description": "The `npx dotaf` command: init, add, theme, lint and mcp.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "dotaf": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc",
+    "test": "vitest run --passWithNoTests"
+  }
+}

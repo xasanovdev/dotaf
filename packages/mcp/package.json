@@ -1,0 +1,21 @@
+{
+  "name": "@dotaf/mcp",
+  "version": "0.0.0",
+  "description": "MCP server that gives coding agents the project's design system: tokens, components, theme updates and UI lint.",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc",
+    "test": "vitest run --passWithNoTests"
+  }
+}
