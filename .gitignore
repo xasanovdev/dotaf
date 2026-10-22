@@ -8,3 +8,4 @@ coverage/
 .env.*
 !.env.example
 CLAUDE.local.md
+packages/core/dotaf.schema.json

@@ -11,11 +11,15 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "dotaf.schema.json"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc -p tsconfig.build.json && node scripts/emit-schema.js",
     "typecheck": "tsc",
-    "test": "vitest run --passWithNoTests"
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "zod": "^4.6.7"
   }
 }
