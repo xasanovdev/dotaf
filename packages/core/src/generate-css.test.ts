@@ -1,3 +1,4 @@
+import { suggestedTokens } from "@dotaf/stylelint-config";
 import postcss from "postcss";
 import { describe, expect, test } from "vitest";
 import { generateCss, parseConfig, type DotafConfig } from "./index.js";
@@ -133,6 +134,16 @@ describe("generateCss", () => {
 
     expect(tokens.size).toBeGreaterThan(0);
     expect([...tokens].filter((token) => !documented.has(token))).toEqual([]);
+  });
+
+  // The lint rule names tokens in its messages but can't import core, so core holds it to them.
+  test("every token the stylelint rule suggests is generated", () => {
+    const generated = new Set<string>();
+    postcss.parse(generateCss(parseConfig({}))).walkDecls(/^--dotaf-/, (declaration) => {
+      generated.add(declaration.prop);
+    });
+
+    expect(suggestedTokens.filter((token) => !generated.has(`--dotaf-${token}`))).toEqual([]);
   });
 
   // A reviewable copy of what `dotaf.css` looks like for the default brand.

@@ -16,6 +16,15 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc",
-    "test": "vitest run --passWithNoTests"
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "postcss-value-parser": "^4.2.0"
+  },
+  "devDependencies": {
+    "stylelint": "^17.16.0"
+  },
+  "peerDependencies": {
+    "stylelint": "^17"
   }
 }
