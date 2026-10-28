@@ -20,7 +20,8 @@ export async function loadConfig(cwd: string): Promise<ResolvedConfig> {
 
   let input: unknown;
   try {
-    input = JSON.parse(source);
+    // Windows editors may save a byte order mark, which JSON.parse rejects.
+    input = JSON.parse(source.replace(/^\uFEFF/, ""));
   } catch (error) {
     throw new DotafConfigError(`${path} is not valid JSON:`, [
       error instanceof Error ? error.message : String(error),

@@ -38,6 +38,14 @@ describe("configJsonSchema", () => {
     expect(editorVerdicts(patternOf("colors", "primary"), color)).toEqual([false, false]);
   });
 
+  test("the editor judges paths like the parser: relative, inside the project", () => {
+    expect(editorVerdicts(patternOf("paths", "css"), "src/styles/dotaf.css")).toEqual([true, true]);
+    for (const bad of ["../x.css", "/x.css", "src/main.tsx"]) {
+      expect(editorVerdicts(patternOf("paths", "css"), bad)).toEqual([false, false]);
+    }
+    expect(editorVerdicts(patternOf("paths", "components"), "../ui")).toEqual([false, false]);
+  });
+
   test("the editor accepts the same font stacks the parser accepts", () => {
     expect(editorVerdicts(patternOf("font", "sans"), "'Open Sans', system-ui")).toEqual([
       true,

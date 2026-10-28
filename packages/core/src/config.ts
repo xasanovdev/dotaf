@@ -77,6 +77,20 @@ const fontStack = z
     error: 'must be comma-separated font families ("Inter, system-ui, sans-serif")',
   });
 
+// Where init and add write files. A dotaf.json may come from someone else's theme, so a path
+// stays relative and inside the project, with forward slashes, and the CSS is a .css file.
+const insideProject = String.raw`(?![A-Za-z]:)(?!/)(?!(?:[^/]*/)*\.\.(?:/|$))[^\\]+`;
+const projectDir = z.string().regex(new RegExp(`^${insideProject}$`), {
+  error: "must be a relative path inside the project, like src/components/ui",
+});
+const projectCss = z.string().regex(new RegExp(String.raw`^${insideProject}\.css$`), {
+  error: "must be a .css file inside the project, like src/styles/dotaf.css",
+});
+
+/** The choices dotaf.json offers, for tools that ask the user. */
+export const radii = ["none", "sm", "md", "lg", "full"] as const;
+export const densities = ["compact", "comfortable", "spacious"] as const;
+
 const configSchema = z.strictObject({
   $schema: z.string().optional(),
   colors: z
@@ -105,12 +119,12 @@ const configSchema = z.strictObject({
       mono: fontStack.default("ui-monospace, monospace"),
     })
     .prefault({}),
-  radius: z.enum(["none", "sm", "md", "lg", "full"]).default("md"),
-  density: z.enum(["compact", "comfortable", "spacious"]).default("comfortable"),
+  radius: z.enum(radii).default("md"),
+  density: z.enum(densities).default("comfortable"),
   paths: z
     .strictObject({
-      components: z.string().default("src/components/ui"),
-      css: z.string().default("src/styles/dotaf.css"),
+      components: projectDir.default("src/components/ui"),
+      css: projectCss.default("src/styles/dotaf.css"),
     })
     .prefault({}),
 });

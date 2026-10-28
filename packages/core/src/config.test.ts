@@ -82,6 +82,26 @@ describe("parseConfig", () => {
     );
   });
 
+  // A dotaf.json can arrive as someone else's theme, so where it writes must stay safe.
+  test.each(["src/main.tsx", "../outside.css", "/etc/dotaf.css", "C:/dotaf.css", "src\\dotaf.css"])(
+    "paths.css %s is rejected: it must be a .css file inside the project",
+    (css) => {
+      expect(() => parseConfig({ paths: { css } })).toThrow(/paths\.css/);
+    },
+  );
+
+  test("paths.components must stay inside the project", () => {
+    expect(() => parseConfig({ paths: { components: "../shared/ui" } })).toThrow(
+      /paths\.components/,
+    );
+    expect(
+      parseConfig({ paths: { css: "app/dotaf.css", components: "components/ui" } }).paths,
+    ).toEqual({
+      css: "app/dotaf.css",
+      components: "components/ui",
+    });
+  });
+
   test("a misspelled key is rejected instead of silently ignored", () => {
     expect(() => parseConfig({ radious: "lg" })).toThrow(/radious/);
   });
