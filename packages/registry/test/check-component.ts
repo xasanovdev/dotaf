@@ -5,7 +5,7 @@ import ts from "typescript";
 import { componentFiles, packageComponents } from "../src/registry.js";
 import { getComponent, type ComponentMeta } from "../src/index.js";
 
-const tsconfig = fileURLToPath(new URL("../tsconfig.json", import.meta.url));
+const componentsTsconfig = fileURLToPath(new URL("../tsconfig.json", import.meta.url));
 
 /** Ways a component folder disagrees with itself; empty when it is consistent. */
 export async function checkComponent(name: string, root = packageComponents): Promise<string[]> {
@@ -29,7 +29,7 @@ interface Source {
 // Compiles with the registry's own tsconfig, so the check sees what `tsc` sees.
 function typeScriptSource(path: string): Source {
   const config = ts.getParsedCommandLineOfConfigFile(
-    tsconfig,
+    componentsTsconfig,
     {},
     {
       ...ts.sys,

@@ -11,12 +11,14 @@
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
     "lint": "eslint .",
+    "lint:css": "stylelint \"**/*.css\" --ignore-pattern \"**/dist/**\"",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check": "pnpm format:check && pnpm build && pnpm lint && pnpm typecheck && pnpm test",
+    "check": "pnpm format:check && pnpm build && pnpm lint && pnpm lint:css && pnpm typecheck && pnpm test",
     "prepare": "husky"
   },
   "devDependencies": {
+    "@dotaf/stylelint-config": "workspace:*",
     "@eslint/js": "^9.39.5",
     "@types/node": "^24.19.2",
     "eslint": "^9.39.5",
@@ -26,6 +28,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^17.6.0",
     "prettier": "^3.9.10",
+    "stylelint": "^17.16.0",
     "turbo": "^2.11.10",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.72.0",

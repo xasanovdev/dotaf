@@ -16,7 +16,7 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "typecheck": "tsc",
+    "typecheck": "tsc && tsc -p tsconfig.strict.json",
     "test": "vitest run"
   },
   "dependencies": {

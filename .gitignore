@@ -9,3 +9,6 @@ coverage/
 !.env.example
 CLAUDE.local.md
 packages/core/dotaf.schema.json
+
+# Vitest browser mode writes failure screenshots and traces here.
+.vitest/

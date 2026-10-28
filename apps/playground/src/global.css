@@ -1,0 +1,7 @@
+body {
+  margin: 0;
+  background: var(--dotaf-color-bg);
+  color: var(--dotaf-color-fg);
+  font-family: var(--dotaf-font-sans);
+  font-size: var(--dotaf-text-base);
+}

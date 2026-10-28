@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    // UI code is typechecked the way a user project compiles it: classes read as
+    // styles.root, and an optional prop accepts undefined (with noUncheckedIndexedAccess a
+    // CSS Modules class is string | undefined). Logic packages keep the stricter base.
+    "noPropertyAccessFromIndexSignature": false,
+    "exactOptionalPropertyTypes": false
+  }
+}

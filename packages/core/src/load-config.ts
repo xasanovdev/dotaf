@@ -2,8 +2,11 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { DotafConfigError, parseConfig, type ResolvedConfig } from "./config.js";
 
+/** The file a project keeps its brand in, at the project root. */
+export const configFileName = "dotaf.json";
+
 export async function loadConfig(cwd: string): Promise<ResolvedConfig> {
-  const path = join(cwd, "dotaf.json");
+  const path = join(cwd, configFileName);
 
   let source: string;
   try {

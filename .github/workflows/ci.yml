@@ -23,4 +23,6 @@ jobs:
           node-version-file: .nvmrc
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      # Browser tests in apps/playground run in headless Chromium.
+      - run: pnpm --filter @dotaf/playground exec playwright install --with-deps chromium
       - run: pnpm check

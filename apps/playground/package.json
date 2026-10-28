@@ -1,0 +1,30 @@
+{
+  "name": "@dotaf/playground",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Every registry component in every variant, in light and dark, for contributors and browser tests.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "typecheck": "tsc",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "react": "^19.3.1",
+    "react-aria-components": "^1.22.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@dotaf/core": "workspace:*",
+    "@dotaf/registry": "workspace:*",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "@vitest/browser-playwright": "^5.0.5",
+    "playwright": "^1.64.1",
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5",
+    "vitest-browser-react": "^2.3.0"
+  }
+}

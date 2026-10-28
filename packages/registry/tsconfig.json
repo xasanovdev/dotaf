@@ -1,11 +1,9 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "../../tsconfig.ui.json",
   "compilerOptions": {
-    "noEmit": true,
-    "lib": ["ES2023", "DOM", "DOM.Iterable"],
-    "jsx": "react-jsx",
-    // Components read classes as styles.root, the way user projects write CSS Modules.
-    "noPropertyAccessFromIndexSignature": false
+    "noEmit": true
   },
+  // Components and fixtures compile as UI code; tsconfig.strict.json holds src/ and test/
+  // to the repo's full strictness.
   "include": ["src", "test", "components", "types"]
 }
