@@ -266,6 +266,9 @@ importers:
 
   packages/core:
     dependencies:
+      '@dotaf/registry':
+        specifier: workspace:*
+        version: link:../registry
       zod:
         specifier: ^4.6.7
         version: 4.6.7

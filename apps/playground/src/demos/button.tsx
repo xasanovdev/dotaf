@@ -1,4 +1,4 @@
-import { Button } from "@registry/button/button";
+import { Button } from "@registry/button";
 import styles from "./demo.module.css";
 
 const variants = ["primary", "secondary", "ghost", "danger"] as const;

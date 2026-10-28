@@ -5,13 +5,14 @@ import { getComponent, listComponents, RegistryError } from "./index.js";
 const components = fixture("components");
 
 describe("listComponents", () => {
-  test("returns the meta of every component folder, skipping dot folders", async () => {
+  test("returns the meta of every component, skipping files that are not one", async () => {
     const metas = await listComponents(components);
 
-    expect(metas.map((meta) => meta.name)).toEqual(["badge"]);
+    expect(metas.map((meta) => meta.name)).toEqual(["badge", "tag"]);
     expect(metas[0]).toMatchObject({
       description: "A short status label shown next to other content.",
       dependencies: ["react-aria-components"],
+      registryDependencies: [],
       props: [
         { name: "variant", default: '"neutral"', required: false },
         { name: "ref", required: false },
@@ -21,9 +22,9 @@ describe("listComponents", () => {
   });
 
   test.each([
-    ["invalid", /badge[/\\]meta\.json is invalid:[\s\S]*description/],
-    ["malformed", /badge[/\\]meta\.json is invalid:[\s\S]*JSON/],
-    ["misnamed", /badge[/\\]meta\.json is invalid:\n {2}- name: must match its folder "badge"/],
+    ["invalid", /badge\.json is invalid:[\s\S]*description/],
+    ["malformed", /badge\.json is invalid:[\s\S]*JSON/],
+    ["misnamed", /badge\.json is invalid:\n {2}- name: must match its file name "badge"/],
     ["incomplete", /badge is missing badge\.tsx, badge\.module\.css/],
   ])("a %s component fails with the file and what is wrong", async (root, message) => {
     const list = listComponents(fixture(root));

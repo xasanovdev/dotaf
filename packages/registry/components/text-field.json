@@ -1,6 +1,6 @@
 {
   "name": "text-field",
-  "description": "A single-line text input with its label, optional description and validation error. Compose the parts you need inside TextField: TextField.Label, TextField.Input, TextField.Description and TextField.Error (renders only while the value is invalid).",
+  "description": "A single-line text input with its label, optional description and validation error. Compose the parts you need inside TextField: TextFieldLabel, TextFieldInput, TextFieldDescription and TextFieldError (renders only while the value is invalid), all exported from the text-field file.",
   "dependencies": ["react-aria-components"],
   "props": [
     {
@@ -46,7 +46,7 @@
     {
       "name": "validate",
       "type": "(value: string) => string | string[] | true | null | undefined",
-      "description": "Returns an error message for an invalid value, shown by TextField.Error."
+      "description": "Returns an error message for an invalid value, shown by TextFieldError."
     },
     {
       "name": "validationBehavior",
@@ -55,5 +55,5 @@
       "description": "native validates on form submit; aria validates as the user types."
     }
   ],
-  "example": "<TextField name=\"email\" isRequired>\n  <TextField.Label>Email</TextField.Label>\n  <TextField.Input type=\"email\" />\n  <TextField.Description>We never share it.</TextField.Description>\n  <TextField.Error />\n</TextField>"
+  "example": "<TextField name=\"email\" isRequired>\n  <TextFieldLabel>Email</TextFieldLabel>\n  <TextFieldInput type=\"email\" />\n  <TextFieldDescription>We never share it.</TextFieldDescription>\n  <TextFieldError />\n</TextField>"
 }

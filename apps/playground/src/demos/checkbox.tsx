@@ -1,4 +1,4 @@
-import { Checkbox } from "@registry/checkbox/checkbox";
+import { Checkbox } from "@registry/checkbox";
 import styles from "./demo.module.css";
 
 export function CheckboxDemo() {

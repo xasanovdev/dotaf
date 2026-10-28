@@ -1,0 +1,19 @@
+{
+  "name": "drifty",
+  "description": "A component whose meta and code disagree, to prove the checks catch it.",
+  "dependencies": [],
+  "props": [
+    {
+      "name": "label",
+      "type": "string",
+      "description": "Not in DriftyProps."
+    },
+    {
+      "name": "size",
+      "type": "\"sm\"",
+      "description": "Required in code, optional here."
+    }
+  ],
+  "example": "<Drifty size=\"sm\" />",
+  "registryDependencies": ["ghost"]
+}

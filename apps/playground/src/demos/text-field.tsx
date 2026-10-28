@@ -1,26 +1,32 @@
-import { TextField } from "@registry/text-field/text-field";
+import {
+  TextField,
+  TextFieldLabel,
+  TextFieldInput,
+  TextFieldDescription,
+  TextFieldError,
+} from "@registry/text-field";
 import styles from "./demo.module.css";
 
 export function TextFieldDemo() {
   return (
     <div className={styles.grid}>
       <TextField>
-        <TextField.Label>Name</TextField.Label>
-        <TextField.Input placeholder="Ada Lovelace" />
+        <TextFieldLabel>Name</TextFieldLabel>
+        <TextFieldInput placeholder="Ada Lovelace" />
       </TextField>
       <TextField
         validationBehavior="aria"
         defaultValue="ada@"
         validate={(value) => (value.includes(".") ? null : "Enter a full email address")}
       >
-        <TextField.Label>Email</TextField.Label>
-        <TextField.Input type="email" />
-        <TextField.Description>We never share it.</TextField.Description>
-        <TextField.Error />
+        <TextFieldLabel>Email</TextFieldLabel>
+        <TextFieldInput type="email" />
+        <TextFieldDescription>We never share it.</TextFieldDescription>
+        <TextFieldError />
       </TextField>
       <TextField isDisabled defaultValue="Read only for now">
-        <TextField.Label>Disabled</TextField.Label>
-        <TextField.Input />
+        <TextFieldLabel>Disabled</TextFieldLabel>
+        <TextFieldInput />
       </TextField>
     </div>
   );

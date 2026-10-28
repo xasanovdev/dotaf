@@ -36,6 +36,8 @@ const metaSchema = z.strictObject({
   description: z.string().min(1),
   /** npm packages the component imports, installed into the user's project. */
   dependencies: z.array(z.string()).default([]),
+  /** Other registry components it imports as "./<name>", copied alongside it. */
+  registryDependencies: z.array(z.string()).default([]),
   props: z.array(propSchema).default([]),
   /** A minimal JSX usage an agent can adapt. */
   example: z.string().min(1),
@@ -44,7 +46,7 @@ const metaSchema = z.strictObject({
 export type ComponentMeta = z.output<typeof metaSchema>;
 
 export interface ComponentFile {
-  /** File name relative to the component folder, e.g. `button.module.css`. */
+  /** File name, e.g. `button.module.css`; components sit side by side in one folder. */
   path: string;
   content: string;
 }
@@ -54,26 +56,20 @@ export interface RegistryComponent {
   files: ComponentFile[];
 }
 
-// Dot folders hold editor or tool state, never components.
+// Each component is <name>.json beside its source files. Dot files hold tool state.
 async function componentNames(root: string): Promise<string[]> {
   const entries = await readdir(root, { withFileTypes: true });
   return entries
-    .filter((entry) => entry.isDirectory() && !entry.name.startsWith("."))
-    .map((entry) => entry.name)
+    .filter(
+      (entry) => entry.isFile() && entry.name.endsWith(".json") && !entry.name.startsWith("."),
+    )
+    .map((entry) => entry.name.slice(0, -".json".length))
     .sort();
 }
 
 async function readMeta(root: string, name: string): Promise<ComponentMeta> {
-  const path = join(name, "meta.json");
-  let text: string;
-  try {
-    text = await readFile(join(root, path), "utf8");
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === "ENOENT") {
-      throw new RegistryError(`${name} is missing meta.json`);
-    }
-    throw error;
-  }
+  const path = `${name}.json`;
+  const text = await readFile(join(root, path), "utf8");
 
   let json: unknown;
   try {
@@ -90,7 +86,7 @@ async function readMeta(root: string, name: string): Promise<ComponentMeta> {
     );
   }
   if (result.data.name !== name) {
-    throw new RegistryError(`${path} is invalid:`, [`name: must match its folder "${name}"`]);
+    throw new RegistryError(`${path} is invalid:`, [`name: must match its file name "${name}"`]);
   }
   return result.data;
 }
@@ -100,7 +96,7 @@ async function readCompleteMeta(root: string, name: string): Promise<ComponentMe
   const meta = await readMeta(root, name);
   const missing: string[] = [];
   for (const file of componentFiles(name)) {
-    await access(join(root, name, file)).catch(() => missing.push(file));
+    await access(join(root, file)).catch(() => missing.push(file));
   }
   if (missing.length > 0) {
     throw new RegistryError(`${name} is missing ${missing.join(", ")}`);
@@ -129,7 +125,7 @@ export async function getComponent(
   const files = await Promise.all(
     componentFiles(name).map(async (path) => ({
       path,
-      content: await readFile(join(root, name, path), "utf8"),
+      content: await readFile(join(root, path), "utf8"),
     })),
   );
   return { meta, files };

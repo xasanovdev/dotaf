@@ -2,5 +2,10 @@ export { configJsonSchema, densities, DotafConfigError, parseConfig, radii } fro
 export type { DarkPalette, DotafConfig, Palette, ResolvedConfig } from "./config.js";
 export { generateCss } from "./generate-css.js";
 export { configFileName, loadConfig } from "./load-config.js";
-export { DotafConfigExistsError, detectProject, initProject, readTheme } from "./init.js";
-export type { Framework, InitResult, PackageManager, ProjectInfo } from "./init.js";
+export { addComponents } from "./add.js";
+export type { AddedComponent, AddResult, KeptComponent } from "./add.js";
+export { DotafConfigExistsError, initProject, readTheme } from "./init.js";
+export type { InitResult } from "./init.js";
+export { detectProject } from "./project.js";
+export type { Framework, PackageManager, ProjectInfo } from "./project.js";
+export { RegistryError } from "@dotaf/registry";

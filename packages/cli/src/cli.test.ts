@@ -122,6 +122,52 @@ describe("dotaf init", () => {
   });
 });
 
+describe("dotaf add", () => {
+  const withConfig = { ...vite, "dotaf.json": JSON.stringify({}) };
+
+  test("copies the components and prints what was added and what to install", async () => {
+    const root = await project(withConfig);
+
+    const { code, out } = await dotaf(["add", "button", "checkbox"], root);
+
+    expect(code).toBe(0);
+    expect(await readFile(join(root, "src/components/ui/checkbox.tsx"), "utf8")).toContain(
+      "export function Checkbox",
+    );
+    expect(out).toContain(
+      "Added button: src/components/ui/button.tsx, src/components/ui/button.module.css",
+    );
+    expect(out).toContain("Added checkbox:");
+    expect(out).toContain("pnpm add react-aria-components");
+  });
+
+  test("an existing file is kept and the output says how to replace it", async () => {
+    const root = await project({ ...withConfig, "src/components/ui/button.tsx": "// mine\n" });
+
+    const { code, out } = await dotaf(["add", "button"], root);
+
+    expect(code).toBe(0);
+    expect(out).toContain(
+      "Kept button: src/components/ui/button.tsx already exists; src/components/ui/button.module.css is missing. Add --overwrite to replace it.",
+    );
+    expect(await readFile(join(root, "src/components/ui/button.tsx"), "utf8")).toBe("// mine\n");
+  });
+
+  test("an unknown component is one clean line listing the ones that exist", async () => {
+    const { code, err } = await dotaf(["add", "buton"], await project(withConfig));
+
+    expect(code).toBe(1);
+    expect(err).toMatch(/^No component named "buton". Available: button, card/);
+  });
+
+  test("without component names it prints usage and fails", async () => {
+    const { code, err } = await dotaf(["add"], await project(withConfig));
+
+    expect(code).toBe(1);
+    expect(err).toContain("dotaf add <component...>");
+  });
+});
+
 describe("dotaf", () => {
   test.each([["--help"], ["help"], ["init", "--help"]])(
     "%s prints usage and succeeds",

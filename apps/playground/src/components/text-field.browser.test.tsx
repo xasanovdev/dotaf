@@ -1,4 +1,10 @@
-import { TextField } from "@registry/text-field/text-field";
+import {
+  TextField,
+  TextFieldLabel,
+  TextFieldInput,
+  TextFieldDescription,
+  TextFieldError,
+} from "@registry/text-field";
 import { describe, expect, test } from "vitest";
 import { page, userEvent } from "vitest/browser";
 import { render } from "vitest-browser-react";
@@ -12,10 +18,10 @@ function EmailField() {
       validationBehavior="aria"
       validate={(value) => (value === "" || value.includes("@") ? null : "Enter a valid email")}
     >
-      <TextField.Label>Email</TextField.Label>
-      <TextField.Input type="email" />
-      <TextField.Description>We never share it.</TextField.Description>
-      <TextField.Error />
+      <TextFieldLabel>Email</TextFieldLabel>
+      <TextFieldInput type="email" />
+      <TextFieldDescription>We never share it.</TextFieldDescription>
+      <TextFieldError />
     </TextField>
   );
 }

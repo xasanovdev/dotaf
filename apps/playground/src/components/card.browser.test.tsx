@@ -1,4 +1,4 @@
-import { Card } from "@registry/card/card";
+import { Card, CardHeader, CardTitle, CardBody } from "@registry/card";
 import { describe, expect, test } from "vitest";
 import { page } from "vitest/browser";
 import { render } from "vitest-browser-react";
@@ -10,10 +10,10 @@ describe("Card", () => {
   test("the title names the card for assistive technology", async () => {
     await render(
       <Card>
-        <Card.Header>
-          <Card.Title>Pro plan</Card.Title>
-        </Card.Header>
-        <Card.Body>Unlimited projects.</Card.Body>
+        <CardHeader>
+          <CardTitle>Pro plan</CardTitle>
+        </CardHeader>
+        <CardBody>Unlimited projects.</CardBody>
       </Card>,
     );
 
@@ -24,10 +24,10 @@ describe("Card", () => {
     await render(
       <>
         <Card>
-          <Card.Title>Default</Card.Title>
+          <CardTitle>Default</CardTitle>
         </Card>
         <Card>
-          <Card.Title level={2}>Section</Card.Title>
+          <CardTitle level={2}>Section</CardTitle>
         </Card>
       </>,
     );
@@ -40,10 +40,10 @@ describe("Card", () => {
     await render(
       <>
         <Card>
-          <Card.Title>Free</Card.Title>
+          <CardTitle>Free</CardTitle>
         </Card>
         <Card>
-          <Card.Title>Pro</Card.Title>
+          <CardTitle>Pro</CardTitle>
         </Card>
       </>,
     );
@@ -55,7 +55,7 @@ describe("Card", () => {
   test("a card without a title points at no missing id", async () => {
     const { container } = await render(
       <Card>
-        <Card.Body>Untitled</Card.Body>
+        <CardBody>Untitled</CardBody>
       </Card>,
     );
 
@@ -65,7 +65,7 @@ describe("Card", () => {
   test("a title with its own id still names the card", async () => {
     await render(
       <Card>
-        <Card.Title id="plan-title">Team plan</Card.Title>
+        <CardTitle id="plan-title">Team plan</CardTitle>
       </Card>,
     );
 
@@ -76,11 +76,11 @@ describe("Card", () => {
     setTheme(theme);
     const { container } = await render(
       <Card>
-        <Card.Header>
-          <Card.Title>Pro plan</Card.Title>
+        <CardHeader>
+          <CardTitle>Pro plan</CardTitle>
           $12 per month
-        </Card.Header>
-        <Card.Body>Unlimited projects.</Card.Body>
+        </CardHeader>
+        <CardBody>Unlimited projects.</CardBody>
       </Card>,
     );
 

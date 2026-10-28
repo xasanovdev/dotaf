@@ -3,7 +3,7 @@ import { fileURLToPath } from "node:url";
 import postcss from "postcss";
 import ts from "typescript";
 import { componentFiles, packageComponents } from "../src/registry.js";
-import { getComponent, type ComponentMeta } from "../src/index.js";
+import { getComponent, listComponents, type ComponentMeta } from "../src/index.js";
 
 const componentsTsconfig = fileURLToPath(new URL("../tsconfig.json", import.meta.url));
 
@@ -12,13 +12,35 @@ export async function checkComponent(name: string, root = packageComponents): Pr
   const { meta, files } = await getComponent(name, root);
   const [tsxPath = "", cssPath = ""] = componentFiles(name);
   const content = (path: string) => files.find((file) => file.path === path)?.content ?? "";
-  const source = typeScriptSource(join(root, name, tsxPath));
+  const source = typeScriptSource(join(root, tsxPath));
+  const registry = new Set((await listComponents(root)).map((component) => component.name));
 
   return [
     ...propDrift(meta, source),
     ...missingClasses(cssPath, content(tsxPath), content(cssPath)),
     ...foreignImports(meta, source.file),
+    ...meta.registryDependencies
+      .filter((dependency) => !registry.has(dependency))
+      .map(
+        (dependency) =>
+          `registryDependencies lists "${dependency}", which the registry does not have`,
+      ),
+    ...(isClientModule(source.file)
+      ? []
+      : [`${tsxPath} must start with "use client" so Next.js server components can render it`]),
   ];
+}
+
+// Every component is interactive or keeps state, so it runs on the client; without the
+// directive, importing it from a Next.js server component fails to build.
+function isClientModule(file: ts.SourceFile): boolean {
+  const [first] = file.statements;
+  return (
+    first !== undefined &&
+    ts.isExpressionStatement(first) &&
+    ts.isStringLiteral(first.expression) &&
+    first.expression.text === "use client"
+  );
 }
 
 interface Source {
@@ -66,18 +88,18 @@ function propDrift(meta: ComponentMeta, { file, checker }: Source): string[] {
   return [
     ...[...documented.keys()]
       .filter((prop) => !props.has(prop))
-      .map((prop) => `meta.json documents "${prop}", which ${typeName} does not have`),
+      .map((prop) => `${meta.name}.json documents "${prop}", which ${typeName} does not have`),
     ...own
       .filter((prop) => !documented.has(prop))
-      .map((prop) => `${typeName} declares "${prop}", which meta.json does not document`),
+      .map((prop) => `${typeName} declares "${prop}", which ${meta.name}.json does not document`),
     ...[...documented.values()].flatMap((prop) => {
       const symbol = props.get(prop.name);
       if (symbol === undefined) return [];
       const required = (symbol.flags & ts.SymbolFlags.Optional) === 0;
       if (required === prop.required) return [];
       return required
-        ? [`meta.json marks "${prop.name}" optional, but ${typeName} requires it`]
-        : [`meta.json marks "${prop.name}" required, but ${typeName} makes it optional`];
+        ? [`${meta.name}.json marks "${prop.name}" optional, but ${typeName} requires it`]
+        : [`${meta.name}.json marks "${prop.name}" required, but ${typeName} makes it optional`];
     }),
   ];
 }
@@ -99,13 +121,14 @@ function missingClasses(cssPath: string, tsx: string, css: string): string[] {
     .map((className) => `styles.${className} has no .${className} rule in ${cssPath}`);
 }
 
-// Components are copied into user projects, so they may import only what meta.json declares
+// Components are copied into user projects, so they may import only what their meta declares
 // (AGENTS.md: no internal imports). Dynamic import() is not checked.
 function foreignImports(meta: ComponentMeta, file: ts.SourceFile): string[] {
   const allowed = (specifier: string) =>
     specifier === "react" ||
     specifier === `./${meta.name}.module.css` ||
-    meta.dependencies.some((dep) => specifier === dep || specifier.startsWith(`${dep}/`));
+    meta.dependencies.some((dep) => specifier === dep || specifier.startsWith(`${dep}/`)) ||
+    meta.registryDependencies.some((dep) => specifier === `./${dep}`);
 
   return file.statements
     .flatMap((statement) =>
@@ -116,5 +139,8 @@ function foreignImports(meta: ComponentMeta, file: ts.SourceFile): string[] {
         : [],
     )
     .filter((specifier) => !allowed(specifier))
-    .map((specifier) => `imports "${specifier}", which meta.json does not list as a dependency`);
+    .map(
+      (specifier) =>
+        `imports "${specifier}", which ${meta.name}.json does not list as a dependency`,
+    );
 }

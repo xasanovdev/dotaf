@@ -1,0 +1,15 @@
+{
+  "name": "tag",
+  "description": "A removable label, built from a badge to prove components can use each other.",
+  "dependencies": ["react-aria-components"],
+  "registryDependencies": ["badge"],
+  "props": [
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "required": true,
+      "description": "Tag text."
+    }
+  ],
+  "example": "<Tag>Design</Tag>"
+}

@@ -1,0 +1,23 @@
+{
+  "name": "card",
+  "description": "A bordered surface that groups related content, like a plan, a setting group or a summary. Compose any of CardHeader (CardTitle plus subtitle text), CardTitle on its own, CardBody and CardFooter (actions, right-aligned), all exported from the card file. CardTitle names the card for screen readers; set its level to fit the page's heading outline. Static only: for a clickable card, put a link or button inside. The example's Button comes from the button component.",
+  "dependencies": [],
+  "props": [
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "description": "Any of CardHeader, CardTitle, CardBody and CardFooter, in reading order."
+    },
+    {
+      "name": "ref",
+      "type": "Ref<HTMLElement>",
+      "description": "The rendered <article> element."
+    },
+    {
+      "name": "aria-labelledby",
+      "type": "string",
+      "description": "Overrides the name taken from CardTitle."
+    }
+  ],
+  "example": "<Card>\n  <CardHeader>\n    <CardTitle>Pro plan</CardTitle>\n    $12 per month\n  </CardHeader>\n  <CardBody>Unlimited projects and priority support.</CardBody>\n  <CardFooter>\n    <Button variant=\"secondary\">Compare</Button>\n    <Button>Upgrade</Button>\n  </CardFooter>\n</Card>"
+}

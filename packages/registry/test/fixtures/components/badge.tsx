@@ -1,3 +1,5 @@
+"use client";
+
 import type { Ref } from "react";
 import { Text, type TextProps } from "react-aria-components";
 import styles from "./badge.module.css";

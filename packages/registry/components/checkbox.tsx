@@ -1,3 +1,5 @@
+"use client";
+
 import type { ReactNode, Ref } from "react";
 import { CheckboxButton, CheckboxField, type CheckboxFieldProps } from "react-aria-components";
 import styles from "./checkbox.module.css";

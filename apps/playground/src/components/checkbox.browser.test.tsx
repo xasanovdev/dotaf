@@ -1,4 +1,4 @@
-import { Checkbox } from "@registry/checkbox/checkbox";
+import { Checkbox } from "@registry/checkbox";
 import { describe, expect, test, vi } from "vitest";
 import { page, userEvent } from "vitest/browser";
 import { render } from "vitest-browser-react";
