@@ -1,0 +1,96 @@
+.root {
+  display: inline-flex;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--dotaf-space-2);
+  color: var(--dotaf-color-fg);
+  font-family: var(--dotaf-font-sans);
+  font-size: var(--dotaf-text-sm);
+  cursor: default;
+}
+
+.box {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 1.125em;
+  height: 1.125em;
+  /* muted-fg, not border: a control's outline needs 3:1 against the page (WCAG 1.4.11). */
+  border: 1px solid var(--dotaf-color-muted-fg);
+  border-radius: var(--dotaf-radius-sm);
+  background: var(--dotaf-color-bg);
+  color: var(--dotaf-color-on-primary);
+  outline: none;
+  transition: background-color 120ms ease-out;
+}
+
+.button[data-hovered] .box {
+  border-color: var(--dotaf-color-fg);
+}
+
+.button[data-selected] .box,
+.button[data-indeterminate] .box {
+  border-color: var(--dotaf-color-primary);
+  background: var(--dotaf-color-primary);
+}
+
+.button[data-invalid] .box {
+  border-color: var(--dotaf-color-danger);
+}
+
+.button[data-focus-visible] .box {
+  outline: 2px solid var(--dotaf-color-primary);
+  outline-offset: 2px;
+}
+
+.button[data-disabled] {
+  opacity: 0.5;
+}
+
+.check,
+.dash {
+  display: none;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* High Contrast mode drops backgrounds; draw the box with system colors instead. */
+@media (forced-colors: active) {
+  .box {
+    forced-color-adjust: none;
+    border-color: CanvasText;
+    background: Canvas;
+    color: Canvas;
+  }
+
+  .button[data-selected] .box,
+  .button[data-indeterminate] .box {
+    border-color: Highlight;
+    background: Highlight;
+    color: HighlightText;
+  }
+
+  .button[data-focus-visible] .box {
+    outline-color: CanvasText;
+  }
+}
+
+.button[data-selected]:not([data-indeterminate]) .check,
+.button[data-indeterminate] .dash {
+  display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .box {
+    transition: none;
+  }
+}

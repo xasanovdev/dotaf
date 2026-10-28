@@ -1,0 +1,46 @@
+{
+  "name": "button",
+  "description": "Triggers an action when pressed with a mouse, touch or keyboard. Use primary for the one main action in a view, secondary or ghost for the rest, danger for destructive actions. For navigation use a link instead.",
+  "dependencies": ["react-aria-components"],
+  "props": [
+    {
+      "name": "variant",
+      "type": "\"primary\" | \"secondary\" | \"ghost\" | \"danger\"",
+      "default": "\"primary\"",
+      "description": "Visual weight: primary for the main action, secondary for other actions, ghost for low-emphasis actions in toolbars, danger for destructive actions."
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\"",
+      "default": "\"md\"",
+      "description": "Height and text size."
+    },
+    {
+      "name": "ref",
+      "type": "Ref<HTMLButtonElement>",
+      "description": "The rendered <button> element."
+    },
+    {
+      "name": "onPress",
+      "type": "(event: PressEvent) => void",
+      "description": "Called on press from mouse, touch, Enter or Space. Use instead of onClick."
+    },
+    {
+      "name": "isDisabled",
+      "type": "boolean",
+      "description": "Prevents presses and dims the button."
+    },
+    {
+      "name": "type",
+      "type": "\"button\" | \"submit\" | \"reset\"",
+      "default": "\"button\"",
+      "description": "Form behaviour, as on a native button."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "description": "The label, optionally with an icon."
+    }
+  ],
+  "example": "<Button variant=\"primary\" onPress={save}>Save changes</Button>"
+}

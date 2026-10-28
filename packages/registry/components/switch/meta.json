@@ -1,0 +1,48 @@
+{
+  "name": "switch",
+  "description": "A labelled on/off toggle for a setting that applies immediately, like turning notifications on. For a choice that waits for a form submit use a checkbox.",
+  "dependencies": ["react-aria-components"],
+  "props": [
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "description": "The label, shown next to the track and announced by screen readers."
+    },
+    {
+      "name": "ref",
+      "type": "Ref<HTMLDivElement>",
+      "description": "The wrapping element."
+    },
+    {
+      "name": "isSelected",
+      "type": "boolean",
+      "description": "Controlled on state; pair with onChange."
+    },
+    {
+      "name": "defaultSelected",
+      "type": "boolean",
+      "description": "Initial on state when uncontrolled."
+    },
+    {
+      "name": "onChange",
+      "type": "(isSelected: boolean) => void",
+      "description": "Called with the new on state."
+    },
+    {
+      "name": "isDisabled",
+      "type": "boolean",
+      "description": "Prevents changes and dims the switch."
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Form field name; the switch submits value when on."
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "description": "The value submitted with the form when on."
+    }
+  ],
+  "example": "<Switch defaultSelected onChange={setNotifications}>Email notifications</Switch>"
+}

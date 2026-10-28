@@ -1,0 +1,65 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dotaf-space-1);
+  font-family: var(--dotaf-font-sans);
+}
+
+.root[data-disabled] {
+  opacity: 0.5;
+}
+
+.label {
+  color: var(--dotaf-color-fg);
+  font-size: var(--dotaf-text-sm);
+  font-weight: 500;
+}
+
+.input {
+  padding: var(--dotaf-space-2) var(--dotaf-space-3);
+  /* muted-fg, not border: an input's outline needs 3:1 against the page (WCAG 1.4.11). */
+  border: 1px solid var(--dotaf-color-muted-fg);
+  border-radius: var(--dotaf-radius-md);
+  background: var(--dotaf-color-bg);
+  color: var(--dotaf-color-fg);
+  font: inherit;
+  font-size: var(--dotaf-text-sm);
+  outline: none;
+}
+
+.input::placeholder {
+  color: var(--dotaf-color-muted-fg);
+}
+
+.input[data-hovered] {
+  border-color: var(--dotaf-color-fg);
+}
+
+/* Any focus, not only keyboard focus: a text input is focused in order to type. */
+.input[data-focused] {
+  border-color: var(--dotaf-color-primary);
+  outline: 1px solid var(--dotaf-color-primary);
+}
+
+.input[data-invalid] {
+  border-color: var(--dotaf-color-danger);
+}
+
+.input[data-invalid][data-focused] {
+  outline-color: var(--dotaf-color-danger);
+}
+
+.description {
+  color: var(--dotaf-color-muted-fg);
+  font-size: var(--dotaf-text-xs);
+}
+
+/* No box of its own: an empty region adds no gap, yet stays in the accessibility tree. */
+.errorRegion {
+  display: contents;
+}
+
+.error {
+  color: var(--dotaf-color-danger);
+  font-size: var(--dotaf-text-xs);
+}

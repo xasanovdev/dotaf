@@ -1,0 +1,40 @@
+.root {
+  display: grid;
+  /* A card stretched to its neighbour's height keeps its parts together at the top. */
+  align-content: start;
+  gap: var(--dotaf-space-4);
+  padding: var(--dotaf-space-6);
+  border: 1px solid var(--dotaf-color-border);
+  border-radius: var(--dotaf-radius-lg);
+  background: var(--dotaf-color-bg);
+  box-shadow: var(--dotaf-shadow-sm);
+  color: var(--dotaf-color-fg);
+  font-family: var(--dotaf-font-sans);
+}
+
+.header {
+  display: grid;
+  gap: var(--dotaf-space-1);
+  color: var(--dotaf-color-muted-fg);
+  font-size: var(--dotaf-text-sm);
+}
+
+.title {
+  margin: 0;
+  color: var(--dotaf-color-fg);
+  font-size: var(--dotaf-text-lg);
+  font-weight: 600;
+}
+
+.body {
+  font-size: var(--dotaf-text-sm);
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--dotaf-space-3);
+  padding-top: var(--dotaf-space-4);
+  border-top: 1px solid var(--dotaf-color-border);
+}

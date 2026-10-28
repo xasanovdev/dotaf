@@ -1,0 +1,86 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--dotaf-space-2);
+  border: 1px solid transparent;
+  border-radius: var(--dotaf-radius-md);
+  font-family: var(--dotaf-font-sans);
+  font-weight: 500;
+  line-height: 1.25;
+  white-space: nowrap;
+  cursor: default;
+  /* React Aria decides when focus should show; [data-focus-visible] draws the ring. */
+  outline: none;
+  transition:
+    background-color 120ms ease-out,
+    border-color 120ms ease-out;
+}
+
+.root[data-size="sm"] {
+  padding: var(--dotaf-space-1) var(--dotaf-space-2);
+  font-size: var(--dotaf-text-xs);
+}
+
+.root[data-size="md"] {
+  padding: var(--dotaf-space-2) var(--dotaf-space-4);
+  font-size: var(--dotaf-text-sm);
+}
+
+.root[data-size="lg"] {
+  padding: var(--dotaf-space-3) var(--dotaf-space-6);
+  font-size: var(--dotaf-text-base);
+}
+
+.root[data-variant="primary"] {
+  background: var(--dotaf-color-primary);
+  color: var(--dotaf-color-on-primary);
+}
+
+.root[data-variant="primary"][data-hovered],
+.root[data-variant="primary"][data-pressed] {
+  background: var(--dotaf-color-primary-hover);
+}
+
+.root[data-variant="danger"] {
+  background: var(--dotaf-color-danger);
+  color: var(--dotaf-color-on-danger);
+}
+
+.root[data-variant="danger"][data-hovered],
+.root[data-variant="danger"][data-pressed] {
+  background: var(--dotaf-color-danger-hover);
+}
+
+.root[data-variant="secondary"] {
+  border-color: var(--dotaf-color-border);
+  background: var(--dotaf-color-bg);
+  color: var(--dotaf-color-fg);
+}
+
+.root[data-variant="ghost"] {
+  background: transparent;
+  color: var(--dotaf-color-fg);
+}
+
+.root[data-variant="secondary"][data-hovered],
+.root[data-variant="secondary"][data-pressed],
+.root[data-variant="ghost"][data-hovered],
+.root[data-variant="ghost"][data-pressed] {
+  background: var(--dotaf-color-muted);
+}
+
+.root[data-focus-visible] {
+  outline: 2px solid var(--dotaf-color-primary);
+  outline-offset: 2px;
+}
+
+.root[data-disabled] {
+  opacity: 0.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root {
+    transition: none;
+  }
+}

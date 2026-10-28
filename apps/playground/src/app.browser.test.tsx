@@ -1,7 +1,8 @@
 import { expect, test } from "vitest";
-import { cdp, page } from "vitest/browser";
+import { page } from "vitest/browser";
 import { render } from "vitest-browser-react";
 import { App } from "./app.js";
+import { emulateMedia } from "./components/test-utils.js";
 
 const pageBackground = () => getComputedStyle(document.body).backgroundColor;
 const dark = "rgb(10, 10, 10)"; // the default dark.background
@@ -9,9 +10,7 @@ const light = "rgb(255, 255, 255)"; // the default colors.background
 
 // The OS prefers dark here, so Light can only win by setting data-theme itself.
 test("System follows the OS until Light or Dark overrides it", async () => {
-  await cdp().send("Emulation.setEmulatedMedia", {
-    features: [{ name: "prefers-color-scheme", value: "dark" }],
-  });
+  await emulateMedia("prefers-color-scheme", "dark");
   await render(<App />);
 
   await expect.element(page.getByRole("radio", { name: "System" })).toBeChecked();

@@ -1,0 +1,17 @@
+.stack {
+  display: grid;
+  gap: var(--dotaf-space-4);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--dotaf-space-3);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: var(--dotaf-space-6);
+}

@@ -1,0 +1,63 @@
+{
+  "name": "checkbox",
+  "description": "A labelled box that toggles one option on or off, or shows a mixed state for a partial selection. Use for choices that take effect on submit; for a setting that applies immediately use a switch.",
+  "dependencies": ["react-aria-components"],
+  "props": [
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "description": "The label, shown next to the box and announced by screen readers."
+    },
+    {
+      "name": "ref",
+      "type": "Ref<HTMLDivElement>",
+      "description": "The wrapping element."
+    },
+    {
+      "name": "isSelected",
+      "type": "boolean",
+      "description": "Controlled checked state; pair with onChange."
+    },
+    {
+      "name": "defaultSelected",
+      "type": "boolean",
+      "description": "Initial checked state when uncontrolled."
+    },
+    {
+      "name": "onChange",
+      "type": "(isSelected: boolean) => void",
+      "description": "Called with the new checked state."
+    },
+    {
+      "name": "isIndeterminate",
+      "type": "boolean",
+      "description": "Shows the mixed state, e.g. for a 'select all' whose items are partly selected."
+    },
+    {
+      "name": "isDisabled",
+      "type": "boolean",
+      "description": "Prevents changes and dims the checkbox."
+    },
+    {
+      "name": "isRequired",
+      "type": "boolean",
+      "description": "Requires the checkbox to be checked before the form submits."
+    },
+    {
+      "name": "isInvalid",
+      "type": "boolean",
+      "description": "Marks the value as invalid and draws the box in the danger color."
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Form field name; the checkbox submits value when checked."
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "description": "The value submitted with the form when checked."
+    }
+  ],
+  "example": "<Checkbox name=\"terms\" isRequired>I accept the terms</Checkbox>"
+}

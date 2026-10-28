@@ -1,0 +1,93 @@
+.root {
+  display: inline-flex;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--dotaf-space-2);
+  color: var(--dotaf-color-fg);
+  font-family: var(--dotaf-font-sans);
+  font-size: var(--dotaf-text-sm);
+  cursor: default;
+}
+
+.track {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  width: 2.25em;
+  height: 1.25em;
+  box-sizing: border-box;
+  /* The thumb's inset is part of the control's shape, scaled with the text, not a spacing
+     step; a transparent border makes it without a spacing token. */
+  border: 0.125em solid transparent;
+  border-radius: var(--dotaf-radius-full);
+  /* muted-fg, not border: a control needs 3:1 against the page (WCAG 1.4.11). */
+  background: var(--dotaf-color-muted-fg);
+  outline: none;
+  transition: background-color 120ms ease-out;
+}
+
+.thumb {
+  width: 1em;
+  height: 1em;
+  border-radius: var(--dotaf-radius-full);
+  background: var(--dotaf-color-bg);
+  transition: transform 120ms ease-out;
+}
+
+.button[data-selected] .track {
+  background: var(--dotaf-color-primary);
+}
+
+.button[data-selected] .thumb {
+  background: var(--dotaf-color-on-primary);
+  transform: translateX(1em);
+}
+
+.button[data-selected]:dir(rtl) .thumb {
+  transform: translateX(-1em);
+}
+
+.button[data-focus-visible] .track {
+  outline: 2px solid var(--dotaf-color-primary);
+  outline-offset: 2px;
+}
+
+.button[data-disabled] {
+  opacity: 0.5;
+}
+
+/* High Contrast mode drops backgrounds; draw the parts with system colors instead. */
+@media (forced-colors: active) {
+  .track {
+    forced-color-adjust: none;
+    border-color: CanvasText;
+    background: Canvas;
+  }
+
+  .thumb {
+    background: CanvasText;
+  }
+
+  .button[data-selected] .track {
+    border-color: Highlight;
+    background: Highlight;
+  }
+
+  .button[data-selected] .thumb {
+    background: HighlightText;
+  }
+
+  .button[data-focus-visible] .track {
+    outline-color: CanvasText;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track,
+  .thumb {
+    transition: none;
+  }
+}

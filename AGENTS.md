@@ -11,7 +11,7 @@ Design system for coding agents. A project's brand lives in `dotaf.json`; dotaf 
 ## Component rules
 
 - Every design value (color, spacing, radius, font, shadow) is a token: `var(--dotaf-*)`. The `dotaf/use-tokens` stylelint rule enforces it.
-- Build every component on `react-aria-components`, including simple ones, and style states through its data attributes (`[data-pressed]`, `[data-hovered]`, `[data-focus-visible]`).
+- Build every component on `react-aria-components`, including simple ones, and style states through its data attributes (`[data-pressed]`, `[data-hovered]`, `[data-focus-visible]`). The one exception is a static container with no interaction to borrow (Card): plain HTML, with the reason in a comment at the top of the component.
 - Variants are explicit props (`variant`, `size`) mapped to `data-variant` / `data-size`. Larger components are compound (`Dialog.Trigger`, `Dialog.Content`). `ref` is a regular prop (React 19).
 
 ## Quality gate
