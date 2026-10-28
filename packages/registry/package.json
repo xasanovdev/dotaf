@@ -11,11 +11,22 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "components"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc",
-    "test": "vitest run --passWithNoTests"
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "postcss": "^8.5.31",
+    "react": "^19.3.1",
+    "react-aria-components": "^1.22.1",
+    "typescript": "~6.0.3"
   }
 }

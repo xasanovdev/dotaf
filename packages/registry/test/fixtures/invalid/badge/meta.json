@@ -1,0 +1,5 @@
+{
+  "name": "badge",
+  "dependencies": ["react-aria-components"],
+  "example": "<Badge>New</Badge>"
+}

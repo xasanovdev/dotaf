@@ -1,0 +1,1 @@
+Dot folders (editor or tool state) are not components.

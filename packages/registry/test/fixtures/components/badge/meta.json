@@ -1,0 +1,24 @@
+{
+  "name": "badge",
+  "description": "A short status label shown next to other content.",
+  "dependencies": ["react-aria-components"],
+  "props": [
+    {
+      "name": "variant",
+      "type": "\"neutral\" | \"danger\"",
+      "default": "\"neutral\"",
+      "description": "Neutral for status, danger for errors."
+    },
+    {
+      "name": "ref",
+      "type": "Ref<HTMLElement>",
+      "description": "The rendered element."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "description": "Label text."
+    }
+  ],
+  "example": "<Badge variant=\"danger\">Failed</Badge>"
+}

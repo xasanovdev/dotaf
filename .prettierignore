@@ -5,3 +5,5 @@ pnpm-lock.yaml
 packages/core/dotaf.schema.json
 # Snapshots must match generator output byte for byte.
 __snapshots__/
+# Deliberately broken JSON; formatting would repair it.
+packages/registry/test/fixtures/malformed/

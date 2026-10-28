@@ -1,0 +1,5 @@
+{
+  "name": "badge",
+  "description": "Has no tsx or css next to it.",
+  "example": "<Badge />"
+}
