@@ -2,17 +2,18 @@
 
 import type { Ref } from "react";
 import {
+  TextField as AriaTextField,
   FieldError,
   Input,
   Label,
   Text,
-  TextField as AriaTextField,
+  type TextFieldProps as AriaTextFieldProps,
   type FieldErrorProps,
   type InputProps,
   type LabelProps,
-  type TextFieldProps as AriaTextFieldProps,
   type TextProps,
 } from "react-aria-components";
+
 import styles from "./text-field.module.css";
 
 // React Aria wires the parts together (label, described-by, invalid state) through context.

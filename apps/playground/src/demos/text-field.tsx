@@ -1,10 +1,11 @@
 import {
   TextField,
-  TextFieldLabel,
-  TextFieldInput,
   TextFieldDescription,
   TextFieldError,
+  TextFieldInput,
+  TextFieldLabel,
 } from "@registry/text-field";
+
 import styles from "./demo.module.css";
 
 export function TextFieldDemo() {

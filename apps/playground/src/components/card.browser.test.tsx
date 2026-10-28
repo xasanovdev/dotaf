@@ -1,8 +1,10 @@
-import { Card, CardHeader, CardTitle, CardBody } from "@registry/card";
+import { Card, CardBody, CardHeader, CardTitle } from "@registry/card";
 import { describe, expect, test } from "vitest";
-import { page } from "vitest/browser";
 import { render } from "vitest-browser-react";
+import { page } from "vitest/browser";
+
 import "virtual:dotaf.css";
+
 import { contrast } from "./contrast.js";
 import { setTheme } from "./test-utils.js";
 

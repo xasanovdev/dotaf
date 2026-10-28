@@ -1,4 +1,5 @@
 import { writeFile } from "node:fs/promises";
+
 import { configJsonSchema } from "../dist/index.js";
 
 await writeFile(

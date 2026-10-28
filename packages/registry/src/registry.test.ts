@@ -1,4 +1,5 @@
 import { describe, expect, test } from "vitest";
+
 import { fixture } from "../test/fixtures.js";
 import { getComponent, listComponents, RegistryError } from "./index.js";
 

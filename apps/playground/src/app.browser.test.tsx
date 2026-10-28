@@ -1,6 +1,7 @@
 import { expect, test } from "vitest";
-import { page } from "vitest/browser";
 import { render } from "vitest-browser-react";
+import { page } from "vitest/browser";
+
 import { App } from "./app.js";
 import { emulateMedia } from "./components/test-utils.js";
 

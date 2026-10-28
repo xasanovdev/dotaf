@@ -2,6 +2,7 @@
 
 import type { Ref } from "react";
 import { Button as AriaButton, type ButtonProps as AriaButtonProps } from "react-aria-components";
+
 import styles from "./button.module.css";
 
 export interface ButtonProps extends Omit<AriaButtonProps, "className" | "style"> {

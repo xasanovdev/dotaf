@@ -1,5 +1,6 @@
 import stylelint from "stylelint";
 import { describe, expect, test } from "vitest";
+
 import config from "./index.js";
 
 // Lints the way a user's project does: the package's default config, through stylelint.

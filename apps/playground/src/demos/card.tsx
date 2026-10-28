@@ -1,5 +1,6 @@
 import { Button } from "@registry/button";
-import { Card, CardHeader, CardTitle, CardBody, CardFooter } from "@registry/card";
+import { Card, CardBody, CardFooter, CardHeader, CardTitle } from "@registry/card";
+
 import styles from "./demo.module.css";
 
 export function CardDemo() {

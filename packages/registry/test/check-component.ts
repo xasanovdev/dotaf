@@ -2,8 +2,9 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import postcss from "postcss";
 import ts from "typescript";
-import { componentFiles, packageComponents } from "../src/registry.js";
+
 import { getComponent, listComponents, type ComponentMeta } from "../src/index.js";
+import { componentFiles, packageComponents } from "../src/registry.js";
 
 const componentsTsconfig = fileURLToPath(new URL("../tsconfig.json", import.meta.url));
 

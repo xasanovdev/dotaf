@@ -1,4 +1,5 @@
 import { describe, expect, test } from "vitest";
+
 import { checkComponent } from "../test/check-component.js";
 import { fixture } from "../test/fixtures.js";
 import { listComponents } from "./index.js";

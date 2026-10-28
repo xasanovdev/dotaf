@@ -1,4 +1,5 @@
 import type { Config } from "stylelint";
+
 import { messages, ruleName, suggestedTokens, useTokens } from "./use-tokens.js";
 
 export { messages, ruleName, suggestedTokens, useTokens };

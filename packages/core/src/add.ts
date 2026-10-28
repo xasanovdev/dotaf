@@ -6,6 +6,7 @@ import {
   RegistryError,
   type RegistryComponent,
 } from "@dotaf/registry";
+
 import { DotafConfigError } from "./config.js";
 import { configFileName, loadConfig } from "./load-config.js";
 import { exists, installCommand, readProject } from "./project.js";

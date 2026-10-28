@@ -2,6 +2,7 @@
 
 import type { Ref } from "react";
 import { Text, type TextProps } from "react-aria-components";
+
 import styles from "./badge.module.css";
 
 export interface BadgeProps extends Omit<TextProps, "className" | "style"> {

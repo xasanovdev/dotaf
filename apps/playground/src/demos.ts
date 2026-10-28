@@ -1,4 +1,5 @@
 import type { ComponentType } from "react";
+
 import { ButtonDemo } from "./demos/button.js";
 import { CardDemo } from "./demos/card.js";
 import { CheckboxDemo } from "./demos/checkbox.js";

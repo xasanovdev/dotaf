@@ -1,8 +1,10 @@
 import { Switch } from "@registry/switch";
 import { describe, expect, test, vi } from "vitest";
-import { page, userEvent } from "vitest/browser";
 import { render } from "vitest-browser-react";
+import { page, userEvent } from "vitest/browser";
+
 import "virtual:dotaf.css";
+
 import { contrast, sameColor } from "./contrast.js";
 import { emulateMedia, pageColor, setTheme } from "./test-utils.js";
 

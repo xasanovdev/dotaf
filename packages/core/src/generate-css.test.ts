@@ -1,6 +1,7 @@
 import { suggestedTokens } from "@dotaf/stylelint-config";
 import postcss from "postcss";
 import { describe, expect, test } from "vitest";
+
 import { generateCss, parseConfig, type DotafConfig } from "./index.js";
 
 const lightSelector = ':root, [data-theme="light"]';

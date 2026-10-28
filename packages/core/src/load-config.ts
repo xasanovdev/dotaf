@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+
 import { DotafConfigError, parseConfig, type ResolvedConfig } from "./config.js";
 
 /** The file a project keeps its brand in, at the project root. */

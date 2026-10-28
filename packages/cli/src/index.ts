@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { readFile } from "node:fs/promises";
+
 import { run } from "./cli.js";
 import { askBrand } from "./prompt.js";
 

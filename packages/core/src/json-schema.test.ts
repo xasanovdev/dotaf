@@ -1,4 +1,5 @@
 import { describe, expect, test } from "vitest";
+
 import { invalidColors, validColors } from "./color-samples.fixture.js";
 import { configJsonSchema } from "./index.js";
 

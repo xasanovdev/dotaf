@@ -1,5 +1,6 @@
 import { access, readFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
+
 import { configFileName } from "./load-config.js";
 
 export type Framework = "next" | "vite" | "unknown";

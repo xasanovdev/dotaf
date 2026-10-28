@@ -1,5 +1,6 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join, posix, relative, resolve, sep } from "node:path";
+
 import { DotafConfigError, parseConfig, type DotafConfig } from "./config.js";
 import { generateCss } from "./generate-css.js";
 import { configFileName, loadConfig } from "./load-config.js";

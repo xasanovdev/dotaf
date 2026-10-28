@@ -1,14 +1,16 @@
 import {
   TextField,
-  TextFieldLabel,
-  TextFieldInput,
   TextFieldDescription,
   TextFieldError,
+  TextFieldInput,
+  TextFieldLabel,
 } from "@registry/text-field";
 import { describe, expect, test } from "vitest";
-import { page, userEvent } from "vitest/browser";
 import { render } from "vitest-browser-react";
+import { page, userEvent } from "vitest/browser";
+
 import "virtual:dotaf.css";
+
 import { contrast } from "./contrast.js";
 import { pageColor, setTheme } from "./test-utils.js";
 

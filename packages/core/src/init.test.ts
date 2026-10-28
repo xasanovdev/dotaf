@@ -3,10 +3,11 @@ import { createServer } from "node:http";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { afterEach, describe, expect, onTestFinished, test, vi } from "vitest";
+
 import {
+  detectProject,
   DotafConfigError,
   DotafConfigExistsError,
-  detectProject,
   initProject,
   readTheme,
 } from "./index.js";

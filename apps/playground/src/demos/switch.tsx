@@ -1,4 +1,5 @@
 import { Switch } from "@registry/switch";
+
 import styles from "./demo.module.css";
 
 export function SwitchDemo() {

@@ -2,6 +2,7 @@
 
 import type { ReactNode, Ref } from "react";
 import { SwitchButton, SwitchField, type SwitchFieldProps } from "react-aria-components";
+
 import styles from "./switch.module.css";
 
 export interface SwitchProps extends Omit<SwitchFieldProps, "className" | "style" | "children"> {
