@@ -4,7 +4,7 @@ import { page, userEvent } from "vitest/browser";
 import { render } from "vitest-browser-react";
 import "virtual:dotaf.css";
 import { contrast, sameColor } from "./contrast.js";
-import { setTheme, tokenColor } from "./test-utils.js";
+import { emulateMedia, setTheme, tokenColor } from "./test-utils.js";
 
 const variants = ["primary", "secondary", "ghost", "danger"] as const;
 const button = (name: string) => page.getByRole("button", { name }).element();
@@ -42,6 +42,17 @@ describe("Button", () => {
     const background = (name: string) => getComputedStyle(button(name)).backgroundColor;
     expect(sameColor(background("Primary"), tokenColor("--dotaf-color-primary"))).toBe(true);
     expect(sameColor(background("Danger"), tokenColor("--dotaf-color-danger"))).toBe(true);
+  });
+
+  // The duration tokens carry reduced motion, so no component needs its own media query.
+  test("reduced motion stops the hover transition", async () => {
+    await render(<Button>Save</Button>);
+    expect(getComputedStyle(button("Save")).transitionDuration).not.toBe("0s");
+
+    await emulateMedia("prefers-reduced-motion", "reduce");
+
+    const durations = () => getComputedStyle(button("Save")).transitionDuration.split(", ");
+    await expect.poll(() => durations().every((duration) => duration === "0s")).toBe(true);
   });
 
   test("a disabled button ignores presses", async () => {

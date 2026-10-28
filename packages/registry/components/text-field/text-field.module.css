@@ -6,19 +6,18 @@
 }
 
 .root[data-disabled] {
-  opacity: 0.5;
+  opacity: var(--dotaf-opacity-disabled);
 }
 
 .label {
   color: var(--dotaf-color-fg);
   font-size: var(--dotaf-text-sm);
-  font-weight: 500;
+  font-weight: var(--dotaf-font-weight-medium);
 }
 
 .input {
   padding: var(--dotaf-space-2) var(--dotaf-space-3);
-  /* muted-fg, not border: an input's outline needs 3:1 against the page (WCAG 1.4.11). */
-  border: 1px solid var(--dotaf-color-muted-fg);
+  border: 1px solid var(--dotaf-color-control-border);
   border-radius: var(--dotaf-radius-md);
   background: var(--dotaf-color-bg);
   color: var(--dotaf-color-fg);
@@ -37,8 +36,8 @@
 
 /* Any focus, not only keyboard focus: a text input is focused in order to type. */
 .input[data-focused] {
-  border-color: var(--dotaf-color-primary);
-  outline: 1px solid var(--dotaf-color-primary);
+  outline: var(--dotaf-focus-ring);
+  outline-offset: var(--dotaf-focus-ring-offset);
 }
 
 .input[data-invalid] {

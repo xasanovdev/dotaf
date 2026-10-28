@@ -11,7 +11,10 @@ export function setTheme(theme: "light" | "dark"): void {
   });
 }
 
-export async function emulateMedia(name: "prefers-color-scheme" | "forced-colors", value: string) {
+export async function emulateMedia(
+  name: "prefers-color-scheme" | "prefers-reduced-motion" | "forced-colors",
+  value: string,
+) {
   await cdp().send("Emulation.setEmulatedMedia", { features: [{ name, value }] });
   onTestFinished(async () => {
     await cdp().send("Emulation.setEmulatedMedia", { features: [] });

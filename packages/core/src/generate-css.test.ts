@@ -60,7 +60,7 @@ describe("generateCss", () => {
     });
   });
 
-  test("derived colors follow the active theme wherever one can be set", () => {
+  test("derived colors and the focus ring follow the active theme wherever one can be set", () => {
     const derived = declarationsOf(generateCss(parseConfig({})), ":root, [data-theme]");
     const names = [
       "--dotaf-color-muted",
@@ -70,6 +70,8 @@ describe("generateCss", () => {
       "--dotaf-color-on-primary",
       "--dotaf-color-danger-hover",
       "--dotaf-color-on-danger",
+      "--dotaf-color-control-border",
+      "--dotaf-focus-ring",
     ];
 
     const fixed = names.filter((name) => !derived[name]?.includes("var(--dotaf-color-"));
@@ -121,6 +123,28 @@ describe("generateCss", () => {
     for (const size of ["sm", "md", "lg"]) {
       expect(scales[`--dotaf-shadow-${size}`]).toMatch(/^0 \d+px/);
     }
+  });
+
+  test("weights, motion, disabled opacity and the focus ring offset are fixed root tokens", () => {
+    expect(rootTokens({})).toMatchObject({
+      "--dotaf-font-weight-normal": "400",
+      "--dotaf-font-weight-medium": "500",
+      "--dotaf-font-weight-semibold": "600",
+      "--dotaf-duration-fast": "120ms",
+      "--dotaf-duration-normal": "200ms",
+      "--dotaf-ease-out": "cubic-bezier(0.2, 0, 0, 1)",
+      "--dotaf-opacity-disabled": "0.5",
+      "--dotaf-focus-ring-offset": "2px",
+    });
+  });
+
+  test("reduced motion zeroes every duration, so components need no media query of their own", () => {
+    const css = generateCss(parseConfig({}));
+
+    expect(declarationsOf(css, ":root", "(prefers-reduced-motion: reduce)")).toEqual({
+      "--dotaf-duration-fast": "0ms",
+      "--dotaf-duration-normal": "0ms",
+    });
   });
 
   test("every token is documented once, telling agents what it is for", () => {

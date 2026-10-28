@@ -6,15 +6,15 @@
   border: 1px solid transparent;
   border-radius: var(--dotaf-radius-md);
   font-family: var(--dotaf-font-sans);
-  font-weight: 500;
+  font-weight: var(--dotaf-font-weight-medium);
   line-height: 1.25;
   white-space: nowrap;
   cursor: default;
   /* React Aria decides when focus should show; [data-focus-visible] draws the ring. */
   outline: none;
   transition:
-    background-color 120ms ease-out,
-    border-color 120ms ease-out;
+    background-color var(--dotaf-duration-fast) var(--dotaf-ease-out),
+    border-color var(--dotaf-duration-fast) var(--dotaf-ease-out);
 }
 
 .root[data-size="sm"] {
@@ -71,16 +71,10 @@
 }
 
 .root[data-focus-visible] {
-  outline: 2px solid var(--dotaf-color-primary);
-  outline-offset: 2px;
+  outline: var(--dotaf-focus-ring);
+  outline-offset: var(--dotaf-focus-ring-offset);
 }
 
 .root[data-disabled] {
-  opacity: 0.5;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .root {
-    transition: none;
-  }
+  opacity: var(--dotaf-opacity-disabled);
 }

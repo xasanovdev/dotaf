@@ -23,7 +23,7 @@
   margin: 0;
   color: var(--dotaf-color-fg);
   font-size: var(--dotaf-text-lg);
-  font-weight: 600;
+  font-weight: var(--dotaf-font-weight-semibold);
 }
 
 .body {

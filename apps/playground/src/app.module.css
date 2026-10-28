@@ -48,8 +48,8 @@
 }
 
 .theme[data-focus-visible] {
-  outline: 2px solid var(--dotaf-color-primary);
-  outline-offset: 2px;
+  outline: var(--dotaf-focus-ring);
+  outline-offset: var(--dotaf-focus-ring-offset);
 }
 
 .demos {

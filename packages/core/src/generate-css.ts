@@ -101,6 +101,17 @@ const derivedTokens: Token[] = [
     value: readableOn("danger"),
     description: "Text and icons on a danger fill.",
   },
+  {
+    name: "color-control-border",
+    value: mix("fg", "45%", "bg"),
+    description: "Outline of a form control (input, checkbox, switch track): 3:1 on the page.",
+  },
+  {
+    name: "focus-ring",
+    value: "2px solid var(--dotaf-color-primary)",
+    description:
+      "Outline of a focused control; pair with outline-offset: var(--dotaf-focus-ring-offset).",
+  },
 ];
 
 const radiusScales = {
@@ -143,7 +154,37 @@ const fixedTokens: Token[] = [
     value: "0 12px 24px -4px rgb(0 0 0 / 0.12), 0 4px 8px -4px rgb(0 0 0 / 0.08)",
     description: "Overlays: dialogs and sheets.",
   },
+  { name: "font-weight-normal", value: "400", description: "Body text." },
+  { name: "font-weight-medium", value: "500", description: "Labels and buttons." },
+  { name: "font-weight-semibold", value: "600", description: "Titles and headings." },
+  {
+    name: "duration-fast",
+    value: "120ms",
+    description: "Hover, press and toggle feedback. 0ms under reduced motion.",
+  },
+  {
+    name: "duration-normal",
+    value: "200ms",
+    description: "Things entering or leaving: popovers, dialogs. 0ms under reduced motion.",
+  },
+  {
+    name: "ease-out",
+    value: "cubic-bezier(0.2, 0, 0, 1)",
+    description: "Easing for every transition: fast start, gentle stop.",
+  },
+  { name: "opacity-disabled", value: "0.5", description: "A disabled control, dimmed as a whole." },
+  {
+    name: "focus-ring-offset",
+    value: "2px",
+    description: "Outline offset that goes with var(--dotaf-focus-ring).",
+  },
 ];
+
+// Components animate with the duration tokens, so zeroing them here honors reduced motion
+// everywhere without a media query in each component.
+const reducedMotion = fixedTokens
+  .filter((token) => token.name.startsWith("duration-"))
+  .map((token) => declaration({ ...token, value: "0ms" }));
 
 /** Tokens that do not change with the theme. */
 function rootTokens(config: ResolvedConfig): Token[] {
@@ -208,8 +249,9 @@ export function generateCss(config: ResolvedConfig): string {
     block(':root,\n[data-theme="light"]', light),
     block('[data-theme="dark"]', dark),
     `@media (prefers-color-scheme: dark) {\n${block(':root:not([data-theme="light"])', dark, "  ")}}\n`,
-    // Custom properties resolve var() where they are declared, so derived colors are
+    // Custom properties resolve var() where they are declared, so derived values are
     // redeclared on every theme root to follow that root's palette.
     block(":root,\n[data-theme]", derivedTokens.map(documented)),
+    `@media (prefers-reduced-motion: reduce) {\n${block(":root", reducedMotion, "  ")}}\n`,
   ].join("\n");
 }

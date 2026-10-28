@@ -29,6 +29,14 @@
   --dotaf-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.06); /* Slight lift: buttons, inputs. */
   --dotaf-shadow-md: 0 4px 8px -2px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.06); /* Raised surfaces: cards, menus, popovers. */
   --dotaf-shadow-lg: 0 12px 24px -4px rgb(0 0 0 / 0.12), 0 4px 8px -4px rgb(0 0 0 / 0.08); /* Overlays: dialogs and sheets. */
+  --dotaf-font-weight-normal: 400; /* Body text. */
+  --dotaf-font-weight-medium: 500; /* Labels and buttons. */
+  --dotaf-font-weight-semibold: 600; /* Titles and headings. */
+  --dotaf-duration-fast: 120ms; /* Hover, press and toggle feedback. 0ms under reduced motion. */
+  --dotaf-duration-normal: 200ms; /* Things entering or leaving: popovers, dialogs. 0ms under reduced motion. */
+  --dotaf-ease-out: cubic-bezier(0.2, 0, 0, 1); /* Easing for every transition: fast start, gentle stop. */
+  --dotaf-opacity-disabled: 0.5; /* A disabled control, dimmed as a whole. */
+  --dotaf-focus-ring-offset: 2px; /* Outline offset that goes with var(--dotaf-focus-ring). */
 }
 
 :root,
@@ -73,4 +81,13 @@
   --dotaf-color-on-primary: color(from var(--dotaf-color-primary) xyz-d65 calc(clamp(0, (0.179 - y) * 1000, 1) * 0.9505) clamp(0, (0.179 - y) * 1000, 1) calc(clamp(0, (0.179 - y) * 1000, 1) * 1.089) / 1); /* Text and icons on a primary fill. */
   --dotaf-color-danger-hover: color-mix(in oklch, var(--dotaf-color-danger) 85%, var(--dotaf-color-fg)); /* Danger fill while hovered or pressed. */
   --dotaf-color-on-danger: color(from var(--dotaf-color-danger) xyz-d65 calc(clamp(0, (0.179 - y) * 1000, 1) * 0.9505) clamp(0, (0.179 - y) * 1000, 1) calc(clamp(0, (0.179 - y) * 1000, 1) * 1.089) / 1); /* Text and icons on a danger fill. */
+  --dotaf-color-control-border: color-mix(in oklch, var(--dotaf-color-fg) 45%, var(--dotaf-color-bg)); /* Outline of a form control (input, checkbox, switch track): 3:1 on the page. */
+  --dotaf-focus-ring: 2px solid var(--dotaf-color-primary); /* Outline of a focused control; pair with outline-offset: var(--dotaf-focus-ring-offset). */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dotaf-duration-fast: 0ms;
+    --dotaf-duration-normal: 0ms;
+  }
 }

@@ -107,7 +107,7 @@ describe("dotaf/use-tokens", () => {
       .b { font: 700 var(--dotaf-text-sm)/1.5 var(--dotaf-font-sans); }
       .c { font: inherit; }`;
     expect(await warnings(css)).toEqual([
-      'Use var(--dotaf-text-*) and var(--dotaf-font-sans) or var(--dotaf-font-mono) instead of italic 700 14px/1.5 "Helvetica", sans-serif (dotaf/use-tokens)',
+      'Use var(--dotaf-font-weight-*), var(--dotaf-text-*) and var(--dotaf-font-sans) or var(--dotaf-font-mono) instead of italic 700 14px/1.5 "Helvetica", sans-serif (dotaf/use-tokens)',
     ]);
   });
 
@@ -127,6 +127,94 @@ describe("dotaf/use-tokens", () => {
       "Use calc(-1 * var(--dotaf-space-2)) instead of -8px (dotaf/use-tokens)",
       "Use var(--dotaf-space-4) instead of 16PX (dotaf/use-tokens)",
     ]);
+  });
+
+  test("raw font weights point to the nearest weight token", async () => {
+    const css = `.a { font-weight: 500; }
+      .b { font-weight: bold; }
+      .c { font-weight: var(--dotaf-font-weight-medium); }`;
+    expect(await warnings(css)).toEqual([
+      "Use var(--dotaf-font-weight-medium) instead of 500 (dotaf/use-tokens)",
+      "Use var(--dotaf-font-weight-semibold) instead of bold (dotaf/use-tokens)",
+    ]);
+  });
+
+  test("raw transition timing points to the motion tokens; property names stay free", async () => {
+    const css = `.a { transition: background-color 150ms ease-out, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+      .b { transition: opacity var(--dotaf-duration-fast) var(--dotaf-ease-out); transition-delay: 0s; }`;
+    expect(await warnings(css)).toEqual([
+      "Use var(--dotaf-duration-fast) instead of 150ms (dotaf/use-tokens)",
+      "Use var(--dotaf-ease-out) instead of ease-out (dotaf/use-tokens)",
+      "Use var(--dotaf-duration-normal) instead of 0.3s (dotaf/use-tokens)",
+      "Use var(--dotaf-ease-out) instead of cubic-bezier(0.4, 0, 0.2, 1) (dotaf/use-tokens)",
+    ]);
+  });
+
+  test("animations check their duration but may keep their own easing, e.g. a linear spinner", async () => {
+    expect(await warnings(".a { animation: pulse 150ms linear infinite; }")).toEqual([
+      "Use var(--dotaf-duration-fast) instead of 150ms (dotaf/use-tokens)",
+    ]);
+  });
+
+  test("a focus rule draws its outline with the focus ring tokens", async () => {
+    const css = `.a:focus-visible { outline: 2px solid red; outline-offset: 3px; }
+      .b[data-focus-visible] { outline: var(--dotaf-focus-ring); outline-offset: var(--dotaf-focus-ring-offset); }
+      .c[data-focused] { outline: none; }
+      .d { outline: none; }`;
+    expect(await warnings(css)).toEqual([
+      "Use var(--dotaf-focus-ring) instead of 2px solid red (dotaf/use-tokens)",
+      "Use var(--dotaf-focus-ring-offset) instead of 3px (dotaf/use-tokens)",
+    ]);
+  });
+
+  test("transition delays stay free; only the duration of each layer is a token", async () => {
+    const css = `.a { transition: transform 300ms 50ms, opacity 120ms 0s; transition-delay: 80ms; }`;
+    expect(await warnings(css)).toEqual([
+      "Use var(--dotaf-duration-normal) instead of 300ms (dotaf/use-tokens)",
+      "Use var(--dotaf-duration-fast) instead of 120ms (dotaf/use-tokens)",
+    ]);
+  });
+
+  test("a duration far beyond the scale gets no misleading nearest step", async () => {
+    expect(await warnings(".a { animation: spin 1s linear infinite; }")).toEqual([
+      "Use a duration token (var(--dotaf-duration-fast) to var(--dotaf-duration-normal)) instead of 1s (dotaf/use-tokens)",
+    ]);
+  });
+
+  test("a non-dotaf variable in a transition gets both motion tokens suggested", async () => {
+    expect(await warnings(".a { transition: opacity var(--my-duration); }")).toEqual([
+      "Use var(--dotaf-duration-fast), var(--dotaf-duration-normal) or var(--dotaf-ease-out) instead of var(--my-duration) (dotaf/use-tokens)",
+    ]);
+  });
+
+  test("focus rules allow removing the outline and check its longhands and focus-within", async () => {
+    const css = `.a:focus-visible { outline: 0; }
+      .b:focus-visible { outline-width: 4px; outline-style: dashed; }
+      .c[data-focus-within] { outline: 2px solid red; }`;
+    expect(await warnings(css)).toEqual([
+      "Use var(--dotaf-focus-ring) instead of 4px (dotaf/use-tokens)",
+      "Use var(--dotaf-focus-ring) instead of dashed (dotaf/use-tokens)",
+      "Use var(--dotaf-focus-ring) instead of 2px solid red (dotaf/use-tokens)",
+    ]);
+  });
+
+  test("a rule is a focus rule only when every selector in it is one", async () => {
+    const css = `.a:not(:focus-visible) { outline: 1px solid var(--dotaf-color-border); }
+      .b, .c:focus-visible { outline: 1px solid var(--dotaf-color-border); }`;
+    expect(await warnings(css)).toEqual([]);
+  });
+
+  test("the font shorthand names the weight token too", async () => {
+    expect(await warnings(".a { font: 600 1rem/1.2 var(--dotaf-font-sans); }")).toEqual([
+      "Use var(--dotaf-font-weight-*), var(--dotaf-text-*) and var(--dotaf-font-sans) or var(--dotaf-font-mono) instead of 600 1rem/1.2 var(--dotaf-font-sans) (dotaf/use-tokens)",
+    ]);
+  });
+
+  test("a value repeated in one declaration is reported at each of its own columns", async () => {
+    const { results } = await stylelint.lint({ code: ".a { margin: 16px 0 16px 0; }", config });
+    const columns = results.flatMap((result) => result.warnings.map((warning) => warning.column));
+
+    expect(columns).toEqual([14, 21]);
   });
 
   test("spacing from tokens, zero, auto and normal passes", async () => {
