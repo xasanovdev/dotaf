@@ -1,4 +1,5 @@
 import { describe, expect, test } from "vitest";
+import { invalidColors, validColors } from "./color-samples.fixture.js";
 import { DotafConfigError, parseConfig } from "./index.js";
 
 describe("parseConfig", () => {
@@ -13,12 +14,8 @@ describe("parseConfig", () => {
         warning: "#d97706",
       },
       dark: {
-        primary: "#4f46e5",
         background: "#0a0a0a",
         foreground: "#fafafa",
-        danger: "#dc2626",
-        success: "#16a34a",
-        warning: "#d97706",
       },
       font: {
         sans: "Inter, system-ui, sans-serif",
@@ -33,19 +30,19 @@ describe("parseConfig", () => {
     });
   });
 
-  test("user values override defaults and dark inherits light colors", () => {
+  test("user values override defaults, and dark keeps only the accents the user set", () => {
     const config = parseConfig({
-      colors: { primary: "#16a34a" },
-      dark: { background: "#111111" },
+      colors: { primary: "#1d4ed8" },
+      dark: { background: "#111111", danger: "#ff6b6b" },
       radius: "lg",
     });
 
-    expect(config.colors.primary).toBe("#16a34a");
+    expect(config.colors.primary).toBe("#1d4ed8");
     expect(config.colors.background).toBe("#ffffff");
-    expect(config.dark).toMatchObject({
-      primary: "#16a34a",
+    expect(config.dark).toEqual({
       background: "#111111",
       foreground: "#fafafa",
+      danger: "#ff6b6b",
     });
     expect(config.radius).toBe("lg");
   });
@@ -61,6 +58,14 @@ describe("parseConfig", () => {
     expect(parseConfig({ colors: { primary: "oklch(0.62 0.19 260)" } }).colors.primary).toBe(
       "oklch(0.62 0.19 260)",
     );
+  });
+
+  test.each(validColors)("the color %s is accepted", (primary) => {
+    expect(parseConfig({ colors: { primary } }).colors.primary).toBe(primary);
+  });
+
+  test.each(invalidColors)("the color %s is rejected with the field path", (primary) => {
+    expect(() => parseConfig({ colors: { primary } })).toThrow(/colors\.primary/);
   });
 
   test("a font stack that could inject CSS is rejected with the field path", () => {

@@ -2,7 +2,8 @@ import { z } from "zod";
 
 export interface ResolvedConfig {
   colors: Palette;
-  dark: Palette;
+  /** Dark surfaces plus the accents the user set for dark mode; the rest derive from `colors`. */
+  dark: DarkPalette;
   font: { sans: string; mono: string };
   radius: "none" | "sm" | "md" | "lg" | "full";
   density: "compact" | "comfortable" | "spacious";
@@ -17,6 +18,11 @@ export interface Palette {
   success: string;
   warning: string;
 }
+
+export type Accent = "primary" | "danger" | "success" | "warning";
+
+export type DarkPalette = Pick<Palette, "background" | "foreground"> &
+  Partial<Record<Accent, string | undefined>>;
 
 export class DotafConfigError extends Error {
   override name = "DotafConfigError";
@@ -33,10 +39,33 @@ export class DotafConfigError extends Error {
 // that a value cannot close its declaration (no `;`, `{`, `}`).
 // Patterns use no flags and no `\p{...}`: JSON Schema drops flags, and editors compile
 // patterns with or without `u`, so every pattern must mean the same in both modes.
+// Function arguments follow CSS Color 4 slot by slot, because a browser drops a color it
+// can't parse and every token mixed from it goes too. Rare valid spellings (exponents,
+// uppercase, tabs) are rejected: a clear error beats a silently broken theme.
+const number = String.raw`-?(?:\d+(?:\.\d+)?|\.\d+)`;
+const percent = `${number}%`;
+const angle = `${number}(?:deg|grad|rad|turn)?`;
+const amount = `(?:${number}%?|none)`;
+const hue = `(?:${angle}|none)`;
+// Modern syntax: space-separated slots and an optional `/ alpha`.
+const modern = (...slots: string[]) => String.raw`${slots.join(" +")}(?: *\/ *${amount})?`;
+// Legacy rgb() and hsl(): comma-separated, no `none`, and rgb() can't mix % with numbers.
+const legacy = (...slots: string[]) => `${slots.join(" *, *")}(?: *, *${number}%?)?`;
+const colorSpace = "srgb|srgb-linear|display-p3|a98-rgb|prophoto-rgb|rec2020|xyz|xyz-d50|xyz-d65";
+const colorFunctions = [
+  String.raw`rgba?\( *(?:${modern(amount, amount, amount)}|${legacy(number, number, number)}|${legacy(percent, percent, percent)}) *\)`,
+  String.raw`hsla?\( *(?:${modern(hue, amount, amount)}|${legacy(angle, percent, percent)}) *\)`,
+  String.raw`hwb\( *${modern(hue, amount, amount)} *\)`,
+  String.raw`(?:ok)?lab\( *${modern(amount, amount, amount)} *\)`,
+  String.raw`(?:ok)?lch\( *${modern(amount, amount, hue)} *\)`,
+  String.raw`color\( *(?:${colorSpace}) +${modern(amount, amount, amount)} *\)`,
+];
 const cssColor = z
   .string()
   .regex(
-    /^(?:#(?:[\dA-Fa-f]{3,4}|[\dA-Fa-f]{6}|[\dA-Fa-f]{8})|(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\([\w\s.%,/-]+\))$/,
+    new RegExp(
+      String.raw`^(?:#(?:[\dA-Fa-f]{3,4}|[\dA-Fa-f]{6}|[\dA-Fa-f]{8})|${colorFunctions.join("|")})$`,
+    ),
     { error: "must be a hex color (#4f46e5) or a CSS color function (oklch(0.6 0.2 260))" },
   );
 
@@ -105,21 +134,5 @@ export function parseConfig(input: unknown, source = "dotaf.json"): ResolvedConf
   }
   const { colors, dark, font, radius, density, paths } = result.data;
 
-  // Dark mode has its own surfaces; every other color follows the light palette
-  // unless the user overrides it.
-  return {
-    font,
-    radius,
-    density,
-    paths,
-    colors,
-    dark: {
-      primary: dark.primary ?? colors.primary,
-      background: dark.background,
-      foreground: dark.foreground,
-      danger: dark.danger ?? colors.danger,
-      success: dark.success ?? colors.success,
-      warning: dark.warning ?? colors.warning,
-    },
-  };
+  return { font, radius, density, paths, colors, dark };
 }

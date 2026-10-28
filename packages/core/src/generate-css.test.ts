@@ -48,6 +48,17 @@ describe("generateCss", () => {
     ).toMatchObject(dark);
   });
 
+  test("dark accents the user left unset are lifted to stay readable; set ones are kept", () => {
+    const css = generateCss(
+      parseConfig({ colors: { primary: "#1d4ed8" }, dark: { danger: "#ff6b6b" } }),
+    );
+
+    expect(declarationsOf(css, '[data-theme="dark"]')).toMatchObject({
+      "--dotaf-color-primary": "oklch(from #1d4ed8 max(l, 0.7) c h)",
+      "--dotaf-color-danger": "#ff6b6b",
+    });
+  });
+
   test("derived colors follow the active theme wherever one can be set", () => {
     const derived = declarationsOf(generateCss(parseConfig({})), ":root, [data-theme]");
     const names = [

@@ -1,4 +1,5 @@
 import { describe, expect, test } from "vitest";
+import { invalidColors, validColors } from "./color-samples.fixture.js";
 import { configJsonSchema } from "./index.js";
 
 interface FieldSchemas {
@@ -29,8 +30,12 @@ describe("configJsonSchema", () => {
     });
   });
 
-  test("the editor accepts the same colors the parser accepts", () => {
-    expect(editorVerdicts(patternOf("colors", "primary"), "#4F46E5")).toEqual([true, true]);
+  test.each(validColors)("the editor accepts the color %s like the parser", (color) => {
+    expect(editorVerdicts(patternOf("colors", "primary"), color)).toEqual([true, true]);
+  });
+
+  test.each(invalidColors)("the editor rejects the color %s like the parser", (color) => {
+    expect(editorVerdicts(patternOf("colors", "primary"), color)).toEqual([false, false]);
   });
 
   test("the editor accepts the same font stacks the parser accepts", () => {

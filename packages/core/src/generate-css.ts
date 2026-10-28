@@ -1,4 +1,4 @@
-import type { Palette, ResolvedConfig } from "./config.js";
+import type { Accent, Palette, ResolvedConfig } from "./config.js";
 
 /** A CSS custom property, written as `--dotaf-<name>`. */
 interface Token {
@@ -9,7 +9,7 @@ interface Token {
 }
 
 /** Suffix of a palette token: `fg` is `--dotaf-color-fg`. */
-type PaletteColor = "bg" | "fg" | "primary" | "danger" | "success" | "warning";
+type PaletteColor = "bg" | "fg" | Accent;
 
 function paletteTokens(palette: Palette): Token[] {
   return [
@@ -36,6 +36,21 @@ function paletteTokens(palette: Palette): Token[] {
       description: "Warnings and states that need attention.",
     },
   ];
+}
+
+// A brand color picked for a light page is often unreadable on a dark one, so accents the
+// user didn't set for dark mode are lifted to lightness 0.7 or more, keeping the hue. That
+// clears 4.5:1 on a near-black dark.background; a translucent color keeps its alpha.
+function darkPalette({ colors, dark }: ResolvedConfig): Palette {
+  const accent = (name: Accent) => dark[name] ?? `oklch(from ${colors[name]} max(l, 0.7) c h)`;
+  return {
+    background: dark.background,
+    foreground: dark.foreground,
+    primary: accent("primary"),
+    danger: accent("danger"),
+    success: accent("success"),
+    warning: accent("warning"),
+  };
 }
 
 // Mixing in oklch keeps lightness steps even across hues.
@@ -185,7 +200,7 @@ const header = `/*
 export function generateCss(config: ResolvedConfig): string {
   const light = ["color-scheme: light;", ...paletteTokens(config.colors).map(documented)];
   // Already documented in the light block.
-  const dark = ["color-scheme: dark;", ...paletteTokens(config.dark).map(declaration)];
+  const dark = ["color-scheme: dark;", ...paletteTokens(darkPalette(config)).map(declaration)];
 
   return [
     header,

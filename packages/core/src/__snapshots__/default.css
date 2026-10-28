@@ -46,10 +46,10 @@
   color-scheme: dark;
   --dotaf-color-bg: #0a0a0a;
   --dotaf-color-fg: #fafafa;
-  --dotaf-color-primary: #4f46e5;
-  --dotaf-color-danger: #dc2626;
-  --dotaf-color-success: #16a34a;
-  --dotaf-color-warning: #d97706;
+  --dotaf-color-primary: oklch(from #4f46e5 max(l, 0.7) c h);
+  --dotaf-color-danger: oklch(from #dc2626 max(l, 0.7) c h);
+  --dotaf-color-success: oklch(from #16a34a max(l, 0.7) c h);
+  --dotaf-color-warning: oklch(from #d97706 max(l, 0.7) c h);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -57,10 +57,10 @@
     color-scheme: dark;
     --dotaf-color-bg: #0a0a0a;
     --dotaf-color-fg: #fafafa;
-    --dotaf-color-primary: #4f46e5;
-    --dotaf-color-danger: #dc2626;
-    --dotaf-color-success: #16a34a;
-    --dotaf-color-warning: #d97706;
+    --dotaf-color-primary: oklch(from #4f46e5 max(l, 0.7) c h);
+    --dotaf-color-danger: oklch(from #dc2626 max(l, 0.7) c h);
+    --dotaf-color-success: oklch(from #16a34a max(l, 0.7) c h);
+    --dotaf-color-warning: oklch(from #d97706 max(l, 0.7) c h);
   }
 }
 
