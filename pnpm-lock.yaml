@@ -213,6 +213,10 @@ importers:
       zod:
         specifier: ^4.6.7
         version: 4.6.7
+    devDependencies:
+      postcss:
+        specifier: ^8.5.31
+        version: 8.5.31
 
   packages/mcp: {}
 

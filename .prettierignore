@@ -3,3 +3,5 @@ coverage/
 .turbo/
 pnpm-lock.yaml
 packages/core/dotaf.schema.json
+# Snapshots must match generator output byte for byte.
+__snapshots__/
