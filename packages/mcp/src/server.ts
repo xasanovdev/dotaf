@@ -1,7 +1,8 @@
-import { extname } from "node:path";
+import { extname, resolve } from "node:path";
 import {
   describeComponent,
   describeDesignSystem,
+  DotafProjectNotFoundError,
   listProjectComponents,
   type ComponentDetails,
   type ComponentSummary,
@@ -12,14 +13,15 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { z } from "zod";
 
 export interface ServerOptions {
-  /** The project folder, or one inside it; dotaf.json is looked up from here. */
+  /** Where the client started the server; a tool's path is resolved against it. */
   cwd: string;
   version: string;
 }
 
 const instructions = `This project's UI is built on dotaf, a design system kept in dotaf.json.
 Before writing or changing UI, call get_design_system and use its tokens and rules.
-Before building a control, call list_components; use get_component for the API of the one that fits.`;
+Before building a control, call list_components; use get_component for the API of the one that fits.
+In a monorepo, pass path: the app folder or file you are working in, so the right dotaf.json is used.`;
 
 // The tools only read the project; agents may call them freely.
 const readOnly = { readOnlyHint: true, openWorldHint: false } as const;
@@ -28,9 +30,30 @@ function textResult(body: string) {
   return { content: [{ type: "text" as const, text: body }] };
 }
 
-/** A dotaf MCP server for one project, not yet connected to a transport. */
+// Core's message suits a person, who can cd into a folder; an agent passes it as path instead.
+async function withPathHint<T>(work: Promise<T>): Promise<T> {
+  try {
+    return await work;
+  } catch (error) {
+    if (error instanceof DotafProjectNotFoundError && error.found.length > 0) {
+      throw new Error(`${error.message} Call again with path set to one of them.`);
+    }
+    throw error;
+  }
+}
+
+/** A dotaf MCP server, not yet connected to a transport. */
 export function createServer({ cwd, version }: ServerOptions): McpServer {
   const server = new McpServer({ name: "dotaf", version }, { instructions });
+  // Clients start the server wherever they like (Claude Code uses the git root), so the agent
+  // says where it is working and dotaf.json is looked up from there.
+  const pathInput = z
+    .string()
+    .optional()
+    .describe(
+      `The folder or file you are working in. An absolute path is safest; a relative one is read from ${cwd}. Omit it when that folder or one above it holds dotaf.json.`,
+    );
+  const from = (path: string | undefined) => resolve(cwd, path ?? ".");
 
   server.registerTool(
     "get_design_system",
@@ -38,9 +61,11 @@ export function createServer({ cwd, version }: ServerOptions): McpServer {
       title: "Get the design system",
       description:
         "Call before writing or changing any UI in this project: components, pages or CSS. Returns the rules UI code must follow and every design token (a CSS variable) with what it is for and its light and dark values. Use these tokens instead of raw colors, sizes, fonts or shadows.",
+      inputSchema: { path: pathInput },
       annotations: readOnly,
     },
-    async () => textResult(formatDesignSystem(await describeDesignSystem(cwd))),
+    async (args) =>
+      textResult(formatDesignSystem(await withPathHint(describeDesignSystem(from(args.path))))),
   );
 
   server.registerTool(
@@ -49,9 +74,11 @@ export function createServer({ cwd, version }: ServerOptions): McpServer {
       title: "List components",
       description:
         "Call when the UI needs a control or container (button, text field, checkbox, switch, card...) before building one by hand. Lists the dotaf components, what each is for, and whether this project already has it.",
+      inputSchema: { path: pathInput },
       annotations: readOnly,
     },
-    async () => textResult(formatComponents(await listProjectComponents(cwd))),
+    async (args) =>
+      textResult(formatComponents(await withPathHint(listProjectComponents(from(args.path))))),
   );
 
   server.registerTool(
@@ -62,10 +89,14 @@ export function createServer({ cwd, version }: ServerOptions): McpServer {
         "Call before using or adapting a dotaf component. Returns its props, a usage example and the install command for npm packages the project lacks; then either where the project keeps it, or its source and the command that adds it.",
       inputSchema: {
         name: z.string().describe('Component name from list_components, e.g. "text-field".'),
+        path: pathInput,
       },
       annotations: readOnly,
     },
-    async ({ name }) => textResult(formatComponent(await describeComponent(cwd, name))),
+    async (args) =>
+      textResult(
+        formatComponent(await withPathHint(describeComponent(from(args.path), args.name))),
+      ),
   );
 
   return server;

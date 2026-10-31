@@ -1,4 +1,4 @@
-import { access, readFile } from "node:fs/promises";
+import { access, readdir, readFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 
 import { DotafConfigError, type ResolvedConfig } from "./config.js";
@@ -50,17 +50,66 @@ export interface DotafProject {
   config: ResolvedConfig;
 }
 
-/** The nearest folder at or above `cwd` holding dotaf.json; commands may run from a subfolder. */
-export async function loadProject(cwd: string): Promise<DotafProject> {
-  for (let dir = cwd; ; dir = dirname(dir)) {
+/** No dotaf.json at or above a folder. `found` lists absolute folders below it that have one. */
+export class DotafProjectNotFoundError extends DotafConfigError {
+  override name = "DotafProjectNotFoundError";
+
+  constructor(
+    summary: string,
+    readonly found: readonly string[],
+  ) {
+    super(summary);
+  }
+}
+
+// Folders that hold installed, generated or built code, never the user's own project.
+const notProjects = new Set(["node_modules", "dist", "build", "out", "coverage", "vendor"]);
+
+// Deep enough for apps/<name>/<package>; the search runs only after the walk up failed.
+const searchDepth = 4;
+
+/** Folders below `root` holding dotaf.json, absolute and sorted. Read one folder at a time. */
+async function configsBelow(root: string): Promise<string[]> {
+  const found: string[] = [];
+  let level = [root];
+  for (let depth = 0; depth < searchDepth && level.length > 0; depth++) {
+    const next: string[] = [];
+    for (const dir of level) {
+      const entries = await readdir(dir, { withFileTypes: true }).catch(() => []);
+      for (const entry of entries) {
+        if (!entry.isDirectory() || entry.name.startsWith(".") || notProjects.has(entry.name)) {
+          continue;
+        }
+        const folder = join(dir, entry.name);
+        if (await exists(join(folder, configFileName))) found.push(folder);
+        next.push(folder);
+      }
+    }
+    level = next;
+  }
+  return found.sort();
+}
+
+/**
+ * The nearest folder at or above `start` (a folder or a file) holding dotaf.json; commands
+ * may run from a subfolder. From above the project, as at a monorepo root, the error names
+ * the dotaf.json files below so the caller can pick one.
+ */
+export async function loadProject(start: string): Promise<DotafProject> {
+  if (!(await exists(start))) throw new DotafConfigError(`${start} does not exist.`);
+  for (let dir = start; ; dir = dirname(dir)) {
     if (await exists(join(dir, configFileName)))
       return { root: dir, config: await loadConfig(dir) };
-    if (dirname(dir) === dir) {
-      throw new DotafConfigError(
-        `No ${configFileName} in ${cwd} or above it. Run \`npx dotaf init\` in your project's root.`,
-      );
-    }
+    if (dirname(dir) === dir) break;
   }
+  const found = await configsBelow(start);
+  const missing = `No ${configFileName} in ${start} or above it.`;
+  throw new DotafProjectNotFoundError(
+    found.length > 0
+      ? `${missing} Found ${configFileName} in ${found.join(", ")}: work from one of them.`
+      : `${missing} Run \`npx dotaf init\` in your project's root.`,
+    found,
+  );
 }
 
 /** JSON as editors save it, byte order mark included. */

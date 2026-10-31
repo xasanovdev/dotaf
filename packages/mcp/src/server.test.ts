@@ -68,6 +68,83 @@ describe("dotaf MCP server", () => {
     }
   });
 
+  test("every tool takes an optional path to the folder or file the UI work is in", async () => {
+    const { tools } = await (await connect(await project())).listTools();
+
+    for (const tool of tools) {
+      expect(tool.inputSchema.properties).toHaveProperty("path");
+      expect(tool.inputSchema.required ?? []).not.toContain("path");
+    }
+  });
+
+  // Claude Code starts stdio servers in the git root, which in a monorepo is above the app.
+  describe("started at a monorepo root", () => {
+    async function monorepo() {
+      return folder({
+        "package.json": "{}",
+        "apps/web/package.json": "{}",
+        "apps/web/dotaf.json": JSON.stringify({ paths: { components: "src/ui" } }),
+        "apps/web/src/main.tsx": "",
+      });
+    }
+
+    test("without a path, the error names the app that has dotaf.json and says to pass it", async () => {
+      const repo = await monorepo();
+
+      const { text, isError } = await call(repo, "get_design_system");
+
+      expect(isError).toBe(true);
+      expect(text).toContain(`Found dotaf.json in ${join(repo, "apps/web")}`);
+      expect(text).toContain("Call again with path set to one of them.");
+    });
+
+    test("a mistyped path says it doesn't exist rather than asking for init", async () => {
+      const { text, isError } = await call(await monorepo(), "list_components", {
+        path: "apps/wbe",
+      });
+
+      expect(isError).toBe(true);
+      expect(text).toContain("apps/wbe does not exist.");
+      expect(text).not.toContain("init");
+    });
+
+    test("path says what a relative path is read from: the folder the server started in", async () => {
+      const repo = await monorepo();
+      const { tools } = await (await connect(repo)).listTools();
+
+      for (const tool of tools) {
+        expect(JSON.stringify(tool.inputSchema.properties?.["path"])).toContain(repo);
+      }
+    });
+
+    test.each([
+      ["a relative folder", "apps/web"],
+      ["a file in the app", "apps/web/src/main.tsx"],
+    ])("each tool works from %s", async (_, path) => {
+      const repo = await monorepo();
+
+      for (const [name, args] of [
+        ["get_design_system", { path }],
+        ["list_components", { path }],
+        ["get_component", { name: "button", path }],
+      ] as const) {
+        expect(await call(repo, name, args)).toMatchObject({ isError: false });
+      }
+    });
+
+    test("an absolute path works too", async () => {
+      const repo = await monorepo();
+
+      const { isError } = await call(repo, "list_components", { path: join(repo, "apps/web") });
+
+      expect(isError).toBe(false);
+    });
+
+    test("the instructions tell the agent to pass the path in a monorepo", async () => {
+      expect((await connect(await monorepo())).getInstructions()).toContain("path");
+    });
+  });
+
   test("introduces itself to the agent: look up the design system before writing UI", async () => {
     const client = await connect(await project());
 

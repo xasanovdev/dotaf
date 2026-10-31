@@ -8,6 +8,7 @@ import {
   describeComponent,
   describeDesignSystem,
   DotafConfigError,
+  DotafProjectNotFoundError,
   generateCss,
   listProjectComponents,
   parseConfig,
@@ -90,6 +91,46 @@ describe("describeDesignSystem", () => {
     const { paths } = await describeDesignSystem(join(root, "src/app"));
 
     expect(paths.css).toBe("src/dotaf.css");
+  });
+
+  test("finds dotaf.json from a file inside the project", async () => {
+    const root = await project({}, { "src/app/page.tsx": "" });
+
+    const { paths } = await describeDesignSystem(join(root, "src/app/page.tsx"));
+
+    expect(paths.css).toBe("src/dotaf.css");
+  });
+
+  test("from above the project, as in a monorepo root, the error names the dotaf.json below", async () => {
+    const config = JSON.stringify({});
+    const repo = await folder({
+      "package.json": "{}",
+      "apps/web/dotaf.json": config,
+      "apps/docs/site/dotaf.json": config,
+      "node_modules/some-theme/dotaf.json": config,
+      ".cache/dotaf.json": config,
+    });
+
+    const error = await describeDesignSystem(repo).catch((caught: unknown) => caught);
+
+    // Absolute, so the caller can use them as they are wherever it started.
+    const found = [join(repo, "apps/docs/site"), join(repo, "apps/web")];
+    expect(error).toBeInstanceOf(DotafProjectNotFoundError);
+    expect(error).toMatchObject({ found });
+    expect((error as Error).message).toContain(
+      `Found dotaf.json in ${found.join(", ")}: work from one of them.`,
+    );
+    expect((error as Error).message).not.toContain("node_modules");
+    expect((error as Error).message).not.toContain(".cache");
+  });
+
+  test("a folder that doesn't exist is named as such, not as a project to init", async () => {
+    const missing = join(await project(), "apps/nope");
+
+    const error = await describeDesignSystem(missing).catch((caught: unknown) => caught);
+
+    expect(error).toBeInstanceOf(DotafConfigError);
+    expect((error as Error).message).toBe(`${missing} does not exist.`);
   });
 
   test("without dotaf.json it says to run init", async () => {

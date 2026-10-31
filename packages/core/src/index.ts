@@ -9,6 +9,6 @@ export { describeComponent, describeDesignSystem, listProjectComponents } from "
 export type { ComponentDetails, ComponentSummary, DesignSystem } from "./design-system.js";
 export { DotafConfigExistsError, initProject, readTheme } from "./init.js";
 export type { InitResult } from "./init.js";
-export { detectProject } from "./project.js";
+export { detectProject, DotafProjectNotFoundError } from "./project.js";
 export type { Framework, PackageManager, ProjectInfo } from "./project.js";
 export { RegistryError } from "@dotaf/registry";
