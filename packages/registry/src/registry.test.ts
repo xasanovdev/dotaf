@@ -6,7 +6,7 @@ import { getComponent, listComponents, RegistryError } from "./index.js";
 const components = fixture("components");
 
 describe("listComponents", () => {
-  test("returns the meta of every component, skipping files that are not one", async () => {
+  test("returns the meta of every component folder, skipping files and dot folders", async () => {
     const metas = await listComponents(components);
 
     expect(metas.map((meta) => meta.name)).toEqual(["badge", "tag"]);
@@ -23,10 +23,11 @@ describe("listComponents", () => {
   });
 
   test.each([
-    ["invalid", /badge\.json is invalid:[\s\S]*description/],
-    ["malformed", /badge\.json is invalid:[\s\S]*JSON/],
-    ["misnamed", /badge\.json is invalid:\n {2}- name: must match its file name "badge"/],
-    ["incomplete", /badge is missing badge\.tsx, badge\.module\.css/],
+    ["invalid", /badge\/badge\.json is invalid:[\s\S]*description/],
+    ["malformed", /badge\/badge\.json is invalid:[\s\S]*JSON/],
+    ["misnamed", /badge\/badge\.json is invalid:\n {2}- name: must match its folder name "badge"/],
+    ["incomplete", /badge is missing badge\/badge\.tsx, badge\/badge\.module\.css/],
+    ["metaless", /badge is missing badge\/badge\.json/],
   ])("a %s component fails with the file and what is wrong", async (root, message) => {
     const list = listComponents(fixture(root));
 
@@ -44,7 +45,10 @@ describe("getComponent", () => {
     const badge = await getComponent("badge", components);
 
     expect(badge.meta.name).toBe("badge");
-    expect(badge.files.map((file) => file.path)).toEqual(["badge.tsx", "badge.module.css"]);
+    expect(badge.files.map((file) => file.path)).toEqual([
+      "badge/badge.tsx",
+      "badge/badge.module.css",
+    ]);
     expect(badge.files[0]?.content).toContain("export function Badge");
   });
 

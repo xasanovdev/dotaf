@@ -1,5 +1,5 @@
 import { mkdir, stat, writeFile } from "node:fs/promises";
-import { join, posix } from "node:path";
+import { dirname, join, posix } from "node:path";
 import {
   getComponent,
   listComponents,
@@ -76,10 +76,10 @@ async function resolve(names: string[], registry: string | undefined): Promise<W
 }
 
 /**
- * Copies registry components into the project's paths.components, side by side, together
- * with the components they import. A component with a file already in place is kept whole,
- * never half-written; `overwrite` replaces only the components named, never one that was
- * pulled in for another. `registry` points at another registry folder (tests use it).
+ * Copies registry components into the project's paths.components, each into its own folder
+ * (`button/button.tsx`), together with the components they import. A component with a file
+ * already in place is kept whole, never half-written; `overwrite` replaces only the
+ * components named, never one that was pulled in for another. `registry` points at another registry folder (tests use it).
  */
 export async function addComponents(
   cwd: string,
@@ -116,8 +116,11 @@ export async function addComponents(
       kept.push({ name: component.meta.name, existing, missing, ...owner });
       continue;
     }
-    await mkdir(folder, { recursive: true });
-    for (const target of targets) await writeFile(join(root, target.path), target.content);
+    for (const target of targets) {
+      const path = join(root, target.path);
+      await mkdir(dirname(path), { recursive: true });
+      await writeFile(path, target.content);
+    }
     added.push({ name: component.meta.name, files: targets.map((t) => t.path), ...owner });
   }
 

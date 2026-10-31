@@ -1,18 +1,19 @@
+import { describe, expect, test } from "vitest";
+import { render } from "vitest-browser-react";
+import { page, userEvent } from "vitest/browser";
+
 import {
   TextField,
   TextFieldDescription,
   TextFieldError,
   TextFieldInput,
   TextFieldLabel,
-} from "@registry/text-field";
-import { describe, expect, test } from "vitest";
-import { render } from "vitest-browser-react";
-import { page, userEvent } from "vitest/browser";
+} from "./text-field";
 
 import "virtual:dotaf.css";
 
-import { contrast } from "./contrast.js";
-import { pageColor, setTheme } from "./test-utils.js";
+import { contrast } from "../../test/browser/contrast";
+import { pageColor, setTheme } from "../../test/browser/test-utils";
 
 function EmailField() {
   return (

@@ -13,6 +13,10 @@ export default defineConfig({
     // Components are imported straight from the registry source, the files users copy.
     alias: {
       "@registry": fileURLToPath(new URL("../../packages/registry/components", import.meta.url)),
+      // The browser test helpers the registry's component tests use.
+      "@registry-test": fileURLToPath(
+        new URL("../../packages/registry/test/browser", import.meta.url),
+      ),
     },
   },
   test: {
@@ -25,7 +29,13 @@ export default defineConfig({
         extends: true,
         test: {
           name: "browser",
-          include: ["src/**/*.browser.test.tsx"],
+          // Component tests live with their component in the registry; they run here because
+          // they need this app's dotaf.css, and the registry can't depend on @dotaf/core.
+          dir: "../..",
+          include: [
+            "apps/playground/src/**/*.browser.test.tsx",
+            "packages/registry/components/**/*.browser.test.tsx",
+          ],
           browser: {
             enabled: true,
             headless: true,

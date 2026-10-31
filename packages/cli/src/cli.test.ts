@@ -133,26 +133,31 @@ describe("dotaf add", () => {
     const { code, out } = await dotaf(["add", "button", "checkbox"], root);
 
     expect(code).toBe(0);
-    expect(await readFile(join(root, "src/components/ui/checkbox.tsx"), "utf8")).toContain(
+    expect(await readFile(join(root, "src/components/ui/checkbox/checkbox.tsx"), "utf8")).toContain(
       "export function Checkbox",
     );
     expect(out).toContain(
-      "Added button: src/components/ui/button.tsx, src/components/ui/button.module.css",
+      "Added button: src/components/ui/button/button.tsx, src/components/ui/button/button.module.css",
     );
     expect(out).toContain("Added checkbox:");
     expect(out).toContain("pnpm add react-aria-components");
   });
 
   test("an existing file is kept and the output says how to replace it", async () => {
-    const root = await project({ ...withConfig, "src/components/ui/button.tsx": "// mine\n" });
+    const root = await project({
+      ...withConfig,
+      "src/components/ui/button/button.tsx": "// mine\n",
+    });
 
     const { code, out } = await dotaf(["add", "button"], root);
 
     expect(code).toBe(0);
     expect(out).toContain(
-      "Kept button: src/components/ui/button.tsx already exists; src/components/ui/button.module.css is missing. Add --overwrite to replace it.",
+      "Kept button: src/components/ui/button/button.tsx already exists; src/components/ui/button/button.module.css is missing. Add --overwrite to replace it.",
     );
-    expect(await readFile(join(root, "src/components/ui/button.tsx"), "utf8")).toBe("// mine\n");
+    expect(await readFile(join(root, "src/components/ui/button/button.tsx"), "utf8")).toBe(
+      "// mine\n",
+    );
   });
 
   test("an unknown component is one clean line listing the ones that exist", async () => {

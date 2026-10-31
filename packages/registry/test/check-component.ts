@@ -129,7 +129,7 @@ function foreignImports(meta: ComponentMeta, file: ts.SourceFile): string[] {
     specifier === "react" ||
     specifier === `./${meta.name}.module.css` ||
     meta.dependencies.some((dep) => specifier === dep || specifier.startsWith(`${dep}/`)) ||
-    meta.registryDependencies.some((dep) => specifier === `./${dep}`);
+    meta.registryDependencies.some((dep) => specifier === `../${dep}/${dep}`);
 
   return file.statements
     .flatMap((statement) =>

@@ -1,9 +1,9 @@
+import { emulateMedia } from "@registry-test/test-utils";
 import { expect, test } from "vitest";
 import { render } from "vitest-browser-react";
 import { page } from "vitest/browser";
 
 import { App } from "./app.js";
-import { emulateMedia } from "./components/test-utils.js";
 
 const pageBackground = () => getComputedStyle(document.body).backgroundColor;
 const dark = "rgb(10, 10, 10)"; // the default dark.background

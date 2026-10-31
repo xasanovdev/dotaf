@@ -1,12 +1,13 @@
-import { Card, CardBody, CardHeader, CardTitle } from "@registry/card";
 import { describe, expect, test } from "vitest";
 import { render } from "vitest-browser-react";
 import { page } from "vitest/browser";
 
+import { Card, CardBody, CardHeader, CardTitle } from "./card";
+
 import "virtual:dotaf.css";
 
-import { contrast } from "./contrast.js";
-import { setTheme } from "./test-utils.js";
+import { contrast } from "../../test/browser/contrast";
+import { setTheme } from "../../test/browser/test-utils";
 
 describe("Card", () => {
   test("the title names the card for assistive technology", async () => {

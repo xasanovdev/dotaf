@@ -5,7 +5,10 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "types": ["node", "vite/client"],
-    "paths": { "@registry/*": ["../../packages/registry/components/*"] }
+    "paths": {
+      "@registry/*": ["../../packages/registry/components/*"],
+      "@registry-test/*": ["../../packages/registry/test/browser/*"]
+    }
   },
   "include": ["src", "vite.config.ts", "dotaf-css.ts"]
 }

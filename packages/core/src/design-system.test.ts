@@ -162,11 +162,11 @@ describe("listProjectComponents", () => {
   });
 
   test("names the files of a component already in paths.components", async () => {
-    const root = await project({}, { "src/ui/button.tsx": "// edited\n" });
+    const root = await project({}, { "src/ui/button/button.tsx": "// edited\n" });
 
     const button = (await listProjectComponents(root)).find((c) => c.name === "button");
 
-    expect(button?.installed).toEqual(["src/ui/button.tsx"]);
+    expect(button?.installed).toEqual(["src/ui/button/button.tsx"]);
   });
 });
 
@@ -175,17 +175,23 @@ describe("describeComponent", () => {
     const root = await project(
       {},
       {
-        "src/ui/button.tsx": "",
-        "src/ui/button.module.css": "",
+        "src/ui/button/button.tsx": "",
+        "src/ui/button/button.module.css": "",
       },
     );
 
     const button = await describeComponent(root, "button");
 
     expect(button.meta.example).toContain("<Button");
-    expect(button.files.map((file) => file.path)).toEqual(["button.tsx", "button.module.css"]);
+    expect(button.files.map((file) => file.path)).toEqual([
+      "button/button.tsx",
+      "button/button.module.css",
+    ]);
     expect(button.files[0]?.content).toContain("export function Button");
-    expect(button.installed).toEqual(["src/ui/button.tsx", "src/ui/button.module.css"]);
+    expect(button.installed).toEqual([
+      "src/ui/button/button.tsx",
+      "src/ui/button/button.module.css",
+    ]);
   });
 
   test("gives the command that installs the npm packages the project still lacks", async () => {

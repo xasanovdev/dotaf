@@ -1,8 +1,7 @@
-import { Checkbox } from "@registry/checkbox";
+import { Checkbox } from "./checkbox";
+import styles from "./checkbox.demo.module.css";
 
-import styles from "./demo.module.css";
-
-export function CheckboxDemo() {
+export default function CheckboxDemo() {
   return (
     <div className={styles.row}>
       <Checkbox>Unchecked</Checkbox>

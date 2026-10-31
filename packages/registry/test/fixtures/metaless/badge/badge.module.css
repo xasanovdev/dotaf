@@ -1,0 +1,13 @@
+.root {
+  display: inline-flex;
+  padding: var(--dotaf-space-1) var(--dotaf-space-2);
+  border-radius: var(--dotaf-radius-full);
+  background: var(--dotaf-color-muted);
+  color: var(--dotaf-color-fg);
+  font-size: var(--dotaf-text-xs);
+}
+
+.root[data-variant="danger"] {
+  background: var(--dotaf-color-danger);
+  color: var(--dotaf-color-on-danger);
+}

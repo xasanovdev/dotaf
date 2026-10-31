@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 
-import { Badge } from "./badge";
+import { Badge } from "../badge/badge";
 import styles from "./tag.module.css";
 
 export interface TagProps {

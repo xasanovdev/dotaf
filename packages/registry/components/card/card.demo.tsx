@@ -1,9 +1,8 @@
-import { Button } from "@registry/button";
-import { Card, CardBody, CardFooter, CardHeader, CardTitle } from "@registry/card";
+import { Button } from "../button/button";
+import { Card, CardBody, CardFooter, CardHeader, CardTitle } from "./card";
+import styles from "./card.demo.module.css";
 
-import styles from "./demo.module.css";
-
-export function CardDemo() {
+export default function CardDemo() {
   return (
     <div className={styles.grid}>
       <Card>

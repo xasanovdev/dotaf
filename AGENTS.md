@@ -14,6 +14,7 @@ Design system for coding agents. A project's brand lives in `dotaf.json`; dotaf 
 - Build every component on `react-aria-components`, including simple ones, and style states through its data attributes (`[data-pressed]`, `[data-hovered]`, `[data-focus-visible]`). The one exception is a static container with no interaction to borrow (Card): plain HTML, with the reason in a comment at the top of the component.
 - Variants are explicit props (`variant`, `size`) mapped to `data-variant` / `data-size`. Larger components are compound, with each part its own named export (`Dialog`, `DialogTrigger`, `DialogContent`), not `Dialog.Trigger`: Next.js server components can't reach properties of a client component. `ref` is a regular prop (React 19).
 - Every component file starts with `"use client"`.
+- Each component is a folder in `packages/registry/components/<name>/` holding its source, meta, demo and browser tests (see the README there). Another component is imported as `../<name>/<name>`.
 
 ## Quality gate
 

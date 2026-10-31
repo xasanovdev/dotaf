@@ -4,11 +4,10 @@ import {
   TextFieldError,
   TextFieldInput,
   TextFieldLabel,
-} from "@registry/text-field";
+} from "./text-field";
+import styles from "./text-field.demo.module.css";
 
-import styles from "./demo.module.css";
-
-export function TextFieldDemo() {
+export default function TextFieldDemo() {
   return (
     <div className={styles.grid}>
       <TextField>

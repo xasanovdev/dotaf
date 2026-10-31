@@ -5,5 +5,5 @@
   },
   // Components and fixtures compile as UI code; tsconfig.strict.json holds src/ and test/
   // to the repo's full strictness.
-  "include": ["src", "test", "components", "types"]
+  "include": ["src", "test", "components", "types", "vitest.config.ts"]
 }

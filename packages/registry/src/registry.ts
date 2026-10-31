@@ -17,9 +17,17 @@ export class RegistryError extends Error {
   }
 }
 
-/** Source files of a component, in the order they are copied into a project. */
+/**
+ * Source files of a component, relative to the registry root, in the order they are copied
+ * into a project. Each component has its own folder; its demo and tests sit there too but are
+ * not copied.
+ */
 export function componentFiles(name: string): string[] {
-  return [`${name}.tsx`, `${name}.module.css`];
+  return [`${name}/${name}.tsx`, `${name}/${name}.module.css`];
+}
+
+function metaFile(name: string): string {
+  return `${name}/${name}.json`;
 }
 
 const propSchema = z.strictObject({
@@ -36,7 +44,7 @@ const metaSchema = z.strictObject({
   description: z.string().min(1),
   /** npm packages the component imports, installed into the user's project. */
   dependencies: z.array(z.string()).default([]),
-  /** Other registry components it imports as "./<name>", copied alongside it. */
+  /** Other registry components it imports as "../<name>/<name>", copied alongside it. */
   registryDependencies: z.array(z.string()).default([]),
   props: z.array(propSchema).default([]),
   /** A minimal JSX usage an agent can adapt. */
@@ -46,7 +54,7 @@ const metaSchema = z.strictObject({
 export type ComponentMeta = z.output<typeof metaSchema>;
 
 export interface ComponentFile {
-  /** File name, e.g. `button.module.css`; components sit side by side in one folder. */
+  /** Path from the registry root, e.g. `button/button.module.css`. */
   path: string;
   content: string;
 }
@@ -56,19 +64,17 @@ export interface RegistryComponent {
   files: ComponentFile[];
 }
 
-// Each component is <name>.json beside its source files. Dot files hold tool state.
+// Each folder is a component, named like the folder. Dot folders hold tool state.
 async function componentNames(root: string): Promise<string[]> {
   const entries = await readdir(root, { withFileTypes: true });
   return entries
-    .filter(
-      (entry) => entry.isFile() && entry.name.endsWith(".json") && !entry.name.startsWith("."),
-    )
-    .map((entry) => entry.name.slice(0, -".json".length))
+    .filter((entry) => entry.isDirectory() && !entry.name.startsWith("."))
+    .map((entry) => entry.name)
     .sort();
 }
 
 async function readMeta(root: string, name: string): Promise<ComponentMeta> {
-  const path = `${name}.json`;
+  const path = metaFile(name);
   const text = await readFile(join(root, path), "utf8");
 
   let json: unknown;
@@ -86,21 +92,22 @@ async function readMeta(root: string, name: string): Promise<ComponentMeta> {
     );
   }
   if (result.data.name !== name) {
-    throw new RegistryError(`${path} is invalid:`, [`name: must match its file name "${name}"`]);
+    throw new RegistryError(`${path} is invalid:`, [`name: must match its folder name "${name}"`]);
   }
   return result.data;
 }
 
-// A listed component must be copyable, so its source files are checked up front.
+// A listed component must be copyable, so its files are checked up front. A broken meta
+// is reported before missing sources, since it says what the component should be.
 async function readCompleteMeta(root: string, name: string): Promise<ComponentMeta> {
-  const meta = await readMeta(root, name);
   const missing: string[] = [];
-  for (const file of componentFiles(name)) {
+  for (const file of [metaFile(name), ...componentFiles(name)]) {
     await access(join(root, file)).catch(() => missing.push(file));
   }
-  if (missing.length > 0) {
-    throw new RegistryError(`${name} is missing ${missing.join(", ")}`);
-  }
+  const fail = () => new RegistryError(`${name} is missing ${missing.join(", ")}`);
+  if (missing.includes(metaFile(name))) throw fail();
+  const meta = await readMeta(root, name);
+  if (missing.length > 0) throw fail();
   return meta;
 }
 

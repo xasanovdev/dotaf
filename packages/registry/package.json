@@ -12,7 +12,9 @@
   },
   "files": [
     "dist",
-    "components"
+    "components",
+    "!components/**/*.demo.*",
+    "!components/**/*.test.*"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
@@ -24,9 +26,11 @@
   },
   "devDependencies": {
     "@types/react": "^19.3.0",
+    "@vitest/browser-playwright": "^5.0.5",
     "postcss": "^8.5.31",
     "react": "^19.3.1",
     "react-aria-components": "^1.22.1",
-    "typescript": "~6.0.3"
+    "typescript": "~6.0.3",
+    "vitest-browser-react": "^2.3.0"
   }
 }

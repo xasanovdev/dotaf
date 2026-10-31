@@ -179,12 +179,17 @@ describe("dotaf MCP server", () => {
   });
 
   test("list_components names each component, what it is for, and whether the project has it", async () => {
-    const root = await project({ "src/ui/button.tsx": "", "src/ui/button.module.css": "" });
+    const root = await project({
+      "src/ui/button/button.tsx": "",
+      "src/ui/button/button.module.css": "",
+    });
 
     const { text } = await call(root, "list_components");
 
     expect(text).toContain("- button: Triggers an action");
-    expect(text).toContain("In the project: src/ui/button.tsx, src/ui/button.module.css");
+    expect(text).toContain(
+      "In the project: src/ui/button/button.tsx, src/ui/button/button.module.css",
+    );
     expect(text).toMatch(/- checkbox: .*\n {2}Not in the project yet\./);
   });
 
@@ -200,11 +205,16 @@ describe("dotaf MCP server", () => {
   });
 
   test("get_component for an installed component points at the project's own copy", async () => {
-    const root = await project({ "src/ui/button.tsx": "", "src/ui/button.module.css": "" });
+    const root = await project({
+      "src/ui/button/button.tsx": "",
+      "src/ui/button/button.module.css": "",
+    });
 
     const { text } = await call(root, "get_component", { name: "button" });
 
-    expect(text).toContain("In the project: src/ui/button.tsx, src/ui/button.module.css");
+    expect(text).toContain(
+      "In the project: src/ui/button/button.tsx, src/ui/button/button.module.css",
+    );
     expect(text).not.toContain("add_component");
     expect(text).not.toContain("```tsx");
   });
@@ -253,29 +263,31 @@ describe("dotaf MCP server", () => {
       const { text, isError } = await call(root, "add_component", { names: ["card", "switch"] });
 
       expect(isError).toBe(false);
-      expect(text).toContain("Added card: src/ui/card.tsx, src/ui/card.module.css");
-      expect(text).toContain("Added switch: src/ui/switch.tsx, src/ui/switch.module.css");
+      expect(text).toContain("Added card: src/ui/card/card.tsx, src/ui/card/card.module.css");
+      expect(text).toContain(
+        "Added switch: src/ui/switch/switch.tsx, src/ui/switch/switch.module.css",
+      );
       expect(text).toContain("Run: pnpm add react-aria-components");
-      expect(await readFile(join(root, "src/ui/card.tsx"), "utf8")).toContain(
+      expect(await readFile(join(root, "src/ui/card/card.tsx"), "utf8")).toContain(
         "export function Card",
       );
     });
 
     test("never overwrites a component the project already has", async () => {
-      const root = await project({ "src/ui/button.tsx": "// edited\n" });
+      const root = await project({ "src/ui/button/button.tsx": "// edited\n" });
 
       const { text } = await call(root, "add_component", { names: ["button"] });
 
-      expect(text).toContain("Kept button: src/ui/button.tsx already exists");
-      expect(await readFile(join(root, "src/ui/button.tsx"), "utf8")).toBe("// edited\n");
+      expect(text).toContain("Kept button: src/ui/button/button.tsx already exists");
+      expect(await readFile(join(root, "src/ui/button/button.tsx"), "utf8")).toBe("// edited\n");
     });
 
     test("a kept component with files missing says so, since nothing will add them", async () => {
-      const root = await project({ "src/ui/button.tsx": "// edited\n" });
+      const root = await project({ "src/ui/button/button.tsx": "// edited\n" });
 
       const { text } = await call(root, "add_component", { names: ["button"] });
 
-      expect(text).toContain("src/ui/button.module.css is missing");
+      expect(text).toContain("src/ui/button/button.module.css is missing");
     });
   });
 

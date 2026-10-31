@@ -1,12 +1,13 @@
-import { Switch } from "@registry/switch";
 import { describe, expect, test, vi } from "vitest";
 import { render } from "vitest-browser-react";
 import { page, userEvent } from "vitest/browser";
 
+import { Switch } from "./switch";
+
 import "virtual:dotaf.css";
 
-import { contrast, sameColor } from "./contrast.js";
-import { emulateMedia, pageColor, setTheme } from "./test-utils.js";
+import { contrast, sameColor } from "../../test/browser/contrast";
+import { emulateMedia, pageColor, setTheme } from "../../test/browser/test-utils";
 
 // The visible track is decoration next to the real (visually hidden) input.
 function track(name: string): Element {

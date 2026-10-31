@@ -1,11 +1,10 @@
-import { Button } from "@registry/button";
-
-import styles from "./demo.module.css";
+import { Button } from "./button";
+import styles from "./button.demo.module.css";
 
 const variants = ["primary", "secondary", "ghost", "danger"] as const;
 const sizes = ["sm", "md", "lg"] as const;
 
-export function ButtonDemo() {
+export default function ButtonDemo() {
   return (
     <div className={styles.stack}>
       {sizes.map((size) => (

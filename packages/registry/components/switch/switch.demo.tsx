@@ -1,8 +1,7 @@
-import { Switch } from "@registry/switch";
+import { Switch } from "./switch";
+import styles from "./switch.demo.module.css";
 
-import styles from "./demo.module.css";
-
-export function SwitchDemo() {
+export default function SwitchDemo() {
   return (
     <div className={styles.row}>
       <Switch>Off</Switch>

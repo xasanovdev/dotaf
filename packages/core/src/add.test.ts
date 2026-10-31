@@ -28,23 +28,23 @@ const app = {
   "dotaf.json": JSON.stringify({ paths: { components: "src/components/ui" } }),
 };
 
-/** A registry entry: meta plus the two source files, in the flat layout. */
+/** A registry entry: its folder with the meta and the two source files. */
 function entry(name: string, meta: Record<string, unknown> = {}) {
   return {
-    [`${name}.json`]: JSON.stringify({
+    [`${name}/${name}.json`]: JSON.stringify({
       name,
       description: `The ${name}.`,
       example: `<${name} />`,
       dependencies: ["react-aria-components"],
       ...meta,
     }),
-    [`${name}.tsx`]: `// ${name}\n`,
-    [`${name}.module.css`]: `.root {}\n`,
+    [`${name}/${name}.tsx`]: `// ${name}\n`,
+    [`${name}/${name}.module.css`]: `.root {}\n`,
   };
 }
 
 describe("addComponents", () => {
-  test("copies a component's files side by side into paths.components", async () => {
+  test("copies a component's files into its own folder in paths.components", async () => {
     const root = await folder(app);
 
     const result = await addComponents(root, ["button"]);
@@ -52,10 +52,13 @@ describe("addComponents", () => {
     expect(result.added).toEqual([
       {
         name: "button",
-        files: ["src/components/ui/button.tsx", "src/components/ui/button.module.css"],
+        files: [
+          "src/components/ui/button/button.tsx",
+          "src/components/ui/button/button.module.css",
+        ],
       },
     ]);
-    expect(await readFile(join(root, "src/components/ui/button.tsx"), "utf8")).toContain(
+    expect(await readFile(join(root, "src/components/ui/button/button.tsx"), "utf8")).toContain(
       "export function Button",
     );
     expect(result.install).toBe("pnpm add react-aria-components");
@@ -70,7 +73,7 @@ describe("addComponents", () => {
   });
 
   test("an existing file is kept unless overwrite is asked for", async () => {
-    const root = await folder({ ...app, "src/components/ui/button.tsx": "// mine\n" });
+    const root = await folder({ ...app, "src/components/ui/button/button.tsx": "// mine\n" });
 
     const kept = await addComponents(root, ["button"]);
 
@@ -78,16 +81,18 @@ describe("addComponents", () => {
     expect(kept.kept).toEqual([
       {
         name: "button",
-        existing: ["src/components/ui/button.tsx"],
-        missing: ["src/components/ui/button.module.css"],
+        existing: ["src/components/ui/button/button.tsx"],
+        missing: ["src/components/ui/button/button.module.css"],
       },
     ]);
-    expect(await readFile(join(root, "src/components/ui/button.tsx"), "utf8")).toBe("// mine\n");
+    expect(await readFile(join(root, "src/components/ui/button/button.tsx"), "utf8")).toBe(
+      "// mine\n",
+    );
 
     const replaced = await addComponents(root, ["button"], { overwrite: true });
 
     expect(replaced.added.map((component) => component.name)).toEqual(["button"]);
-    expect(await readFile(join(root, "src/components/ui/button.tsx"), "utf8")).toContain(
+    expect(await readFile(join(root, "src/components/ui/button/button.tsx"), "utf8")).toContain(
       "export function Button",
     );
   });
@@ -104,11 +109,17 @@ describe("addComponents", () => {
     expect(result.added).toEqual([
       {
         name: "dialog",
-        files: ["src/components/ui/dialog.tsx", "src/components/ui/dialog.module.css"],
+        files: [
+          "src/components/ui/dialog/dialog.tsx",
+          "src/components/ui/dialog/dialog.module.css",
+        ],
       },
       {
         name: "button",
-        files: ["src/components/ui/button.tsx", "src/components/ui/button.module.css"],
+        files: [
+          "src/components/ui/button/button.tsx",
+          "src/components/ui/button/button.module.css",
+        ],
         neededBy: "dialog",
       },
     ]);
@@ -139,13 +150,15 @@ describe("addComponents", () => {
       ...entry("button"),
       ...entry("dialog", { registryDependencies: ["button"] }),
     });
-    const root = await folder({ ...app, "src/components/ui/button.tsx": "// mine\n" });
+    const root = await folder({ ...app, "src/components/ui/button/button.tsx": "// mine\n" });
 
     const result = await addComponents(root, ["dialog"], { registry, overwrite: true });
 
     expect(result.added.map((component) => component.name)).toEqual(["dialog"]);
     expect(result.kept).toMatchObject([{ name: "button", neededBy: "dialog" }]);
-    expect(await readFile(join(root, "src/components/ui/button.tsx"), "utf8")).toBe("// mine\n");
+    expect(await readFile(join(root, "src/components/ui/button/button.tsx"), "utf8")).toBe(
+      "// mine\n",
+    );
   });
 
   test("a dependency missing from the registry names the component that needs it", async () => {
@@ -162,7 +175,7 @@ describe("addComponents", () => {
     await expect(addComponents(root, ["card", "buton", "chekbox"])).rejects.toThrow(
       /"buton", "chekbox"[\s\S]*Available: button/,
     );
-    await expect(readFile(join(root, "src/components/ui/card.tsx"), "utf8")).rejects.toThrow();
+    await expect(readFile(join(root, "src/components/ui/card/card.tsx"), "utf8")).rejects.toThrow();
   });
 
   test("from a subfolder it finds the project by its dotaf.json", async () => {
@@ -170,8 +183,10 @@ describe("addComponents", () => {
 
     const result = await addComponents(join(root, "src/pages"), ["button"]);
 
-    expect(result.added[0]?.files).toContain("src/components/ui/button.tsx");
-    expect(await readFile(join(root, "src/components/ui/button.tsx"), "utf8")).toContain("Button");
+    expect(result.added[0]?.files).toContain("src/components/ui/button/button.tsx");
+    expect(await readFile(join(root, "src/components/ui/button/button.tsx"), "utf8")).toContain(
+      "Button",
+    );
   });
 
   test("paths.components that is a file fails with a clear message", async () => {
