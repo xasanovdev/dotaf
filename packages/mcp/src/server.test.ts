@@ -1,4 +1,4 @@
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
@@ -54,17 +54,27 @@ async function call(cwd: string, name: string, args: Record<string, unknown> = {
 }
 
 describe("dotaf MCP server", () => {
-  test("offers the read tools, each saying when to call it and marked read-only", async () => {
+  test("offers six tools, each saying when to call it; only two write, and neither destroys", async () => {
     const { tools } = await (await connect(await project())).listTools();
 
     expect(tools.map((tool) => tool.name)).toEqual([
       "get_design_system",
       "list_components",
       "get_component",
+      "add_component",
+      "update_theme",
+      "lint_ui",
     ]);
+    const writers = ["add_component", "update_theme"];
     for (const tool of tools) {
-      expect(tool.description).toMatch(/^Call (before|when)/);
-      expect(tool.annotations).toMatchObject({ readOnlyHint: true, openWorldHint: false });
+      expect(tool.description).toMatch(/^Call (before|when|after)/);
+      expect(tool.annotations).toMatchObject({
+        readOnlyHint: !writers.includes(tool.name),
+        openWorldHint: false,
+      });
+      if (writers.includes(tool.name)) {
+        expect(tool.annotations).toMatchObject({ destructiveHint: false });
+      }
     }
   });
 
@@ -127,6 +137,9 @@ describe("dotaf MCP server", () => {
         ["get_design_system", { path }],
         ["list_components", { path }],
         ["get_component", { name: "button", path }],
+        ["add_component", { names: ["button"], path }],
+        ["update_theme", { radius: "lg", path }],
+        ["lint_ui", { path }],
       ] as const) {
         expect(await call(repo, name, args)).toMatchObject({ isError: false });
       }
@@ -150,6 +163,7 @@ describe("dotaf MCP server", () => {
 
     expect(client.getServerVersion()).toMatchObject({ name: "dotaf", version: "1.2.3" });
     expect(client.getInstructions()).toContain("get_design_system");
+    expect(client.getInstructions()).toContain("After writing CSS, call lint_ui");
   });
 
   test("get_design_system gives the rules, every token with its purpose, and dark values", async () => {
@@ -180,7 +194,7 @@ describe("dotaf MCP server", () => {
     expect(text).toContain("# button");
     expect(text).toContain('- variant: "primary" | "secondary" | "ghost" | "danger" = "primary"');
     expect(text).toContain('<Button variant="primary" onPress={save}>Save changes</Button>');
-    expect(text).toContain("npx dotaf add button");
+    expect(text).toContain("Add it with add_component");
     expect(text).toContain('```tsx\n"use client";');
     expect(text).toContain("```css\n.root {");
   });
@@ -191,7 +205,7 @@ describe("dotaf MCP server", () => {
     const { text } = await call(root, "get_component", { name: "button" });
 
     expect(text).toContain("In the project: src/ui/button.tsx, src/ui/button.module.css");
-    expect(text).not.toContain("npx dotaf add");
+    expect(text).not.toContain("add_component");
     expect(text).not.toContain("```tsx");
   });
 
@@ -222,10 +236,144 @@ describe("dotaf MCP server", () => {
       ["get_design_system", {}],
       ["list_components", {}],
       ["get_component", { name: "button" }],
+      ["add_component", { names: ["button"] }],
+      ["update_theme", { radius: "lg" }],
+      ["lint_ui", {}],
     ] as const) {
       const { text, isError } = await call(root, name, args);
       expect(isError).toBe(true);
       expect(text).toContain("npx dotaf init");
     }
+  });
+
+  describe("add_component", () => {
+    test("copies the components into the project and says what to install", async () => {
+      const root = await project();
+
+      const { text, isError } = await call(root, "add_component", { names: ["card", "switch"] });
+
+      expect(isError).toBe(false);
+      expect(text).toContain("Added card: src/ui/card.tsx, src/ui/card.module.css");
+      expect(text).toContain("Added switch: src/ui/switch.tsx, src/ui/switch.module.css");
+      expect(text).toContain("Run: pnpm add react-aria-components");
+      expect(await readFile(join(root, "src/ui/card.tsx"), "utf8")).toContain(
+        "export function Card",
+      );
+    });
+
+    test("never overwrites a component the project already has", async () => {
+      const root = await project({ "src/ui/button.tsx": "// edited\n" });
+
+      const { text } = await call(root, "add_component", { names: ["button"] });
+
+      expect(text).toContain("Kept button: src/ui/button.tsx already exists");
+      expect(await readFile(join(root, "src/ui/button.tsx"), "utf8")).toBe("// edited\n");
+    });
+
+    test("a kept component with files missing says so, since nothing will add them", async () => {
+      const root = await project({ "src/ui/button.tsx": "// edited\n" });
+
+      const { text } = await call(root, "add_component", { names: ["button"] });
+
+      expect(text).toContain("src/ui/button.module.css is missing");
+    });
+  });
+
+  describe("update_theme", () => {
+    test("changes the brand, regenerates dotaf.css and lists each change", async () => {
+      const root = await project();
+
+      const { text, isError } = await call(root, "update_theme", {
+        colors: { danger: "#b91c1c" },
+        radius: "lg",
+      });
+
+      expect(isError).toBe(false);
+      expect(text).toContain("colors.danger: #dc2626 -> #b91c1c");
+      expect(text).toContain("radius: md -> lg");
+      expect(text).toContain("Regenerated src/dotaf.css.");
+      expect(await readFile(join(root, "src/dotaf.css"), "utf8")).toContain(
+        "--dotaf-color-danger: #b91c1c;",
+      );
+    });
+
+    test("null puts a value back to its default; a dark accent is derived again", async () => {
+      const root = await project();
+      await call(root, "update_theme", { dark: { primary: "#4ade80" } });
+
+      const { text } = await call(root, "update_theme", { dark: { primary: null } });
+
+      expect(text).toContain("dark.primary: #4ade80 -> derived from colors.primary");
+    });
+
+    test("an invalid value is an error that says why, and nothing changes", async () => {
+      const { text, isError } = await call(await project(), "update_theme", {
+        colors: { primary: "green-ish" },
+      });
+
+      expect(isError).toBe(true);
+      expect(text).toContain("colors.primary: must be a hex color");
+    });
+
+    test("the schema names every brand field with dotaf's default", async () => {
+      const { tools } = await (await connect(await project())).listTools();
+      const schema = JSON.stringify(
+        tools.find((tool) => tool.name === "update_theme")?.inputSchema,
+      );
+
+      for (const field of [
+        "primary",
+        "background",
+        "danger",
+        "sans",
+        "mono",
+        "radius",
+        "density",
+      ]) {
+        expect(schema).toContain(field);
+      }
+      expect(schema).toContain("derived from colors.primary");
+      expect(schema).not.toContain('"paths"');
+    });
+
+    test("tells the agent where the current values are, apart from dotaf's defaults", async () => {
+      const { tools } = await (await connect(await project())).listTools();
+
+      expect(tools.find((tool) => tool.name === "update_theme")?.description).toContain(
+        "get_design_system",
+      );
+    });
+  });
+
+  describe("lint_ui", () => {
+    test("names each raw value by file:line:column with the token to use", async () => {
+      const root = await project({ "src/ui/card.module.css": ".card {\n  padding: 12px;\n}\n" });
+
+      const { text, isError } = await call(root, "lint_ui");
+
+      expect(isError).toBe(false);
+      expect(text).toContain(
+        "src/ui/card.module.css:2:12 Use var(--dotaf-space-3) instead of 12px",
+      );
+      expect(text).toContain("1 problem in 1 of 1 CSS file.");
+    });
+
+    test("a clean project says how many files it checked", async () => {
+      const root = await project({
+        "src/a.css": ".a {\n  gap: var(--dotaf-space-2);\n}\n",
+        "src/b.css": ".b {\n  gap: var(--dotaf-space-2);\n}\n",
+      });
+
+      const { text } = await call(root, "lint_ui", { files: ["src/a.css"] });
+
+      expect(text).toBe("Checked 1 CSS file: every design value is a dotaf token.");
+    });
+
+    test("a file it can't check is an error, not a clean result", async () => {
+      const { text, isError } = await call(await project(), "lint_ui", { files: ["src/nope.css"] });
+
+      expect(isError).toBe(true);
+      expect(text).toContain("src/nope.css does not exist.");
+    });
   });
 });

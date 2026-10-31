@@ -1,10 +1,23 @@
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { dirname, join } from "node:path";
 
 import { DotafConfigError, parseConfig, type ResolvedConfig } from "./config.js";
+import { generateCss } from "./generate-css.js";
 
 /** The file a project keeps its brand in, at the project root. */
 export const configFileName = "dotaf.json";
+
+/** Writes dotaf.json as dotaf formats it: two-space JSON and a final newline. */
+export async function writeConfig(root: string, config: unknown): Promise<void> {
+  await writeFile(join(root, configFileName), `${JSON.stringify(config, null, 2)}\n`);
+}
+
+/** Writes dotaf.css for `config` at its paths.css. */
+export async function writeStylesheet(root: string, config: ResolvedConfig): Promise<void> {
+  const file = join(root, config.paths.css);
+  await mkdir(dirname(file), { recursive: true });
+  await writeFile(file, generateCss(config));
+}
 
 export async function loadConfig(cwd: string): Promise<ResolvedConfig> {
   const path = join(cwd, configFileName);

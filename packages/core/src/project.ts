@@ -62,8 +62,15 @@ export class DotafProjectNotFoundError extends DotafConfigError {
   }
 }
 
-// Folders that hold installed, generated or built code, never the user's own project.
-const notProjects = new Set(["node_modules", "dist", "build", "out", "coverage", "vendor"]);
+/** Folders that hold installed, generated or built code: never a project, never linted. */
+export const notProjects: ReadonlySet<string> = new Set([
+  "node_modules",
+  "dist",
+  "build",
+  "out",
+  "coverage",
+  "vendor",
+]);
 
 // Deep enough for apps/<name>/<package>; the search runs only after the walk up failed.
 const searchDepth = 4;
@@ -115,6 +122,11 @@ export async function loadProject(start: string): Promise<DotafProject> {
 /** JSON as editors save it, byte order mark included. */
 export function parseJson(text: string): unknown {
   return JSON.parse(text.replace(/^\uFEFF/, ""));
+}
+
+/** A JSON object, as opposed to an array, null or a primitive. */
+export function isObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
 interface PackageJson {

@@ -129,6 +129,9 @@ const configSchema = z.strictObject({
     .prefault({}),
 });
 
+/** dotaf.json keys that say where files go rather than what the brand is; a theme never sets them. */
+export const notBrand: readonly string[] = ["paths", "$schema"];
+
 /** What users write in dotaf.json: every field optional. */
 export type DotafConfig = z.input<typeof configSchema>;
 

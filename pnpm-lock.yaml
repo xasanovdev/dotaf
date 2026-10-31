@@ -275,13 +275,16 @@ importers:
       '@dotaf/registry':
         specifier: workspace:*
         version: link:../registry
+      '@dotaf/stylelint-config':
+        specifier: workspace:*
+        version: link:../stylelint-config
+      stylelint:
+        specifier: ^17.16.0
+        version: 17.16.0(supports-color@10.2.2)(typescript@6.0.3)
       zod:
         specifier: ^4.6.7
         version: 4.6.7
     devDependencies:
-      '@dotaf/stylelint-config':
-        specifier: workspace:*
-        version: link:../stylelint-config
       postcss:
         specifier: ^8.5.31
         version: 8.5.31

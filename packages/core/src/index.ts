@@ -11,4 +11,8 @@ export { DotafConfigExistsError, initProject, readTheme } from "./init.js";
 export type { InitResult } from "./init.js";
 export { detectProject, DotafProjectNotFoundError } from "./project.js";
 export type { Framework, PackageManager, ProjectInfo } from "./project.js";
+export { lintProject } from "./lint.js";
+export type { LintFinding, LintReport } from "./lint.js";
+export { brandDefaults, updateTheme } from "./theme.js";
+export type { ThemeChange, ThemeChanges, ThemeUpdate } from "./theme.js";
 export { RegistryError } from "@dotaf/registry";

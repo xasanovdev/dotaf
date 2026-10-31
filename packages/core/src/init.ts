@@ -1,10 +1,16 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import { dirname, join, posix, relative, resolve, sep } from "node:path";
 
-import { DotafConfigError, parseConfig, type DotafConfig } from "./config.js";
-import { generateCss } from "./generate-css.js";
-import { configFileName, loadConfig } from "./load-config.js";
-import { exists, installCommand, parseJson, readProject, type ProjectInfo } from "./project.js";
+import { DotafConfigError, notBrand, parseConfig, type DotafConfig } from "./config.js";
+import { configFileName, loadConfig, writeConfig, writeStylesheet } from "./load-config.js";
+import {
+  exists,
+  installCommand,
+  isObject,
+  parseJson,
+  readProject,
+  type ProjectInfo,
+} from "./project.js";
 
 export interface InitResult {
   /** False on a rerun: an existing dotaf.json is left as it is. */
@@ -77,21 +83,19 @@ export async function initProject(
     if (brand === undefined) return undefined;
   }
 
-  const writeConfig = !info.hasConfig || options.theme !== undefined;
-  if (writeConfig) {
+  const writesConfig = !info.hasConfig || options.theme !== undefined;
+  if (writesConfig) {
     const input: DotafConfig = {
       ...brand,
       $schema: schemaUrl,
       paths: await defaultPaths(cwd, info),
     };
     parseConfig(input, configFileName);
-    await writeFile(join(cwd, configFileName), `${JSON.stringify(input, null, 2)}\n`);
+    await writeConfig(cwd, input);
   }
 
   const config = await loadConfig(cwd);
-  const cssFile = join(cwd, config.paths.css);
-  await mkdir(dirname(cssFile), { recursive: true });
-  await writeFile(cssFile, generateCss(config));
+  await writeStylesheet(cwd, config);
 
   const specifier =
     info.entry === undefined ? undefined : importSpecifier(info.entry, config.paths.css);
@@ -101,7 +105,7 @@ export async function initProject(
     (await readFile(join(cwd, info.entry), "utf8")).includes(specifier);
   const install = installCommand(project, ["react-aria-components"]);
   return {
-    wroteConfig: writeConfig,
+    wroteConfig: writesConfig,
     css: config.paths.css,
     ...(info.entry === undefined || specifier === undefined || imported
       ? {}
@@ -155,11 +159,11 @@ export async function readTheme(source: string, cwd: string): Promise<DotafConfi
       error instanceof Error ? error.message : String(error),
     ]);
   }
-  if (typeof theme !== "object" || theme === null || Array.isArray(theme)) {
+  if (!isObject(theme)) {
     throw new DotafConfigError(`${source} is not a dotaf.json object`);
   }
   const brand = Object.fromEntries(
-    Object.entries(theme).filter(([key]) => key !== "paths" && key !== "$schema"),
+    Object.entries(theme).filter(([key]) => !notBrand.includes(key)),
   );
   parseConfig(brand, source);
   return brand;
