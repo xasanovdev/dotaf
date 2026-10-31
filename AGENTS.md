@@ -6,6 +6,7 @@ Design system for coding agents. A project's brand lives in `dotaf.json`; dotaf 
 
 - `core` owns behaviour. `cli` and `mcp` are adapters: parse input, call `core`, format output. New logic lands in `core` so both adapters get it.
 - Dependencies point one way: `cli` → `mcp` → `core` → `registry`, `stylelint-config`.
+- Inside `core/src` the same holds across three layers: `commands/` (what `cli` and `mcp` call; they may touch the disk) → `project/` (finds the project, reads and writes `dotaf.json`, `dotaf.css` and `package.json`) → `config/` (pure: schema, parsing, CSS generation, JSON helpers; no disk). ESLint checks the static imports.
 - `registry` components are copied into user projects as source. Write them as code a user is glad to own: readable, small, no internal imports.
 
 ## Component rules

@@ -1,8 +1,8 @@
 import { extname, relative, resolve, sep } from "node:path";
 import type { LintResult } from "stylelint";
 
-import { DotafConfigError } from "./config.js";
-import { exists, loadProject, notProjects } from "./project.js";
+import { DotafConfigError } from "../config/config.js";
+import { exists, loadProject, notProjects } from "../project/project.js";
 
 export interface LintFinding {
   /** Relative to the project, with forward slashes. */

@@ -7,9 +7,8 @@ import {
   type RegistryComponent,
 } from "@dotaf/registry";
 
-import { DotafConfigError } from "./config.js";
-import { configFileName } from "./load-config.js";
-import { existingFiles, installCommand, loadProject, readProject } from "./project.js";
+import { configFileName, DotafConfigError } from "../config/config.js";
+import { existingFiles, installCommand, loadProject, readProject } from "../project/project.js";
 
 export interface AddedComponent {
   name: string;

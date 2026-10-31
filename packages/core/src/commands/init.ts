@@ -1,16 +1,16 @@
 import { readFile } from "node:fs/promises";
 import { dirname, join, posix, relative, resolve, sep } from "node:path";
 
-import { DotafConfigError, notBrand, parseConfig, type DotafConfig } from "./config.js";
-import { configFileName, loadConfig, writeConfig, writeStylesheet } from "./load-config.js";
 import {
-  exists,
-  installCommand,
-  isObject,
-  parseJson,
-  readProject,
-  type ProjectInfo,
-} from "./project.js";
+  configFileName,
+  DotafConfigError,
+  notBrand,
+  parseConfig,
+  type DotafConfig,
+} from "../config/config.js";
+import { isObject, parseJson } from "../config/json.js";
+import { loadConfig, writeConfig, writeStylesheet } from "../project/load-config.js";
+import { exists, installCommand, readProject, type ProjectInfo } from "../project/project.js";
 
 export interface InitResult {
   /** False on a rerun: an existing dotaf.json is left as it is. */

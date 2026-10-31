@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
+import { configJsonSchema } from "../index.js";
 import { invalidColors, validColors } from "./color-samples.fixture.js";
-import { configJsonSchema } from "./index.js";
 
 interface FieldSchemas {
   properties: Record<string, { properties: Record<string, { pattern?: string }> } | undefined>;

@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
+import { DotafConfigError, parseConfig } from "../index.js";
 import { invalidColors, validColors } from "./color-samples.fixture.js";
-import { DotafConfigError, parseConfig } from "./index.js";
 
 describe("parseConfig", () => {
   test("an empty config resolves to the default brand", () => {

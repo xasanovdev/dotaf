@@ -17,7 +17,7 @@
     "!components/**/*.test.*"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "node ../../scripts/clean-dist.js && tsc -p tsconfig.build.json",
     "typecheck": "tsc && tsc -p tsconfig.strict.json",
     "test": "vitest run"
   },

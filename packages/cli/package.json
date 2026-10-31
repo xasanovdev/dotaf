@@ -11,7 +11,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "node ../../scripts/clean-dist.js && tsc -p tsconfig.build.json",
     "typecheck": "tsc",
     "test": "vitest run"
   },

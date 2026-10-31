@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { afterEach, describe, expect, test } from "vitest";
 
-import { brandDefaults, DotafConfigError, updateTheme, type ThemeChanges } from "./index.js";
+import { brandDefaults, DotafConfigError, updateTheme, type ThemeChanges } from "../index.js";
 
 const folders: string[] = [];
 

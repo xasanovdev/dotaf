@@ -25,6 +25,42 @@ export default defineConfig(
     extends: [reactHooks.configs.flat.recommended, jsxA11y.flatConfigs.strict],
     languageOptions: { globals: globals.browser },
   },
+  // core's layers (AGENTS.md): commands/ → project/ → config/. Static imports only.
+  {
+    files: ["packages/core/src/config/**/*.ts"],
+    ignores: ["**/*.test.ts"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              regex: String.raw`^(?!(zod(/.*)?|\./.*)$)`,
+              message: "config/ is pure: it imports only its siblings and zod.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ["packages/core/src/project/**/*.ts"],
+    ignores: ["**/*.test.ts"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              // commands/, or the public index ("..", "../index", "../index.js").
+              regex: String.raw`^\.\.(/commands/.*|/index(\.[jt]s)?)?$`,
+              message: "project/ sits below commands/: it may import config/, not commands/.",
+            },
+          ],
+        },
+      ],
+    },
+  },
   {
     files: ["**/*.js"],
     extends: [tseslint.configs.disableTypeChecked],

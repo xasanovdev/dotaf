@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { afterEach, describe, expect, test } from "vitest";
 
-import { addComponents, DotafConfigError } from "./index.js";
+import { addComponents, DotafConfigError } from "../index.js";
 
 const folders: string[] = [];
 

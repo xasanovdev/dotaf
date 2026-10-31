@@ -1,11 +1,14 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 
-import { DotafConfigError, parseConfig, type ResolvedConfig } from "./config.js";
-import { generateCss } from "./generate-css.js";
-
-/** The file a project keeps its brand in, at the project root. */
-export const configFileName = "dotaf.json";
+import {
+  configFileName,
+  DotafConfigError,
+  parseConfig,
+  type ResolvedConfig,
+} from "../config/config.js";
+import { generateCss } from "../config/generate-css.js";
+import { parseJson } from "../config/json.js";
 
 /** Writes dotaf.json as dotaf formats it: two-space JSON and a final newline. */
 export async function writeConfig(root: string, config: unknown): Promise<void> {
@@ -34,8 +37,7 @@ export async function loadConfig(cwd: string): Promise<ResolvedConfig> {
 
   let input: unknown;
   try {
-    // Windows editors may save a byte order mark, which JSON.parse rejects.
-    input = JSON.parse(source.replace(/^\uFEFF/, ""));
+    input = parseJson(source);
   } catch (error) {
     throw new DotafConfigError(`${path} is not valid JSON:`, [
       error instanceof Error ? error.message : String(error),

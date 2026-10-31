@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, test } from "vitest";
 
-import { DotafConfigError, loadConfig } from "./index.js";
+import { DotafConfigError, loadConfig } from "../index.js";
 
 let project: string;
 

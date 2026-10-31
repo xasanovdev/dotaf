@@ -10,7 +10,7 @@ import {
   DotafConfigExistsError,
   initProject,
   readTheme,
-} from "./index.js";
+} from "../index.js";
 
 const projects: string[] = [];
 

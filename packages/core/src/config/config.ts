@@ -140,8 +140,11 @@ export function configJsonSchema(): Record<string, unknown> {
   return z.toJSONSchema(configSchema, { io: "input" });
 }
 
+/** The file a project keeps its brand in, at the project root. */
+export const configFileName = "dotaf.json";
+
 /** `source` names the config in error messages, e.g. the file path it came from. */
-export function parseConfig(input: unknown, source = "dotaf.json"): ResolvedConfig {
+export function parseConfig(input: unknown, source = configFileName): ResolvedConfig {
   const result = configSchema.safeParse(input);
   if (!result.success) {
     throw new DotafConfigError(

@@ -1,8 +1,9 @@
 import { access, readdir, readFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 
-import { DotafConfigError, type ResolvedConfig } from "./config.js";
-import { configFileName, loadConfig } from "./load-config.js";
+import { configFileName, DotafConfigError, type ResolvedConfig } from "../config/config.js";
+import { parseJson } from "../config/json.js";
+import { loadConfig } from "./load-config.js";
 
 export type Framework = "next" | "vite" | "unknown";
 export type PackageManager = "pnpm" | "yarn" | "bun" | "npm";
@@ -117,16 +118,6 @@ export async function loadProject(start: string): Promise<DotafProject> {
       : `${missing} Run \`npx dotaf init\` in your project's root.`,
     found,
   );
-}
-
-/** JSON as editors save it, byte order mark included. */
-export function parseJson(text: string): unknown {
-  return JSON.parse(text.replace(/^\uFEFF/, ""));
-}
-
-/** A JSON object, as opposed to an array, null or a primitive. */
-export function isObject(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
 interface PackageJson {

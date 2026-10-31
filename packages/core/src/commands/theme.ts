@@ -2,14 +2,16 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
 import {
+  configFileName,
   DotafConfigError,
   notBrand,
   parseConfig,
   type Palette,
   type ResolvedConfig,
-} from "./config.js";
-import { configFileName, writeConfig, writeStylesheet } from "./load-config.js";
-import { isObject, loadProject, parseJson } from "./project.js";
+} from "../config/config.js";
+import { isObject, parseJson } from "../config/json.js";
+import { writeConfig, writeStylesheet } from "../project/load-config.js";
+import { loadProject } from "../project/project.js";
 
 type Settable<T> = { [K in keyof T]?: T[K] | null | undefined };
 

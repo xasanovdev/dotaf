@@ -15,7 +15,7 @@
     "dotaf.schema.json"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.build.json && node scripts/emit-schema.js",
+    "build": "node ../../scripts/clean-dist.js && tsc -p tsconfig.build.json && node scripts/emit-schema.js",
     "typecheck": "tsc",
     "test": "vitest run"
   },

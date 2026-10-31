@@ -6,15 +6,15 @@ import {
   type RegistryComponent,
 } from "@dotaf/registry";
 
-import type { ResolvedConfig } from "./config.js";
-import { describeTokens, type DesignToken } from "./generate-css.js";
+import type { ResolvedConfig } from "../config/config.js";
+import { describeTokens, type DesignToken } from "../config/generate-css.js";
 import {
   existingFiles,
   installCommand,
   loadProject,
   readProject,
   type DotafProject,
-} from "./project.js";
+} from "../project/project.js";
 
 export interface DesignSystem {
   tokens: DesignToken[];

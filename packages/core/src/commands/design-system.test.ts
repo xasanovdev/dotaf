@@ -13,7 +13,7 @@ import {
   listProjectComponents,
   parseConfig,
   RegistryError,
-} from "./index.js";
+} from "../index.js";
 
 const folders: string[] = [];
 
