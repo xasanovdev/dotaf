@@ -37,6 +37,7 @@ async function dotaf(args: string[], cwd: string, overrides: Partial<Io> = {}) {
     version: "1.2.3",
     out: (line) => out.push(line),
     err: (line) => err.push(line),
+    serveMcp: () => Promise.resolve(),
     ...overrides,
   });
   return { code, out: out.join("\n"), err: err.join("\n") };
@@ -166,6 +167,30 @@ describe("dotaf add", () => {
 
     expect(code).toBe(1);
     expect(err).toContain("dotaf add <component...>");
+  });
+});
+
+describe("dotaf mcp", () => {
+  test("serves the project to agents and prints nothing, since stdout carries the protocol", async () => {
+    const root = await project({});
+    const serveMcp = vi.fn().mockResolvedValue(undefined);
+
+    const { code, out, err } = await dotaf(["mcp"], root, { serveMcp });
+
+    expect(code).toBe(0);
+    expect(serveMcp).toHaveBeenCalledWith({ cwd: root, version: "1.2.3" });
+    expect(out).toBe("");
+    expect(err).toBe("");
+  });
+
+  test("takes no arguments", async () => {
+    const serveMcp = vi.fn();
+
+    const { code, err } = await dotaf(["mcp", "--port", "3000"], await project({}), { serveMcp });
+
+    expect(code).toBe(1);
+    expect(err).toContain("dotaf mcp");
+    expect(serveMcp).not.toHaveBeenCalled();
   });
 });
 

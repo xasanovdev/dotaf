@@ -1,9 +1,12 @@
 export { configJsonSchema, densities, DotafConfigError, parseConfig, radii } from "./config.js";
 export type { DarkPalette, DotafConfig, Palette, ResolvedConfig } from "./config.js";
 export { generateCss } from "./generate-css.js";
+export type { DesignToken } from "./generate-css.js";
 export { configFileName, loadConfig } from "./load-config.js";
 export { addComponents } from "./add.js";
 export type { AddedComponent, AddResult, KeptComponent } from "./add.js";
+export { describeComponent, describeDesignSystem, listProjectComponents } from "./design-system.js";
+export type { ComponentDetails, ComponentSummary, DesignSystem } from "./design-system.js";
 export { DotafConfigExistsError, initProject, readTheme } from "./init.js";
 export type { InitResult } from "./init.js";
 export { detectProject } from "./project.js";

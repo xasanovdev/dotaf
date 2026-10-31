@@ -1,5 +1,5 @@
 import { mkdir, stat, writeFile } from "node:fs/promises";
-import { dirname, join, posix } from "node:path";
+import { join, posix } from "node:path";
 import {
   getComponent,
   listComponents,
@@ -8,8 +8,8 @@ import {
 } from "@dotaf/registry";
 
 import { DotafConfigError } from "./config.js";
-import { configFileName, loadConfig } from "./load-config.js";
-import { exists, installCommand, readProject } from "./project.js";
+import { configFileName } from "./load-config.js";
+import { existingFiles, installCommand, loadProject, readProject } from "./project.js";
 
 export interface AddedComponent {
   name: string;
@@ -41,18 +41,6 @@ interface Wanted {
   component: RegistryComponent;
   /** Set when another component pulled this one in rather than the caller naming it. */
   neededBy?: string;
-}
-
-// add may run from a subfolder; the project is where dotaf.json is.
-async function projectRoot(cwd: string): Promise<string> {
-  for (let dir = cwd; ; dir = dirname(dir)) {
-    if (await exists(join(dir, configFileName))) return dir;
-    if (dirname(dir) === dir) {
-      throw new DotafConfigError(
-        `No ${configFileName} in ${cwd} or above it. Run \`npx dotaf init\` in your project's root.`,
-      );
-    }
-  }
 }
 
 /** The named components, then what they import, each once, in that order. */
@@ -98,8 +86,7 @@ export async function addComponents(
   names: string[],
   options: { overwrite?: boolean | undefined; registry?: string | undefined } = {},
 ): Promise<AddResult> {
-  const root = await projectRoot(cwd);
-  const config = await loadConfig(root);
+  const { root, config } = await loadProject(cwd);
   const wanted = await resolve(names, options.registry);
 
   const folder = join(root, config.paths.components);
@@ -117,8 +104,10 @@ export async function addComponents(
       ...file,
       path: posix.join(config.paths.components, file.path),
     }));
-    const present = await Promise.all(targets.map((target) => exists(join(root, target.path))));
-    const existing = targets.filter((_, index) => present[index] === true).map((t) => t.path);
+    const existing = await existingFiles(
+      root,
+      targets.map((target) => target.path),
+    );
     const owner = neededBy === undefined ? {} : { neededBy };
     if (existing.length > 0 && (options.overwrite !== true || neededBy !== undefined)) {
       const missing = targets

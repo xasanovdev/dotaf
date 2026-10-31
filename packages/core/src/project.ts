@@ -1,7 +1,8 @@
 import { access, readFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 
-import { configFileName } from "./load-config.js";
+import { DotafConfigError, type ResolvedConfig } from "./config.js";
+import { configFileName, loadConfig } from "./load-config.js";
 
 export type Framework = "next" | "vite" | "unknown";
 export type PackageManager = "pnpm" | "yarn" | "bun" | "npm";
@@ -35,6 +36,31 @@ export async function exists(path: string): Promise<boolean> {
     () => true,
     () => false,
   );
+}
+
+/** Those of `paths`, relative to `root`, that exist, in the order given. */
+export async function existingFiles(root: string, paths: string[]): Promise<string[]> {
+  const present = await Promise.all(paths.map((path) => exists(join(root, path))));
+  return paths.filter((_, index) => present[index] === true);
+}
+
+/** A project dotaf is set up in: the folder holding dotaf.json, and that config. */
+export interface DotafProject {
+  root: string;
+  config: ResolvedConfig;
+}
+
+/** The nearest folder at or above `cwd` holding dotaf.json; commands may run from a subfolder. */
+export async function loadProject(cwd: string): Promise<DotafProject> {
+  for (let dir = cwd; ; dir = dirname(dir)) {
+    if (await exists(join(dir, configFileName)))
+      return { root: dir, config: await loadConfig(dir) };
+    if (dirname(dir) === dir) {
+      throw new DotafConfigError(
+        `No ${configFileName} in ${cwd} or above it. Run \`npx dotaf init\` in your project's root.`,
+      );
+    }
+  }
 }
 
 /** JSON as editors save it, byte order mark included. */

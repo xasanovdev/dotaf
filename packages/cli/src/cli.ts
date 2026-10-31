@@ -9,6 +9,7 @@ import {
   type DotafConfig,
   type InitResult,
 } from "@dotaf/core";
+import type { ServerOptions } from "@dotaf/mcp";
 
 export interface Io {
   cwd: string;
@@ -19,17 +20,21 @@ export interface Io {
   err: (line: string) => void;
   /** Asks for the brand; resolves undefined when the user cancels. */
   askBrand?: () => Promise<DotafConfig | undefined>;
+  /** Serves the project to a coding agent over stdio. */
+  serveMcp: (options: ServerOptions) => Promise<void>;
 }
 
 export const usage = `Usage: dotaf init [--theme <file|url>] [--yes] [--force]
        dotaf add <component...> [--overwrite]
+       dotaf mcp
 
   init                Write dotaf.json and dotaf.css for this project
     --theme <file|url>  Start from a shared dotaf.json (its brand; paths stay this project's)
     --yes               Use the defaults without asking
     --force             Let --theme replace an existing dotaf.json
   add                 Copy components into paths.components, with the ones they use
-    --overwrite         Replace component files that already exist`;
+    --overwrite         Replace component files that already exist
+  mcp                 Serve this project's design system to a coding agent (MCP over stdio)`;
 
 const initOptions = {
   theme: { type: "string" },
@@ -55,6 +60,7 @@ export async function run(args: string[], io: Io): Promise<number> {
   try {
     if (command === "init") return await init(rest, io);
     if (command === "add") return await add(rest, io);
+    if (command === "mcp") return await mcp(rest, io);
   } catch (error) {
     io.err(failure(error));
     return 1;
@@ -102,6 +108,13 @@ async function add(args: string[], io: Io): Promise<number> {
   )) {
     io.out(line);
   }
+  return 0;
+}
+
+// stdout carries the protocol, so nothing else may be printed there.
+async function mcp(args: string[], io: Io): Promise<number> {
+  parse(args, {});
+  await io.serveMcp({ cwd: io.cwd, version: io.version });
   return 0;
 }
 

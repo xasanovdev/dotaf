@@ -19,4 +19,9 @@ process.exitCode = await run(process.argv.slice(2), {
     console.error(line);
   },
   askBrand,
+  // Loaded on demand: init and add shouldn't pay to load the MCP SDK.
+  serveMcp: async (options) => {
+    const { serve } = await import("@dotaf/mcp");
+    await serve(options);
+  },
 });

@@ -218,8 +218,43 @@ function rootTokens(config: ResolvedConfig): Token[] {
   ];
 }
 
+/** A token as agents see it: the full property name and, for a theme color, its dark value. */
+export interface DesignToken {
+  /** E.g. `--dotaf-color-primary`, used as `var(--dotaf-color-primary)`. */
+  name: string;
+  /** The value on :root; for a theme color, its light value. */
+  value: string;
+  /** Set on theme colors only; every other token is the same in both themes. */
+  dark?: string;
+  description: string;
+}
+
+/** The custom property a token is declared as. */
+function property(token: Token): string {
+  return `--dotaf-${token.name}`;
+}
+
+function described(token: Token): DesignToken {
+  return { name: property(token), value: token.value, description: token.description };
+}
+
+/** Every token generateCss declares, each once, in the order the stylesheet lists them. */
+export function describeTokens(config: ResolvedConfig): DesignToken[] {
+  const dark = new Map(
+    paletteTokens(darkPalette(config)).map((token) => [token.name, token.value]),
+  );
+  return [
+    ...rootTokens(config).map(described),
+    ...paletteTokens(config.colors).map((token) => ({
+      ...described(token),
+      dark: dark.get(token.name) ?? token.value,
+    })),
+    ...derivedTokens.map(described),
+  ];
+}
+
 function declaration(token: Token): string {
-  return `--dotaf-${token.name}: ${token.value};`;
+  return `${property(token)}: ${token.value};`;
 }
 
 function documented(token: Token): string {
