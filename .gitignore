@@ -14,3 +14,5 @@ packages/core/dotaf.schema.json
 .vitest/
 
 .vscode
+# Generated from apps/playground/dotaf.json (the app itself uses virtual:dotaf.css); kept on disk only for editor hover.
+apps/playground/src/styles/dotaf.css
