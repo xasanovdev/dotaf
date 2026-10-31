@@ -1,0 +1,11 @@
+.switches {
+  display: grid;
+  justify-items: start;
+  gap: var(--dotaf-space-3);
+}
+
+.status {
+  align-self: center;
+  color: var(--dotaf-color-muted-fg);
+  font-size: var(--dotaf-text-sm);
+}

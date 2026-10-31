@@ -6,6 +6,7 @@ import { Label, RadioButton, RadioField, RadioGroup } from "react-aria-component
 
 import styles from "./app.module.css";
 import { demos } from "./demos.js";
+import { NotificationSettings } from "./examples/notification-settings.js";
 
 const themes = [
   { value: "system", label: "System" },
@@ -59,6 +60,15 @@ export function App() {
             </section>
           ))
         )}
+        {/* Components used together, after the demos of each on its own. */}
+        <section aria-labelledby="examples">
+          <h2 id="examples" className={styles.demoTitle}>
+            Examples
+          </h2>
+          <div className={styles.examples}>
+            <NotificationSettings />
+          </div>
+        </section>
       </main>
     </div>
   );

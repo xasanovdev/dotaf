@@ -58,6 +58,12 @@
   padding-top: var(--dotaf-space-8);
 }
 
+.examples {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(20rem, 100%), 1fr));
+  gap: var(--dotaf-space-6);
+}
+
 .demoTitle {
   margin: 0 0 var(--dotaf-space-4);
   font-size: var(--dotaf-text-lg);

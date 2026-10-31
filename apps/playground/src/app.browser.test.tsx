@@ -27,3 +27,17 @@ test("System follows the OS until Light or Dark overrides it", async () => {
   await page.getByText("System", { exact: true }).click();
   await expect.poll(pageBackground).toBe(dark);
 });
+
+test("the examples follow the component demos", async () => {
+  await render(<App />);
+
+  const sections = page.getByRole("main").getByRole("heading", { level: 2 }).elements();
+  expect(sections.at(-1)?.textContent).toBe("Examples");
+  await expect
+    .element(
+      page
+        .getByRole("region", { name: "Examples" })
+        .getByRole("article", { name: "Notification settings" }),
+    )
+    .toBeVisible();
+});
