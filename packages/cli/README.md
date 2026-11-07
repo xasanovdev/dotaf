@@ -1,3 +1,3 @@
 # dotaf
 
-The `npx dotaf` command: init, add, theme, lint and mcp.
+The `npx dotaf` command: init, add and mcp. See the [main README](../../README.md).
