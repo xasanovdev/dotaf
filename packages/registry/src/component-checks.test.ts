@@ -2,7 +2,7 @@ import { access } from "node:fs/promises";
 import { join } from "node:path";
 import { describe, expect, test } from "vitest";
 
-import { checkComponent } from "../test/check-component.js";
+import { checkComponent, checkComponents } from "../test/check-component.js";
 import { fixture } from "../test/fixtures.js";
 import { listComponents } from "./index.js";
 import { packageComponents } from "./registry.js";
@@ -31,10 +31,9 @@ describe("component checks", () => {
 
   // Runs over the components this package ships; empty until the first component lands.
   test("every shipped component agrees with its meta", async () => {
-    const metas = await listComponents();
-    const problems = await Promise.all(metas.map(({ name }) => checkComponent(name)));
+    const names = (await listComponents()).map(({ name }) => name);
 
-    expect(problems.flat()).toEqual([]);
+    expect(await checkComponents(names)).toEqual([]);
   });
 
   // The demo and browser test aren't copied into projects, so the loader doesn't require them;

@@ -10,11 +10,40 @@ const componentsTsconfig = fileURLToPath(new URL("../tsconfig.json", import.meta
 
 /** Ways a component folder disagrees with itself; empty when it is consistent. */
 export async function checkComponent(name: string, root = packageComponents): Promise<string[]> {
+  return checkComponents([name], root);
+}
+
+/**
+ * The problems of every named component. They share one TypeScript program: building one
+ * loads the React Aria and DOM types, which costs about as much as all the checks together.
+ */
+export async function checkComponents(
+  names: string[],
+  root = packageComponents,
+): Promise<string[]> {
+  const tsxPath = (name: string) => join(root, componentFiles(name)[0] ?? "");
+  const program = typeScriptProgram(names.map(tsxPath));
+  const registry = new Set((await listComponents(root)).map((component) => component.name));
+
+  const problems = await Promise.all(
+    names.map(async (name) => {
+      const file = program.getSourceFile(tsxPath(name));
+      if (file === undefined) throw new Error(`cannot read ${tsxPath(name)}`);
+      return problemsOf(name, root, { file, checker: program.getTypeChecker() }, registry);
+    }),
+  );
+  return problems.flat();
+}
+
+async function problemsOf(
+  name: string,
+  root: string,
+  source: Source,
+  registry: Set<string>,
+): Promise<string[]> {
   const { meta, files } = await getComponent(name, root);
   const [tsxPath = "", cssPath = ""] = componentFiles(name);
   const content = (path: string) => files.find((file) => file.path === path)?.content ?? "";
-  const source = typeScriptSource(join(root, tsxPath));
-  const registry = new Set((await listComponents(root)).map((component) => component.name));
 
   return [
     ...propDrift(meta, source),
@@ -50,7 +79,7 @@ interface Source {
 }
 
 // Compiles with the registry's own tsconfig, so the check sees what `tsc` sees.
-function typeScriptSource(path: string): Source {
+function typeScriptProgram(paths: string[]): ts.Program {
   const config = ts.getParsedCommandLineOfConfigFile(
     componentsTsconfig,
     {},
@@ -61,10 +90,7 @@ function typeScriptSource(path: string): Source {
       },
     },
   );
-  const program = ts.createProgram([path], config?.options ?? {});
-  const file = program.getSourceFile(path);
-  if (file === undefined) throw new Error(`cannot read ${path}`);
-  return { file, checker: program.getTypeChecker() };
+  return ts.createProgram(paths, config?.options ?? {});
 }
 
 // Every prop the component declares itself must be documented; documented props may also
