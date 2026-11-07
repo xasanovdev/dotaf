@@ -16,7 +16,12 @@ import {
 import "virtual:dotaf.css";
 
 import { contrast, sameColor } from "../../test/browser/contrast";
-import { emulateMedia, setTheme, tokenColor } from "../../test/browser/test-utils";
+import {
+  emulateMedia,
+  setTheme,
+  startedAnimations,
+  tokenColor,
+} from "../../test/browser/test-utils";
 
 function DeleteDialog(props: Omit<DialogProps, "children">) {
   return (
@@ -162,6 +167,20 @@ describe("Dialog", () => {
       }
     },
   );
+
+  test("it closes faster than it opens", async () => {
+    const started = startedAnimations();
+    await render(<DeleteDialog />);
+    await open();
+    const element = overlay();
+    await expect.poll(() => element.hasAttribute("data-entering")).toBe(false);
+
+    await userEvent.keyboard("{Escape}");
+    await expect.element(dialog()).not.toBeInTheDocument();
+
+    const [enter, exit] = started.filter((a) => a.target === element).map((a) => a.duration);
+    expect(exit).toBeLessThan(enter ?? 0);
+  });
 
   // The duration tokens carry reduced motion, so the dialog needs no media query of its own.
   test("reduced motion stops the enter and exit animation", async () => {

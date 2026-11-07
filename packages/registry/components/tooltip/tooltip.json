@@ -1,6 +1,6 @@
 {
   "name": "tooltip",
-  "description": "A short text hint that shows on hover and keyboard focus, for icon-only buttons and terse controls. Put the trigger and a Tooltip inside TooltipTrigger, both exported from the tooltip file. Screen readers read it as the trigger's description, so an icon-only button still needs its own aria-label. Keep it to a few words of plain text; anything interactive or essential belongs in the page or a popover, since touch users never see it. The example's Button comes from the button component.",
+  "description": "A short text hint that shows on hover and keyboard focus, for icon-only buttons and terse controls. Put the trigger and a Tooltip inside TooltipTrigger, both exported from the tooltip file. Hover shows it after 700ms (TooltipTrigger's delay prop changes that) and keyboard focus at once. Screen readers read it as the trigger's description, so an icon-only button still needs its own aria-label. Keep it to a few words of plain text; anything interactive or essential belongs in the page or a popover, since touch users never see it. The example's Button comes from the button component.",
   "dependencies": ["react-aria-components"],
   "props": [
     {

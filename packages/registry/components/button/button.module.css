@@ -15,7 +15,13 @@
   outline: none;
   transition:
     background-color var(--dotaf-duration-fast) var(--dotaf-ease-out),
-    border-color var(--dotaf-duration-fast) var(--dotaf-ease-out);
+    border-color var(--dotaf-duration-fast) var(--dotaf-ease-out),
+    scale var(--dotaf-duration-fast) var(--dotaf-ease-out);
+}
+
+/* A press shrinks the button a little, so it feels pushed in; hover only changes color. */
+.root[data-pressed] {
+  scale: 0.97;
 }
 
 .root[data-size="sm"] {
@@ -69,6 +75,24 @@
 .root[data-variant="ghost"][data-hovered],
 .root[data-variant="ghost"][data-pressed] {
   background: var(--dotaf-color-muted);
+}
+
+/* A ring with one side open, sized to the text, in the label's color. It spins on the
+   duration token, so reduced motion holds it still and it still reads as busy. */
+.spinner {
+  flex-shrink: 0;
+  width: 1em;
+  height: 1em;
+  border: 2px solid currentcolor;
+  border-inline-end-color: transparent;
+  border-radius: var(--dotaf-radius-full);
+  animation: spin calc(var(--dotaf-duration-normal) * 4) linear infinite;
+}
+
+@keyframes spin {
+  to {
+    rotate: 1turn;
+  }
 }
 
 .root[data-focus-visible] {

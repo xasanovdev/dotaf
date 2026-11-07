@@ -15,7 +15,12 @@ import {
 import "virtual:dotaf.css";
 
 import { contrast, sameColor } from "../../test/browser/contrast";
-import { emulateMedia, pageColor, setTheme } from "../../test/browser/test-utils";
+import {
+  emulateMedia,
+  pageColor,
+  setTheme,
+  startedAnimations,
+} from "../../test/browser/test-utils";
 
 function CountrySelect(props: Omit<SelectProps, "children">) {
   return (
@@ -162,6 +167,20 @@ describe("Select", () => {
 
     const fill = (name: string) => getComputedStyle(option(name).element()).backgroundColor;
     expect(sameColor(fill("Uzbekistan"), fill("Kazakhstan"))).toBe(false);
+  });
+
+  test("it closes faster than it opens", async () => {
+    const started = startedAnimations();
+    await render(<CountrySelect />);
+    await open();
+    const element = popover();
+    await expect.poll(() => element.hasAttribute("data-entering")).toBe(false);
+
+    await userEvent.keyboard("{Escape}");
+    await expect.element(listbox()).not.toBeInTheDocument();
+
+    const [enter, exit] = started.filter((a) => a.target === element).map((a) => a.duration);
+    expect(exit).toBeLessThan(enter ?? 0);
   });
 
   // The duration tokens carry reduced motion, so the popover needs no media query of its own.

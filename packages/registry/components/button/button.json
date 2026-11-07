@@ -31,6 +31,11 @@
       "description": "Prevents presses and dims the button."
     },
     {
+      "name": "isPending",
+      "type": "boolean",
+      "description": "Marks an action in progress: presses are ignored, focus and the label stay, and a spinner shows if it lasts past 200ms. Screen readers hear the change."
+    },
+    {
       "name": "type",
       "type": "\"button\" | \"submit\" | \"reset\"",
       "default": "\"button\"",

@@ -89,6 +89,8 @@
 .popover[data-exiting] {
   animation-name: drop;
   animation-direction: reverse;
+  /* Leaving takes 60% as long as arriving, so a dismissed popover gets out of the way. */
+  animation-duration: var(--dotaf-duration-fast);
 }
 
 .list {

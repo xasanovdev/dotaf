@@ -20,6 +20,9 @@
 .overlay[data-exiting] {
   animation-name: fade;
   animation-direction: reverse;
+  /* Leaving takes 60% as long as arriving, so a dismissed dialog gets out of the way.
+     The panel inherits this duration. */
+  animation-duration: var(--dotaf-duration-fast);
 }
 
 .modal {

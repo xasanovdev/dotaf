@@ -28,6 +28,22 @@ async function show() {
 }
 
 describe("Tooltip", () => {
+  // First in the file: once any tooltip has shown, React Aria shows the next one at once, which
+  // would hide the delay. Each test file gets a fresh page.
+  test("by default, hovering shows it within a second, not React Aria's 1.5", async () => {
+    await render(
+      <TooltipTrigger>
+        <Button>Save</Button>
+        <Tooltip>Saves a copy to your drafts</Tooltip>
+      </TooltipTrigger>,
+    );
+    await userEvent.click(document.body, { position: { x: 1, y: 1 } });
+
+    await trigger().hover();
+
+    await expect.element(tooltip(), { timeout: 1000 }).toBeVisible();
+  });
+
   test("keyboard focus shows it, and it describes the trigger", async () => {
     await render(<SaveTooltip />);
     await show();

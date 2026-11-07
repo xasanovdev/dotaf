@@ -17,6 +17,9 @@ export default function ButtonDemo() {
           <Button size={size} isDisabled>
             disabled
           </Button>
+          <Button size={size} isPending>
+            pending
+          </Button>
         </div>
       ))}
     </div>

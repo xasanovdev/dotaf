@@ -34,6 +34,22 @@ describe("Button", () => {
     await expect.poll(() => getComputedStyle(button("Save")).outlineStyle).toBe("none");
   });
 
+  test("it shrinks a little while pressed, and hover alone leaves it full size", async () => {
+    await render(<Button>Save</Button>);
+    const scale = () => getComputedStyle(button("Save")).scale;
+
+    await page.getByRole("button", { name: "Save" }).hover();
+    await expect.poll(() => button("Save").hasAttribute("data-hovered")).toBe(true);
+    expect(scale()).toBe("none");
+
+    await userEvent.tab();
+    await userEvent.keyboard("[Space>]");
+    await expect.poll(scale).toBe("0.97");
+
+    await userEvent.keyboard("[/Space]");
+    await expect.poll(scale).toBe("none");
+  });
+
   test("filled variants paint their tokens", async () => {
     await render(
       <>
@@ -70,6 +86,27 @@ describe("Button", () => {
 
     expect(onPress).not.toHaveBeenCalled();
     await expect.element(page.getByRole("button", { name: "Save" })).toBeDisabled();
+  });
+
+  test("a pending button keeps focus and its label, ignores presses, and shows a spinner after a beat", async () => {
+    const onPress = vi.fn();
+    await render(
+      <Button isPending onPress={onPress}>
+        Save
+      </Button>,
+    );
+    const spinner = () => button("Save").querySelector("[aria-hidden='true']");
+
+    // A quick save never flashes the spinner.
+    expect(spinner()).toBeNull();
+    await expect.poll(spinner).not.toBeNull();
+
+    await userEvent.tab();
+    await expect.element(page.getByRole("button", { name: "Save" })).toHaveFocus();
+    await userEvent.keyboard("{Enter}");
+    // Playwright won't click an aria-disabled button unless forced.
+    await page.getByRole("button", { name: "Save" }).click({ force: true });
+    expect(onPress).not.toHaveBeenCalled();
   });
 
   test.each(["light", "dark"] as const)(

@@ -8,7 +8,7 @@ import { Menu, MenuItem, MenuSeparator, MenuTrigger, type MenuProps } from "./me
 import "virtual:dotaf.css";
 
 import { contrast, sameColor } from "../../test/browser/contrast";
-import { emulateMedia, setTheme } from "../../test/browser/test-utils";
+import { emulateMedia, setTheme, startedAnimations } from "../../test/browser/test-utils";
 
 function ActionsMenu(props: Omit<MenuProps, "children">) {
   return (
@@ -127,6 +127,20 @@ describe("Menu", () => {
 
     const fill = (name: string) => getComputedStyle(item(name).element()).backgroundColor;
     expect(sameColor(fill("Rename"), fill("Duplicate"))).toBe(false);
+  });
+
+  test("it closes faster than it opens", async () => {
+    const started = startedAnimations();
+    await render(<ActionsMenu />);
+    await open();
+    const element = popover();
+    await expect.poll(() => element.hasAttribute("data-entering")).toBe(false);
+
+    await userEvent.keyboard("{Escape}");
+    await expect.element(menu()).not.toBeInTheDocument();
+
+    const [enter, exit] = started.filter((a) => a.target === element).map((a) => a.duration);
+    expect(exit).toBeLessThan(enter ?? 0);
   });
 
   // The duration tokens carry reduced motion, so the popover needs no media query of its own.
