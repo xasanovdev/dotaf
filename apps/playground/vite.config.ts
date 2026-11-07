@@ -20,6 +20,9 @@ export default defineConfig({
     },
   },
   test: {
+    // The persistent module cache keys a file by its own content, so demos.ts kept the
+    // import.meta.glob result from before a component was added. Transforms stay in memory.
+    fsModuleCache: false,
     projects: [
       {
         extends: true,
