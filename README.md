@@ -310,7 +310,7 @@ The `$schema` line gives you autocomplete and validation in your editor.
 | Type   | `font-sans`, `font-mono`, `text-xs` to `text-2xl`, `font-weight-normal`, `font-weight-medium`, `font-weight-semibold`                                                                                                                                                 |
 | Depth  | `shadow-sm`, `shadow-md`, `shadow-lg`                                                                                                                                                                                                                                 |
 | Motion | `duration-fast`, `duration-normal`, `ease-out` (durations drop to 0ms under `prefers-reduced-motion`)                                                                                                                                                                 |
-| State  | `focus-ring`, `focus-ring-offset`, `opacity-disabled`                                                                                                                                                                                                                 |
+| State  | `focus-ring`, `focus-ring-offset`, `opacity-disabled`, `target-min` (smallest hit area: 24px, 44px on touch screens)                                                                                                                                                  |
 
 Every name is prefixed: `color-primary` is `var(--dotaf-color-primary)`.
 
@@ -321,18 +321,53 @@ Every name is prefixed: `color-primary` is `var(--dotaf-color-primary)`.
   <img alt="Card, Checkbox and Switch components from the dotaf playground" src=".github/assets/playground-light.png" width="100%">
 </picture>
 
-| Component    | Parts                                                                                     |
-| ------------ | ----------------------------------------------------------------------------------------- |
-| `button`     | `Button` with `variant` (primary, secondary, ghost, danger) and `size` (sm, md, lg)       |
-| `text-field` | `TextField`, `TextFieldLabel`, `TextFieldInput`, `TextFieldDescription`, `TextFieldError` |
-| `checkbox`   | `Checkbox`, including indeterminate and invalid states                                    |
-| `switch`     | `Switch`                                                                                  |
-| `card`       | `Card`, `CardHeader`, `CardTitle`, `CardBody`, `CardFooter`                               |
+20 components, each built on `react-aria-components` and styled only with tokens.
 
-Each one is tested in a real browser: keyboard use and focus, accessible names, contrast in light
-and dark, and, where they apply, forced colors and right-to-left layout. Select, Dialog, Tabs, Tooltip and Menu are next.
+### Actions
 
-Larger components are split into named parts, so they work in Next.js server components:
+| Component | Parts                                                                                         | Use it for                                 |
+| --------- | --------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| `button`  | `Button` with `variant` (primary, secondary, ghost, danger), `size` (sm, md, lg), `isPending` | An action: save, submit, delete            |
+| `menu`    | `MenuTrigger`, `Menu`, `MenuItem` (with `variant="danger"`), `MenuSeparator`                  | A list of actions that opens from a button |
+
+### Forms
+
+| Component        | Parts                                                                                                                   | Use it for                                                         |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| `form`           | `Form`, `FormActions`                                                                                                   | Submit on Enter, focus the first invalid field, show server errors |
+| `text-field`     | `TextField`, `TextFieldLabel`, `TextFieldInput`, `TextFieldPasswordInput`, `TextFieldDescription`, `TextFieldError`     | One line of text, or a password with a show button                 |
+| `text-area`      | `TextArea`, `TextAreaLabel`, `TextAreaInput`, `TextAreaDescription`, `TextAreaError`                                    | Multi-line text that grows as you type                             |
+| `number-field`   | `NumberField`, `NumberFieldLabel`, `NumberFieldInput`, `NumberFieldDescription`, `NumberFieldError`                     | Quantities, amounts and percentages, with − and + steps            |
+| `checkbox`       | `Checkbox`, including indeterminate and invalid states                                                                  | One option on or off, applied on submit                            |
+| `checkbox-group` | `CheckboxGroup`, `CheckboxGroupLabel`, `CheckboxGroupDescription`, `CheckboxGroupError`, with a `Checkbox` per option   | Any number of several options                                      |
+| `radio-group`    | `RadioGroup`, `RadioGroupLabel`, `Radio`, `RadioGroupDescription`, `RadioGroupError`                                    | Exactly one of 2 to about 5 visible options                        |
+| `select`         | `Select`, `SelectLabel`, `SelectTrigger`, `SelectPopover`, `SelectItem`, `SelectDescription`, `SelectError`             | One of about 4 to 15 options                                       |
+| `combobox`       | `Combobox`, `ComboboxLabel`, `ComboboxInput`, `ComboboxPopover`, `ComboboxItem`, `ComboboxDescription`, `ComboboxError` | One of a long list, filtered by typing                             |
+| `switch`         | `Switch`                                                                                                                | A setting that applies at once                                     |
+
+### Overlays
+
+| Component | Parts                                                                                        | Use it for                                          |
+| --------- | -------------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| `dialog`  | `DialogTrigger`, `Dialog`, `DialogTitle`, `DialogDescription`, `DialogFooter`, `DialogClose` | A modal for a confirmation, a short form or details |
+| `tooltip` | `TooltipTrigger`, `Tooltip`                                                                  | A short hint for an icon-only button                |
+
+### Layout and status
+
+| Component   | Parts                                                               | Use it for                             |
+| ----------- | ------------------------------------------------------------------- | -------------------------------------- |
+| `tabs`      | `Tabs`, `TabList`, `Tab`, `TabPanel`                                | Panels of related content in one place |
+| `card`      | `Card`, `CardHeader`, `CardTitle`, `CardBody`, `CardFooter`         | A surface that groups related content  |
+| `badge`     | `Badge` with `variant` (neutral, primary, success, warning, danger) | A status label: Active, Draft, Failed  |
+| `separator` | `Separator` with `orientation` (horizontal, vertical)               | A line between groups of content       |
+
+`dotaf add` brings the components a component uses along with it: `checkbox-group` adds
+`checkbox`. Each one is tested in a real browser: keyboard use and focus, accessible names, contrast
+in light and dark, touch-sized hit areas, and, where they apply, forced colors and right-to-left
+layout.
+
+Larger components are split into named parts, so they work in Next.js server components. Each
+component's folder has an `index.ts`, so you import the folder:
 
 ```tsx
 import { Button } from "@/components/ui/button";
@@ -419,8 +454,9 @@ gate, and points to the component rules, for people and agents alike.
 
 ## Roadmap
 
-- **v0.1:** Select, Dialog, Tabs, Tooltip and Menu; `dotaf theme`, `dotaf lint` and `dotaf list` in
-  the CLI; registering a project's own components with dotaf; publishing to npm.
+- **v0.1:** `dotaf theme`, `dotaf lint` and `dotaf list` in the CLI; registering a project's own
+  components with dotaf; raised-surface tokens for dark mode; validation errors shown when a field
+  is left; publishing to npm.
 - **v1.0:** reading the brand from an existing project or a reference; a web theme editor; a theme
   gallery.
 
