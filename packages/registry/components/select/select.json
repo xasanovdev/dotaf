@@ -1,0 +1,64 @@
+{
+  "name": "select",
+  "description": "Picks one option from a list in a popover, for 4 to about 15 choices; for 2 or 3 use radio buttons, for long lists use a combobox with search. Compose the parts inside Select: SelectLabel, SelectTrigger (shows the value or placeholder), SelectDescription, SelectError (renders only while the value is invalid) and SelectPopover holding SelectItems, all exported from the select file. Each SelectItem's id is the value onChange reports and the form submits.",
+  "dependencies": ["react-aria-components"],
+  "props": [
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "description": "SelectLabel, SelectTrigger, optional SelectDescription and SelectError, then SelectPopover."
+    },
+    {
+      "name": "ref",
+      "type": "Ref<HTMLDivElement>",
+      "description": "The wrapping element."
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Form field name; the form submits the chosen item's id."
+    },
+    {
+      "name": "value",
+      "type": "Key | null",
+      "description": "Controlled value: the chosen item's id; pair with onChange."
+    },
+    {
+      "name": "defaultValue",
+      "type": "Key | null",
+      "description": "Initial value when uncontrolled."
+    },
+    {
+      "name": "onChange",
+      "type": "(value: Key | null) => void",
+      "description": "Called with the newly chosen item's id."
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "default": "\"Select an item\"",
+      "description": "Shown in the trigger until something is chosen."
+    },
+    {
+      "name": "isRequired",
+      "type": "boolean",
+      "description": "Requires a choice before the form submits."
+    },
+    {
+      "name": "isDisabled",
+      "type": "boolean",
+      "description": "Prevents opening and dims the field."
+    },
+    {
+      "name": "isInvalid",
+      "type": "boolean",
+      "description": "Marks the value invalid from outside, e.g. after a server error."
+    },
+    {
+      "name": "disabledKeys",
+      "type": "Iterable<Key>",
+      "description": "Ids of items that show but can't be chosen; or set isDisabled on a SelectItem."
+    }
+  ],
+  "example": "<Select name=\"country\" isRequired>\n  <SelectLabel>Country</SelectLabel>\n  <SelectTrigger />\n  <SelectError />\n  <SelectPopover>\n    <SelectItem id=\"uz\">Uzbekistan</SelectItem>\n    <SelectItem id=\"kz\">Kazakhstan</SelectItem>\n  </SelectPopover>\n</Select>"
+}

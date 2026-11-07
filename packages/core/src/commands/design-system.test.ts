@@ -151,6 +151,7 @@ describe("listProjectComponents", () => {
       "button",
       "card",
       "checkbox",
+      "select",
       "switch",
       "tabs",
       "text-field",

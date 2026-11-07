@@ -1,0 +1,179 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dotaf-space-1);
+  font-family: var(--dotaf-font-sans);
+}
+
+.root[data-disabled] {
+  opacity: var(--dotaf-opacity-disabled);
+}
+
+.label {
+  color: var(--dotaf-color-fg);
+  font-size: var(--dotaf-text-sm);
+  font-weight: var(--dotaf-font-weight-medium);
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--dotaf-space-2);
+  padding: var(--dotaf-space-2) var(--dotaf-space-3);
+  border: 1px solid var(--dotaf-color-control-border);
+  border-radius: var(--dotaf-radius-md);
+  background: var(--dotaf-color-bg);
+  color: var(--dotaf-color-fg);
+  font: inherit;
+  font-size: var(--dotaf-text-sm);
+  text-align: start;
+  cursor: default;
+  outline: none;
+}
+
+.trigger[data-hovered] {
+  border-color: var(--dotaf-color-fg);
+}
+
+.trigger[data-focus-visible] {
+  outline: var(--dotaf-focus-ring);
+  outline-offset: var(--dotaf-focus-ring-offset);
+}
+
+.root[data-invalid] .trigger {
+  border-color: var(--dotaf-color-danger);
+}
+
+.value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.value[data-placeholder] {
+  color: var(--dotaf-color-muted-fg);
+}
+
+.chevron {
+  flex-shrink: 0;
+  width: 1em;
+  height: 1em;
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* React Aria portals the popover to the end of <body> and sets --trigger-width on it. */
+.popover {
+  min-width: var(--trigger-width);
+  max-height: inherit;
+  overflow: auto;
+  border: 1px solid var(--dotaf-color-border);
+  border-radius: var(--dotaf-radius-md);
+  background: var(--dotaf-color-bg);
+  box-shadow: var(--dotaf-shadow-md);
+  /* Set at rest so the duration token, and with it reduced motion, always applies. */
+  animation-duration: var(--dotaf-duration-normal);
+  animation-timing-function: var(--dotaf-ease-out);
+}
+
+.popover[data-entering] {
+  animation-name: drop;
+}
+
+.popover[data-exiting] {
+  animation-name: drop;
+  animation-direction: reverse;
+}
+
+.list {
+  display: grid;
+  padding: var(--dotaf-space-1);
+  font-family: var(--dotaf-font-sans);
+  outline: none;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--dotaf-space-4);
+  padding: var(--dotaf-space-2) var(--dotaf-space-3);
+  border-radius: var(--dotaf-radius-sm);
+  color: var(--dotaf-color-fg);
+  font-size: var(--dotaf-text-sm);
+  cursor: default;
+  outline: none;
+}
+
+.item[data-focused],
+.item[data-hovered] {
+  background: var(--dotaf-color-muted);
+}
+
+.item[data-disabled] {
+  opacity: var(--dotaf-opacity-disabled);
+}
+
+.check {
+  flex-shrink: 0;
+  width: 1em;
+  height: 1em;
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  visibility: hidden;
+}
+
+.item[data-selected] .check {
+  visibility: visible;
+}
+
+.description {
+  color: var(--dotaf-color-muted-fg);
+  font-size: var(--dotaf-text-xs);
+}
+
+/* No box of its own: an empty region adds no gap, yet stays in the accessibility tree. */
+.errorRegion {
+  display: contents;
+}
+
+.error {
+  color: var(--dotaf-color-danger);
+  font-size: var(--dotaf-text-xs);
+}
+
+/* High Contrast mode drops backgrounds; mark the focused option with system colors. */
+@media (forced-colors: active) {
+  .item[data-focused] {
+    forced-color-adjust: none;
+    background: Highlight;
+    color: HighlightText;
+  }
+}
+
+/* The popover opens below the trigger, or above it when there is no room. */
+@keyframes drop {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--dotaf-space-1) * -1));
+  }
+}
+
+.popover[data-placement="top"][data-entering],
+.popover[data-placement="top"][data-exiting] {
+  animation-name: lift;
+}
+
+@keyframes lift {
+  from {
+    opacity: 0;
+    transform: translateY(var(--dotaf-space-1));
+  }
+}
