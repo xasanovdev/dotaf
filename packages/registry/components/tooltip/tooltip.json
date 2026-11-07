@@ -1,0 +1,30 @@
+{
+  "name": "tooltip",
+  "description": "A short text hint that shows on hover and keyboard focus, for icon-only buttons and terse controls. Put the trigger and a Tooltip inside TooltipTrigger, both exported from the tooltip file. Screen readers read it as the trigger's description, so an icon-only button still needs its own aria-label. Keep it to a few words of plain text; anything interactive or essential belongs in the page or a popover, since touch users never see it. The example's Button comes from the button component.",
+  "dependencies": ["react-aria-components"],
+  "props": [
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "description": "The hint: a few words of plain text."
+    },
+    {
+      "name": "placement",
+      "type": "Placement",
+      "default": "\"top\"",
+      "description": "Side of the trigger to show on, e.g. \"top\", \"bottom\", \"start\", \"end\"; it flips when there is no room."
+    },
+    {
+      "name": "offset",
+      "type": "number",
+      "default": "6",
+      "description": "Gap from the trigger in pixels."
+    },
+    {
+      "name": "ref",
+      "type": "Ref<HTMLDivElement>",
+      "description": "The tooltip element."
+    }
+  ],
+  "example": "<TooltipTrigger>\n  <Button variant=\"ghost\" aria-label=\"Archive\"><ArchiveIcon /></Button>\n  <Tooltip>Archive</Tooltip>\n</TooltipTrigger>"
+}

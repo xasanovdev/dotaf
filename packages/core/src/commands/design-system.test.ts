@@ -155,6 +155,7 @@ describe("listProjectComponents", () => {
       "switch",
       "tabs",
       "text-field",
+      "tooltip",
     ]);
     expect(components[0]).toEqual({
       name: "button",

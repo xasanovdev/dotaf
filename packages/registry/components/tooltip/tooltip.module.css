@@ -1,0 +1,37 @@
+/* Inverted colors set the hint apart from the page in both themes. React Aria portals it to
+   the end of <body>, so it paints above the page. */
+.root {
+  max-width: 16rem;
+  padding: var(--dotaf-space-1) var(--dotaf-space-2);
+  /* Invisible here; forced colors draw it, since High Contrast mode drops the fill. */
+  border: 1px solid transparent;
+  border-radius: var(--dotaf-radius-sm);
+  background: var(--dotaf-color-fg);
+  color: var(--dotaf-color-bg);
+  font-family: var(--dotaf-font-sans);
+  font-size: var(--dotaf-text-xs);
+  /* Set at rest so the duration token, and with it reduced motion, always applies. */
+  animation-duration: var(--dotaf-duration-fast);
+  animation-timing-function: var(--dotaf-ease-out);
+}
+
+.root[data-entering] {
+  animation-name: fade;
+}
+
+.root[data-exiting] {
+  animation-name: fade;
+  animation-direction: reverse;
+}
+
+@media (forced-colors: active) {
+  .root {
+    border-color: CanvasText;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
