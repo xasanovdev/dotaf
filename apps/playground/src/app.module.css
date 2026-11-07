@@ -64,7 +64,7 @@
   gap: var(--dotaf-space-6);
 }
 
-.demoTitle {
+.sectionTitle {
   margin: 0 0 var(--dotaf-space-4);
   font-size: var(--dotaf-text-lg);
   text-transform: capitalize;

@@ -53,7 +53,7 @@ export function App() {
         ) : (
           demos.map(({ name, Demo }) => (
             <section key={name} aria-labelledby={`demo-${name}`}>
-              <h2 id={`demo-${name}`} className={styles.demoTitle}>
+              <h2 id={`demo-${name}`} className={styles.sectionTitle}>
                 {name}
               </h2>
               <Demo />
@@ -62,7 +62,7 @@ export function App() {
         )}
         {/* Components used together, after the demos of each on its own. */}
         <section aria-labelledby="examples">
-          <h2 id="examples" className={styles.demoTitle}>
+          <h2 id="examples" className={styles.sectionTitle}>
             Examples
           </h2>
           <div className={styles.examples}>

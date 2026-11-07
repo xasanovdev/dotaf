@@ -1,3 +1,7 @@
+.description {
+  margin: 0;
+}
+
 .switches {
   display: grid;
   justify-items: start;

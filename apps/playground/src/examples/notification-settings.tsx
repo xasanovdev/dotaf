@@ -16,7 +16,7 @@ export function NotificationSettings() {
     <Card>
       <CardHeader>
         <CardTitle>Notification settings</CardTitle>
-        Choose how we reach you.
+        <p className={styles.description}>Choose how we reach you.</p>
       </CardHeader>
       <CardBody>
         <div className={styles.switches}>
