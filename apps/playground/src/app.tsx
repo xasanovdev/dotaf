@@ -7,6 +7,7 @@ import { Label, RadioButton, RadioField, RadioGroup } from "react-aria-component
 import styles from "./app.module.css";
 import { demos } from "./demos.js";
 import { NotificationSettings } from "./examples/notification-settings.js";
+import { ProjectSettings } from "./examples/project-settings.js";
 
 const themes = [
   { value: "system", label: "System" },
@@ -67,6 +68,7 @@ export function App() {
           </h2>
           <div className={styles.examples}>
             <NotificationSettings />
+            <ProjectSettings />
           </div>
         </section>
       </main>

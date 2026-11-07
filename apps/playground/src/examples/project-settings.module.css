@@ -1,0 +1,43 @@
+.id {
+  display: flex;
+  align-items: center;
+  gap: var(--dotaf-space-1);
+  color: var(--dotaf-color-muted-fg);
+  font-family: var(--dotaf-font-mono);
+  font-size: var(--dotaf-text-sm);
+}
+
+.icon {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 1.5;
+}
+
+.members {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.member {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--dotaf-space-4);
+  padding: var(--dotaf-space-2) 0;
+  border-bottom: 1px solid var(--dotaf-color-border);
+}
+
+.person {
+  display: flex;
+  align-items: baseline;
+  gap: var(--dotaf-space-2);
+}
+
+.role {
+  color: var(--dotaf-color-muted-fg);
+  font-size: var(--dotaf-text-xs);
+}
