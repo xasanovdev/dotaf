@@ -1,0 +1,19 @@
+.stack {
+  display: grid;
+  gap: var(--dotaf-space-3);
+  max-width: 24rem;
+  color: var(--dotaf-color-fg);
+  font-family: var(--dotaf-font-sans);
+  font-size: var(--dotaf-text-sm);
+}
+
+.stack p {
+  margin: 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--dotaf-space-3);
+  height: var(--dotaf-space-6);
+}

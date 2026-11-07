@@ -236,7 +236,7 @@ describe("dotaf MCP server", () => {
     const { text, isError } = await call(await project(), "get_component", { name: "dialogg" });
 
     expect(isError).toBe(true);
-    expect(text).toContain("Available: button");
+    expect(text).toMatch(/Available: .*\bbutton\b/);
   });
 
   test("without dotaf.json every tool tells the agent to run init", async () => {

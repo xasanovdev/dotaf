@@ -1,0 +1,118 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dotaf-space-2);
+  font-family: var(--dotaf-font-sans);
+}
+
+/* Options share a row; the label, description and error each take a full line. */
+.root[data-orientation="horizontal"] {
+  flex-flow: row wrap;
+  /* Lines stay at the top when a grid stretches the group taller than its content. */
+  align-content: flex-start;
+  column-gap: var(--dotaf-space-4);
+}
+
+.root[data-orientation="horizontal"] > :not(.radio) {
+  flex-basis: 100%;
+}
+
+.label {
+  color: var(--dotaf-color-fg);
+  font-size: var(--dotaf-text-sm);
+  font-weight: var(--dotaf-font-weight-medium);
+}
+
+.radio {
+  display: inline-flex;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--dotaf-space-2);
+  color: var(--dotaf-color-fg);
+  font-size: var(--dotaf-text-sm);
+  cursor: default;
+}
+
+/* The chosen option is a thick ring around the page color, a shape change that holds in
+   any palette, forced colors included. */
+.circle {
+  position: relative;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  width: 1.125em;
+  height: 1.125em;
+  border: 1px solid var(--dotaf-color-control-border);
+  border-radius: var(--dotaf-radius-full);
+  background: var(--dotaf-color-bg);
+  outline: none;
+  transition-property: border-color, border-width;
+  transition-duration: var(--dotaf-duration-fast);
+  transition-timing-function: var(--dotaf-ease-out);
+}
+
+.button[data-hovered] .circle {
+  border-color: var(--dotaf-color-fg);
+}
+
+.button[data-selected] .circle {
+  border-width: 0.3125em;
+  border-color: var(--dotaf-color-primary);
+}
+
+.button[data-invalid] .circle {
+  border-color: var(--dotaf-color-danger);
+}
+
+.button[data-focus-visible] .circle {
+  outline: var(--dotaf-focus-ring);
+  outline-offset: var(--dotaf-focus-ring-offset);
+}
+
+.button[data-disabled] {
+  opacity: var(--dotaf-opacity-disabled);
+}
+
+/* The circle is smaller than a fingertip. An invisible layer centered on it takes the press:
+   at least var(--dotaf-target-min), which is 24px, or 44px on touch screens. */
+.circle::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, var(--dotaf-target-min));
+  height: max(100%, var(--dotaf-target-min));
+  border-radius: inherit;
+  translate: -50% -50%;
+}
+
+.description {
+  color: var(--dotaf-color-muted-fg);
+  font-size: var(--dotaf-text-xs);
+}
+
+/* No box of its own: an empty region adds no gap, yet stays in the accessibility tree. */
+.errorRegion {
+  display: contents;
+}
+
+.error {
+  color: var(--dotaf-color-danger);
+  font-size: var(--dotaf-text-xs);
+}
+
+@media (forced-colors: active) {
+  .circle {
+    border-color: CanvasText;
+  }
+
+  .button[data-selected] .circle {
+    border-color: Highlight;
+  }
+
+  .button[data-focus-visible] .circle {
+    outline-color: CanvasText;
+  }
+}

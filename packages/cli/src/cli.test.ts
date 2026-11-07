@@ -164,7 +164,7 @@ describe("dotaf add", () => {
     const { code, err } = await dotaf(["add", "buton"], await project(withConfig));
 
     expect(code).toBe(1);
-    expect(err).toMatch(/^No component named "buton". Available: button, card/);
+    expect(err).toMatch(/^No component named "buton". Available: .*\bbutton, card\b/);
   });
 
   test("without component names it prints usage and fails", async () => {

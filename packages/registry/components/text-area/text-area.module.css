@@ -1,0 +1,77 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dotaf-space-1);
+  font-family: var(--dotaf-font-sans);
+}
+
+.root[data-disabled] {
+  opacity: var(--dotaf-opacity-disabled);
+}
+
+.label {
+  color: var(--dotaf-color-fg);
+  font-size: var(--dotaf-text-sm);
+  font-weight: var(--dotaf-font-weight-medium);
+}
+
+/* Grows with its text from about three lines, so nothing scrolls inside a small box; a
+   browser without field-sizing keeps the three lines and the resize handle. */
+.input {
+  box-sizing: border-box;
+  min-height: calc(3lh + 2 * var(--dotaf-space-2));
+  field-sizing: content;
+  padding: var(--dotaf-space-2) var(--dotaf-space-3);
+  border: 1px solid var(--dotaf-color-control-border);
+  border-radius: var(--dotaf-radius-md);
+  background: var(--dotaf-color-bg);
+  color: var(--dotaf-color-fg);
+  font: inherit;
+  font-size: var(--dotaf-text-sm);
+  outline: none;
+  resize: vertical;
+}
+
+.input::placeholder {
+  color: var(--dotaf-color-muted-fg);
+}
+
+.input[data-hovered] {
+  border-color: var(--dotaf-color-fg);
+}
+
+/* Any focus, not only keyboard focus: a text input is focused in order to type. */
+.input[data-focused] {
+  outline: var(--dotaf-focus-ring);
+  outline-offset: var(--dotaf-focus-ring-offset);
+}
+
+.input[data-invalid] {
+  border-color: var(--dotaf-color-danger);
+}
+
+.input[data-invalid][data-focused] {
+  outline-color: var(--dotaf-color-danger);
+}
+
+.description {
+  color: var(--dotaf-color-muted-fg);
+  font-size: var(--dotaf-text-xs);
+}
+
+/* No box of its own: an empty region adds no gap, yet stays in the accessibility tree. */
+.errorRegion {
+  display: contents;
+}
+
+.error {
+  color: var(--dotaf-color-danger);
+  font-size: var(--dotaf-text-xs);
+}
+
+/* iOS zooms the page into an input whose text is under 16px; touch screens get 16px. */
+@media (pointer: coarse) {
+  .input {
+    font-size: var(--dotaf-text-base);
+  }
+}

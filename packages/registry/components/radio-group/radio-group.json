@@ -1,0 +1,65 @@
+{
+  "name": "radio-group",
+  "description": "Picks exactly one of 2 to about 5 options, all visible at once; for more options use a select. Compose the parts inside RadioGroup: RadioGroupLabel, one Radio per option, RadioGroupDescription and RadioGroupError (renders only while the choice is invalid), all exported from the radio-group file. Each Radio's value is what onChange reports and the form submits; its children are the option's label.",
+  "dependencies": ["react-aria-components"],
+  "props": [
+    {
+      "name": "ref",
+      "type": "Ref<HTMLDivElement>",
+      "description": "The wrapping element, which has the radiogroup role."
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Form field name; the form submits the chosen Radio's value."
+    },
+    {
+      "name": "value",
+      "type": "string | null",
+      "description": "Controlled choice; pair with onChange."
+    },
+    {
+      "name": "defaultValue",
+      "type": "string | null",
+      "description": "Initial choice when uncontrolled."
+    },
+    {
+      "name": "onChange",
+      "type": "(value: string) => void",
+      "description": "Called with the chosen Radio's value."
+    },
+    {
+      "name": "orientation",
+      "type": "\"horizontal\" | \"vertical\"",
+      "default": "\"vertical\"",
+      "description": "vertical stacks the options; horizontal puts them in a row, for short labels only."
+    },
+    {
+      "name": "isRequired",
+      "type": "boolean",
+      "description": "Requires a choice before the form submits."
+    },
+    {
+      "name": "isDisabled",
+      "type": "boolean",
+      "description": "Prevents changes and dims every option."
+    },
+    {
+      "name": "isInvalid",
+      "type": "boolean",
+      "description": "Marks the choice invalid from outside, e.g. after a server error."
+    },
+    {
+      "name": "validate",
+      "type": "(value: string | null) => string | string[] | true | null | undefined",
+      "description": "Returns an error message for an invalid choice, shown by RadioGroupError."
+    },
+    {
+      "name": "validationBehavior",
+      "type": "\"native\" | \"aria\"",
+      "default": "\"native\"",
+      "description": "native validates on form submit; aria validates as soon as the choice changes."
+    }
+  ],
+  "example": "<RadioGroup name=\"plan\" defaultValue=\"pro\">\n  <RadioGroupLabel>Plan</RadioGroupLabel>\n  <Radio value=\"free\">Free</Radio>\n  <Radio value=\"pro\">Pro</Radio>\n  <Radio value=\"team\">Team</Radio>\n  <RadioGroupDescription>You can change it later.</RadioGroupDescription>\n</RadioGroup>"
+}

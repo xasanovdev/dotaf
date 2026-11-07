@@ -173,7 +173,7 @@ describe("addComponents", () => {
     const root = await folder(app);
 
     await expect(addComponents(root, ["card", "buton", "chekbox"])).rejects.toThrow(
-      /"buton", "chekbox"[\s\S]*Available: button/,
+      /"buton", "chekbox"[\s\S]*Available: .*\bbutton\b/,
     );
     await expect(readFile(join(root, "src/components/ui/card/card.tsx"), "utf8")).rejects.toThrow();
   });

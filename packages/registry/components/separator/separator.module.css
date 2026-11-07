@@ -1,0 +1,20 @@
+/* The line is a border, not a background: High Contrast mode drops backgrounds. */
+.root {
+  flex-shrink: 0;
+  align-self: stretch;
+  box-sizing: border-box;
+  margin: 0;
+  border: 0 solid var(--dotaf-color-border);
+}
+
+.root[data-orientation="horizontal"] {
+  width: auto;
+  height: 0;
+  border-top-width: 1px;
+}
+
+.root[data-orientation="vertical"] {
+  width: 0;
+  height: auto;
+  border-left-width: 1px;
+}

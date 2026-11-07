@@ -148,18 +148,22 @@ describe("listProjectComponents", () => {
     const components = await listProjectComponents(await project());
 
     expect(components.map((c) => c.name)).toEqual([
+      "badge",
       "button",
       "card",
       "checkbox",
       "dialog",
       "menu",
+      "radio-group",
       "select",
+      "separator",
       "switch",
       "tabs",
+      "text-area",
       "text-field",
       "tooltip",
     ]);
-    expect(components[0]).toEqual({
+    expect(components[1]).toEqual({
       name: "button",
       description: expect.stringContaining("Triggers an action") as string,
       installed: [],
@@ -217,6 +221,6 @@ describe("describeComponent", () => {
     const root = await project();
 
     await expect(describeComponent(root, "dialogg")).rejects.toThrow(RegistryError);
-    await expect(describeComponent(root, "dialogg")).rejects.toThrow("Available: button");
+    await expect(describeComponent(root, "dialogg")).rejects.toThrow(/Available: .*\bbutton\b/);
   });
 });

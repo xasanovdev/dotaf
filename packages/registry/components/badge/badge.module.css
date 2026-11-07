@@ -1,0 +1,47 @@
+/* Each variant fills with a light tint of its color and writes in a deep shade of it, so the
+   text keeps 4.5:1 in both themes: mixing toward the text color darkens it on a light page
+   and lightens it on a dark one. */
+.root {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 var(--dotaf-space-2);
+  /* Invisible here; forced colors draw it, since High Contrast mode drops the fill. */
+  border: 1px solid transparent;
+  border-radius: var(--dotaf-radius-sm);
+  font-family: var(--dotaf-font-sans);
+  font-size: var(--dotaf-text-xs);
+  font-weight: var(--dotaf-font-weight-medium);
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.root[data-variant="neutral"] {
+  background: color-mix(in oklch, var(--dotaf-color-muted-fg) 12%, var(--dotaf-color-bg));
+  color: color-mix(in oklch, var(--dotaf-color-muted-fg) 60%, var(--dotaf-color-fg));
+}
+
+.root[data-variant="primary"] {
+  background: color-mix(in oklch, var(--dotaf-color-primary) 12%, var(--dotaf-color-bg));
+  color: color-mix(in oklch, var(--dotaf-color-primary) 60%, var(--dotaf-color-fg));
+}
+
+.root[data-variant="success"] {
+  background: color-mix(in oklch, var(--dotaf-color-success) 12%, var(--dotaf-color-bg));
+  color: color-mix(in oklch, var(--dotaf-color-success) 60%, var(--dotaf-color-fg));
+}
+
+.root[data-variant="warning"] {
+  background: color-mix(in oklch, var(--dotaf-color-warning) 12%, var(--dotaf-color-bg));
+  color: color-mix(in oklch, var(--dotaf-color-warning) 60%, var(--dotaf-color-fg));
+}
+
+.root[data-variant="danger"] {
+  background: color-mix(in oklch, var(--dotaf-color-danger) 12%, var(--dotaf-color-bg));
+  color: color-mix(in oklch, var(--dotaf-color-danger) 60%, var(--dotaf-color-fg));
+}
+
+@media (forced-colors: active) {
+  .root {
+    border-color: CanvasText;
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "badge",
+  "description": "A small colored label that states the status of the thing next to it, such as Active, Draft or Failed. Static text, not a control: for something clickable use a button, for a count on a button put the number in its label. Pick the variant by meaning: success for done or healthy, warning for needs attention, danger for failed or blocked, primary for new or highlighted, neutral for everything else.",
+  "dependencies": [],
+  "props": [
+    {
+      "name": "variant",
+      "type": "\"neutral\" | \"primary\" | \"success\" | \"warning\" | \"danger\"",
+      "default": "\"neutral\"",
+      "description": "The status the badge stands for; each has its own color. The words must say it too, since color alone is missed by some readers."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "description": "The status in a word or two."
+    },
+    {
+      "name": "ref",
+      "type": "Ref<HTMLSpanElement>",
+      "description": "The rendered <span> element."
+    }
+  ],
+  "example": "<Badge variant=\"success\">Active</Badge>"
+}

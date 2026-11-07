@@ -1,0 +1,19 @@
+{
+  "name": "separator",
+  "description": "A thin line between groups of content, such as sections of a page, settings groups or toolbar items; screen readers hear it as a separator. Use vertical inside a row. Prefer spacing alone where it already reads as two groups.",
+  "dependencies": ["react-aria-components"],
+  "props": [
+    {
+      "name": "orientation",
+      "type": "\"horizontal\" | \"vertical\"",
+      "default": "\"horizontal\"",
+      "description": "horizontal spans the width of its container; vertical fills the height of the row it sits in."
+    },
+    {
+      "name": "ref",
+      "type": "Ref<HTMLElement>",
+      "description": "The rendered element: an <hr>, or a <div> when vertical."
+    }
+  ],
+  "example": "<Separator />\n\n<div className={styles.toolbar}>\n  <Button variant=\"ghost\">Bold</Button>\n  <Separator orientation=\"vertical\" />\n  <Button variant=\"ghost\">Link</Button>\n</div>"
+}
