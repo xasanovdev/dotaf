@@ -3,13 +3,8 @@ import { describe, expect, test, vi } from "vitest";
 import { render } from "vitest-browser-react";
 import { page, userEvent } from "vitest/browser";
 
-import { Button } from "../button/button";
-import {
-  TextField,
-  TextFieldError,
-  TextFieldInput,
-  TextFieldLabel,
-} from "../text-field/text-field";
+import { Button } from "../button";
+import { TextField, TextFieldError, TextFieldInput, TextFieldLabel } from "../text-field";
 import { Form, FormActions, type FormProps } from "./form";
 
 import "virtual:dotaf.css";

@@ -26,7 +26,10 @@ describe("listComponents", () => {
     ["invalid", /badge\/badge\.json is invalid:[\s\S]*description/],
     ["malformed", /badge\/badge\.json is invalid:[\s\S]*JSON/],
     ["misnamed", /badge\/badge\.json is invalid:\n {2}- name: must match its folder name "badge"/],
-    ["incomplete", /badge is missing badge\/badge\.tsx, badge\/badge\.module\.css/],
+    [
+      "incomplete",
+      /badge is missing badge\/badge\.tsx, badge\/badge\.module\.css, badge\/index\.ts/,
+    ],
     ["metaless", /badge is missing badge\/badge\.json/],
   ])("a %s component fails with the file and what is wrong", async (root, message) => {
     const list = listComponents(fixture(root));
@@ -48,6 +51,7 @@ describe("getComponent", () => {
     expect(badge.files.map((file) => file.path)).toEqual([
       "badge/badge.tsx",
       "badge/badge.module.css",
+      "badge/index.ts",
     ]);
     expect(badge.files[0]?.content).toContain("export function Badge");
   });

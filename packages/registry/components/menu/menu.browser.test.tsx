@@ -2,7 +2,7 @@ import { describe, expect, test, vi } from "vitest";
 import { render } from "vitest-browser-react";
 import { page, userEvent } from "vitest/browser";
 
-import { Button } from "../button/button";
+import { Button } from "../button";
 import { Menu, MenuItem, MenuSeparator, MenuTrigger, type MenuProps } from "./menu";
 
 import "virtual:dotaf.css";

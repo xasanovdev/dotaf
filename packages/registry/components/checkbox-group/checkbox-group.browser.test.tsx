@@ -2,7 +2,7 @@ import { describe, expect, test, vi } from "vitest";
 import { render } from "vitest-browser-react";
 import { page, userEvent } from "vitest/browser";
 
-import { Checkbox } from "../checkbox/checkbox";
+import { Checkbox } from "../checkbox";
 import {
   CheckboxGroup,
   CheckboxGroupDescription,

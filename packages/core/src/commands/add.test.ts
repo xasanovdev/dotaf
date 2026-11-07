@@ -40,6 +40,7 @@ function entry(name: string, meta: Record<string, unknown> = {}) {
     }),
     [`${name}/${name}.tsx`]: `// ${name}\n`,
     [`${name}/${name}.module.css`]: `.root {}\n`,
+    [`${name}/index.ts`]: `export * from "./${name}";\n`,
   };
 }
 
@@ -55,6 +56,7 @@ describe("addComponents", () => {
         files: [
           "src/components/ui/button/button.tsx",
           "src/components/ui/button/button.module.css",
+          "src/components/ui/button/index.ts",
         ],
       },
     ]);
@@ -62,6 +64,10 @@ describe("addComponents", () => {
       "export function Button",
     );
     expect(result.install).toBe("pnpm add react-aria-components");
+    // index.ts lets the project import "@/components/ui/button" rather than ".../button/button".
+    expect(await readFile(join(root, "src/components/ui/button/index.ts"), "utf8")).toBe(
+      'export * from "./button";\n',
+    );
   });
 
   test("adds several components at once, each once", async () => {
@@ -82,7 +88,10 @@ describe("addComponents", () => {
       {
         name: "button",
         existing: ["src/components/ui/button/button.tsx"],
-        missing: ["src/components/ui/button/button.module.css"],
+        missing: [
+          "src/components/ui/button/button.module.css",
+          "src/components/ui/button/index.ts",
+        ],
       },
     ]);
     expect(await readFile(join(root, "src/components/ui/button/button.tsx"), "utf8")).toBe(
@@ -112,6 +121,7 @@ describe("addComponents", () => {
         files: [
           "src/components/ui/dialog/dialog.tsx",
           "src/components/ui/dialog/dialog.module.css",
+          "src/components/ui/dialog/index.ts",
         ],
       },
       {
@@ -119,6 +129,7 @@ describe("addComponents", () => {
         files: [
           "src/components/ui/button/button.tsx",
           "src/components/ui/button/button.module.css",
+          "src/components/ui/button/index.ts",
         ],
         neededBy: "dialog",
       },

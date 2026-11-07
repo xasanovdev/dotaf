@@ -1,7 +1,7 @@
-import { Button } from "@registry/button/button";
-import { Card, CardBody, CardHeader, CardTitle } from "@registry/card/card";
-import { Dialog, DialogDescription, DialogFooter, DialogTitle } from "@registry/dialog/dialog";
-import { Menu, MenuItem, MenuSeparator, MenuTrigger } from "@registry/menu/menu";
+import { Button } from "@registry/button";
+import { Card, CardBody, CardHeader, CardTitle } from "@registry/card";
+import { Dialog, DialogDescription, DialogFooter, DialogTitle } from "@registry/dialog";
+import { Menu, MenuItem, MenuSeparator, MenuTrigger } from "@registry/menu";
 import {
   Select,
   SelectDescription,
@@ -9,9 +9,9 @@ import {
   SelectLabel,
   SelectPopover,
   SelectTrigger,
-} from "@registry/select/select";
-import { Tab, TabList, TabPanel, Tabs } from "@registry/tabs/tabs";
-import { Tooltip, TooltipTrigger } from "@registry/tooltip/tooltip";
+} from "@registry/select";
+import { Tab, TabList, TabPanel, Tabs } from "@registry/tabs";
+import { Tooltip, TooltipTrigger } from "@registry/tooltip";
 import { useState } from "react";
 
 import styles from "./project-settings.module.css";

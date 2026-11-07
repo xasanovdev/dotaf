@@ -16,7 +16,7 @@ Code from shadcn, Tailwind and Radix looks right here but breaks the rules. Writ
 | A `react-aria-components` primitive                                                | A bare `<button>`, Radix, Headless UI       |
 | `ref` as a regular prop (React 19)                                                 | `forwardRef`                                |
 | One named export per part: `DialogTrigger`, `DialogContent`                        | `Dialog.Trigger`                            |
-| Another component imported as `../button/button`                                   | `@dotaf/registry`, `@/components/...`       |
+| Another component imported as `../button`                                          | `@dotaf/registry`, `@/components/...`       |
 
 ## Rules
 

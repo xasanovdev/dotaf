@@ -335,8 +335,8 @@ and dark, and, where they apply, forced colors and right-to-left layout. Select,
 Larger components are split into named parts, so they work in Next.js server components:
 
 ```tsx
-import { Button } from "@/components/ui/button/button";
-import { Card, CardBody, CardFooter, CardHeader, CardTitle } from "@/components/ui/card/card";
+import { Button } from "@/components/ui/button";
+import { Card, CardBody, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function ProPlan() {
   return (

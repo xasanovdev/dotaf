@@ -199,6 +199,7 @@ describe("describeComponent", () => {
     expect(button.files.map((file) => file.path)).toEqual([
       "button/button.tsx",
       "button/button.module.css",
+      "button/index.ts",
     ]);
     expect(button.files[0]?.content).toContain("export function Button");
     expect(button.installed).toEqual([

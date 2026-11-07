@@ -76,7 +76,7 @@ async function resolve(names: string[], registry: string | undefined): Promise<W
 
 /**
  * Copies registry components into the project's paths.components, each into its own folder
- * (`button/button.tsx`), together with the components they import. A component with a file
+ * (`button/button.tsx` and its `index.ts`), together with the components they import. A component with a file
  * already in place is kept whole, never half-written; `overwrite` replaces only the
  * components named, never one that was pulled in for another. `registry` points at another registry folder (tests use it).
  */

@@ -1,4 +1,4 @@
-import { Button } from "../button/button";
+import { Button } from "../button";
 import { Tooltip, TooltipTrigger } from "./tooltip";
 import styles from "./tooltip.demo.module.css";
 

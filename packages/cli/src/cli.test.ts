@@ -153,7 +153,7 @@ describe("dotaf add", () => {
 
     expect(code).toBe(0);
     expect(out).toContain(
-      "Kept button: src/components/ui/button/button.tsx already exists; src/components/ui/button/button.module.css is missing. Add --overwrite to replace it.",
+      "Kept button: src/components/ui/button/button.tsx already exists; src/components/ui/button/button.module.css, src/components/ui/button/index.ts are missing. Add --overwrite to replace it.",
     );
     expect(await readFile(join(root, "src/components/ui/button/button.tsx"), "utf8")).toBe(
       "// mine\n",

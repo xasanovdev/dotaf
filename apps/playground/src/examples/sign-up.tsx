@@ -1,11 +1,11 @@
-import { Button } from "@registry/button/button";
-import { Card, CardBody, CardHeader, CardTitle } from "@registry/card/card";
+import { Button } from "@registry/button";
+import { Card, CardBody, CardHeader, CardTitle } from "@registry/card";
+import { Checkbox } from "@registry/checkbox";
 import {
   CheckboxGroup,
   CheckboxGroupDescription,
   CheckboxGroupLabel,
-} from "@registry/checkbox-group/checkbox-group";
-import { Checkbox } from "@registry/checkbox/checkbox";
+} from "@registry/checkbox-group";
 import {
   Combobox,
   ComboboxError,
@@ -13,14 +13,14 @@ import {
   ComboboxItem,
   ComboboxLabel,
   ComboboxPopover,
-} from "@registry/combobox/combobox";
-import { Form, FormActions, type FormProps } from "@registry/form/form";
+} from "@registry/combobox";
+import { Form, FormActions, type FormProps } from "@registry/form";
 import {
   NumberField,
   NumberFieldDescription,
   NumberFieldInput,
   NumberFieldLabel,
-} from "@registry/number-field/number-field";
+} from "@registry/number-field";
 import {
   TextField,
   TextFieldDescription,
@@ -28,7 +28,7 @@ import {
   TextFieldInput,
   TextFieldLabel,
   TextFieldPasswordInput,
-} from "@registry/text-field/text-field";
+} from "@registry/text-field";
 import { useState } from "react";
 
 import styles from "./sign-up.module.css";

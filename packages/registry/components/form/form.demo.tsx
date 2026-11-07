@@ -1,13 +1,13 @@
 import { useState } from "react";
 
-import { Button } from "../button/button";
+import { Button } from "../button";
 import {
   TextField,
   TextFieldDescription,
   TextFieldError,
   TextFieldInput,
   TextFieldLabel,
-} from "../text-field/text-field";
+} from "../text-field";
 import { Form, FormActions, type FormProps } from "./form";
 import styles from "./form.demo.module.css";
 

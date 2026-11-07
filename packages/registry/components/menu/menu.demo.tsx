@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Button } from "../button/button";
+import { Button } from "../button";
 import { Menu, MenuItem, MenuSeparator, MenuTrigger } from "./menu";
 import styles from "./menu.demo.module.css";
 

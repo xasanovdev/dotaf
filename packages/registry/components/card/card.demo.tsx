@@ -1,4 +1,4 @@
-import { Button } from "../button/button";
+import { Button } from "../button";
 import { Card, CardBody, CardFooter, CardHeader, CardTitle } from "./card";
 import styles from "./card.demo.module.css";
 

@@ -23,7 +23,9 @@ describe("component checks", () => {
       'drifty.json marks "size" optional, but DriftyProps requires it',
       "styles.missing has no .missing rule in drifty/drifty.module.css",
       'imports "react-aria-components", which drifty.json does not list as a dependency',
+      'imports "../ghost/ghost"; import another component by its folder, as "../ghost"',
       'imports "zod", which drifty.json does not list as a dependency',
+      'drifty/index.ts must be exactly: export * from "./drifty";',
       'registryDependencies lists "ghost", which the registry does not have',
       'drifty/drifty.tsx must start with "use client" so Next.js server components can render it',
     ]);

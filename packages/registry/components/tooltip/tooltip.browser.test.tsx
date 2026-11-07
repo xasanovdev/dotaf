@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 import { render } from "vitest-browser-react";
 import { page, userEvent } from "vitest/browser";
 
-import { Button } from "../button/button";
+import { Button } from "../button";
 import { Tooltip, TooltipTrigger, type TooltipProps } from "./tooltip";
 
 import "virtual:dotaf.css";

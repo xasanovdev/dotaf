@@ -3,7 +3,7 @@
   "compilerOptions": {
     "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "jsx": "react-jsx",
-    // Like a user project: a bundler resolves imports, so a component imports "../button/button".
+    // Like a user project: a bundler resolves imports, so a component imports "../button" (its index.ts).
     "module": "ESNext",
     "moduleResolution": "Bundler",
     // UI code is typechecked the way a user project compiles it: classes read as

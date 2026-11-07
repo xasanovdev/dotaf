@@ -20,10 +20,11 @@ export class RegistryError extends Error {
 /**
  * Source files of a component, relative to the registry root, in the order they are copied
  * into a project. Each component has its own folder; its demo and tests sit there too but are
- * not copied.
+ * not copied. index.ts re-exports the source, so a project imports the folder
+ * ("@/components/ui/button") instead of naming it twice.
  */
 export function componentFiles(name: string): string[] {
-  return [`${name}/${name}.tsx`, `${name}/${name}.module.css`];
+  return [`${name}/${name}.tsx`, `${name}/${name}.module.css`, `${name}/index.ts`];
 }
 
 function metaFile(name: string): string {
@@ -44,7 +45,7 @@ const metaSchema = z.strictObject({
   description: z.string().min(1),
   /** npm packages the component imports, installed into the user's project. */
   dependencies: z.array(z.string()).default([]),
-  /** Other registry components it imports as "../<name>/<name>", copied alongside it. */
+  /** Other registry components it imports as "../<name>", copied alongside it. */
   registryDependencies: z.array(z.string()).default([]),
   props: z.array(propSchema).default([]),
   /** A minimal JSX usage an agent can adapt. */

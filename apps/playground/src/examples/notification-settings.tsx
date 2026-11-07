@@ -1,6 +1,6 @@
-import { Button } from "@registry/button/button";
-import { Card, CardBody, CardFooter, CardHeader, CardTitle } from "@registry/card/card";
-import { Switch } from "@registry/switch/switch";
+import { Button } from "@registry/button";
+import { Card, CardBody, CardFooter, CardHeader, CardTitle } from "@registry/card";
+import { Switch } from "@registry/switch";
 import { useState } from "react";
 
 import styles from "./notification-settings.module.css";

@@ -287,7 +287,7 @@ describe("dotaf MCP server", () => {
 
       const { text } = await call(root, "add_component", { names: ["button"] });
 
-      expect(text).toContain("src/ui/button/button.module.css is missing");
+      expect(text).toContain("src/ui/button/button.module.css, src/ui/button/index.ts are missing");
     });
   });
 

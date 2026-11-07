@@ -42,13 +42,16 @@ async function problemsOf(
   registry: Set<string>,
 ): Promise<string[]> {
   const { meta, files } = await getComponent(name, root);
-  const [tsxPath = "", cssPath = ""] = componentFiles(name);
+  const [tsxPath = "", cssPath = "", indexPath = ""] = componentFiles(name);
   const content = (path: string) => files.find((file) => file.path === path)?.content ?? "";
 
   return [
     ...propDrift(meta, source),
     ...missingClasses(cssPath, content(tsxPath), content(cssPath)),
     ...foreignImports(meta, source.file),
+    ...(content(indexPath).trim() === reExport(name)
+      ? []
+      : [`${indexPath} must be exactly: ${reExport(name)}`]),
     ...meta.registryDependencies
       .filter((dependency) => !registry.has(dependency))
       .map(
@@ -59,6 +62,11 @@ async function problemsOf(
       ? []
       : [`${tsxPath} must start with "use client" so Next.js server components can render it`]),
   ];
+}
+
+// The folder's entry point: everything the source exports, and nothing else.
+function reExport(name: string): string {
+  return `export * from "./${name}";`;
 }
 
 // Every component is interactive or keeps state, so it runs on the client; without the
@@ -155,7 +163,7 @@ function foreignImports(meta: ComponentMeta, file: ts.SourceFile): string[] {
     specifier === "react" ||
     specifier === `./${meta.name}.module.css` ||
     meta.dependencies.some((dep) => specifier === dep || specifier.startsWith(`${dep}/`)) ||
-    meta.registryDependencies.some((dep) => specifier === `../${dep}/${dep}`);
+    meta.registryDependencies.some((dep) => specifier === `../${dep}`);
 
   return file.statements
     .flatMap((statement) =>
@@ -166,8 +174,11 @@ function foreignImports(meta: ComponentMeta, file: ts.SourceFile): string[] {
         : [],
     )
     .filter((specifier) => !allowed(specifier))
-    .map(
-      (specifier) =>
-        `imports "${specifier}", which ${meta.name}.json does not list as a dependency`,
-    );
+    .map((specifier) => {
+      // The pre-index.ts form: the folder's entry point makes the file name redundant.
+      const doubled = /^\.\.\/([a-z][a-z0-9-]*)\/\1$/.exec(specifier);
+      return doubled
+        ? `imports "${specifier}"; import another component by its folder, as "../${doubled[1] ?? ""}"`
+        : `imports "${specifier}", which ${meta.name}.json does not list as a dependency`;
+    });
 }
