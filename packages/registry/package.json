@@ -14,7 +14,9 @@
     "dist",
     "components",
     "!components/**/*.demo.*",
-    "!components/**/*.test.*"
+    "!components/**/*.test.*",
+    "!components/AGENTS.md",
+    "!components/CLAUDE.md"
   ],
   "scripts": {
     "build": "node ../../scripts/clean-dist.js && tsc -p tsconfig.build.json",

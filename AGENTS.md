@@ -7,15 +7,11 @@ Design system for coding agents. A project's brand lives in `dotaf.json`; dotaf 
 - `core` owns behaviour. `cli` and `mcp` are adapters: parse input, call `core`, format output. New logic lands in `core` so both adapters get it.
 - Dependencies point one way: `cli` → `mcp` → `core` → `registry`, `stylelint-config`.
 - Inside `core/src` the same holds across three layers: `commands/` (what `cli` and `mcp` call; they may touch the disk) → `project/` (finds the project, reads and writes `dotaf.json`, `dotaf.css` and `package.json`) → `config/` (pure: schema, parsing, CSS generation, JSON helpers; no disk). ESLint checks the static imports.
-- `registry` components are copied into user projects as source. Write them as code a user is glad to own: readable, small, no internal imports.
 
-## Component rules
+## Components
 
-- Every design value (color, spacing, radius, font, shadow) is a token: `var(--dotaf-*)`. The `dotaf/use-tokens` stylelint rule enforces it.
-- Build every component on `react-aria-components`, including simple ones, and style states through its data attributes (`[data-pressed]`, `[data-hovered]`, `[data-focus-visible]`). The one exception is a static container with no interaction to borrow (Card): plain HTML, with the reason in a comment at the top of the component.
-- Variants are explicit props (`variant`, `size`) mapped to `data-variant` / `data-size`. Larger components are compound, with each part its own named export (`Dialog`, `DialogTrigger`, `DialogContent`), not `Dialog.Trigger`: Next.js server components can't reach properties of a client component. `ref` is a regular prop (React 19).
-- Every component file starts with `"use client"`.
-- Each component is a folder in `packages/registry/components/<name>/` holding its source, meta, demo and browser tests (see the README there). Another component is imported as `../<name>/<name>`.
+- Every design value in CSS (color, spacing, radius, font, shadow) is a token: `var(--dotaf-*)`. The `dotaf/use-tokens` stylelint rule enforces it.
+- Before writing or changing a component, read `packages/registry/components/AGENTS.md`: the component rules, and the shadcn and Tailwind habits that break them.
 
 ## Quality gate
 
