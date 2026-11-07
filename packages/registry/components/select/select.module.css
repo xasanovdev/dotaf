@@ -17,6 +17,8 @@
 
 .trigger {
   display: flex;
+  min-height: var(--dotaf-target-min);
+  box-sizing: border-box;
   align-items: center;
   justify-content: space-between;
   gap: var(--dotaf-space-2);
@@ -98,6 +100,8 @@
 
 .item {
   display: flex;
+  min-height: var(--dotaf-target-min);
+  box-sizing: border-box;
   align-items: center;
   justify-content: space-between;
   gap: var(--dotaf-space-4);

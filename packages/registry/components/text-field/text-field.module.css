@@ -16,6 +16,8 @@
 }
 
 .input {
+  min-height: var(--dotaf-target-min);
+  box-sizing: border-box;
   padding: var(--dotaf-space-2) var(--dotaf-space-3);
   border: 1px solid var(--dotaf-color-control-border);
   border-radius: var(--dotaf-radius-md);
@@ -61,4 +63,11 @@
 .error {
   color: var(--dotaf-color-danger);
   font-size: var(--dotaf-text-xs);
+}
+
+/* iOS zooms the page into an input whose text is under 16px; touch screens get 16px. */
+@media (pointer: coarse) {
+  .input {
+    font-size: var(--dotaf-text-base);
+  }
 }

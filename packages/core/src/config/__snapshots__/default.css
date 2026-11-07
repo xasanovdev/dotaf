@@ -38,6 +38,7 @@
   --dotaf-ease-out: cubic-bezier(0.2, 0, 0, 1); /* Easing for every transition: fast start, gentle stop. */
   --dotaf-opacity-disabled: 0.5; /* A disabled control, dimmed as a whole. */
   --dotaf-focus-ring-offset: 2px; /* Outline offset that goes with var(--dotaf-focus-ring). */
+  --dotaf-target-min: 24px; /* Smallest hit area of a control: 24px, 44px on touch screens. */
 }
 
 :root,
@@ -84,6 +85,12 @@
   --dotaf-color-on-danger: color(from var(--dotaf-color-danger) xyz-d65 calc(clamp(0, (0.179 - y) * 1000, 1) * 0.9505) clamp(0, (0.179 - y) * 1000, 1) calc(clamp(0, (0.179 - y) * 1000, 1) * 1.089) / 1); /* Text and icons on a danger fill. */
   --dotaf-color-control-border: color-mix(in oklch, var(--dotaf-color-fg) 45%, var(--dotaf-color-bg)); /* Outline of a form control (input, checkbox, switch track): 3:1 on the page. */
   --dotaf-focus-ring: 2px solid var(--dotaf-color-primary); /* Outline of a focused control; pair with outline-offset: var(--dotaf-focus-ring-offset). */
+}
+
+@media (pointer: coarse) {
+  :root {
+    --dotaf-target-min: 44px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

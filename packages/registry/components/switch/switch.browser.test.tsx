@@ -7,7 +7,7 @@ import { Switch } from "./switch";
 import "virtual:dotaf.css";
 
 import { contrast, sameColor } from "../../test/browser/contrast";
-import { emulateMedia, pageColor, setTheme } from "../../test/browser/test-utils";
+import { emulateMedia, emulateTouch, pageColor, setTheme } from "../../test/browser/test-utils";
 
 // The visible track is decoration next to the real (visually hidden) input.
 function track(name: string): Element {
@@ -104,5 +104,22 @@ describe("Switch", () => {
         sameColor(getComputedStyle(thumb(name)).backgroundColor, trackStyle.backgroundColor),
       ).toBe(false);
     }
+  });
+  // WCAG 2.5.8: a target is at least 24px; a fingertip needs about 44px.
+  test("without a label it still takes a press 24px tall, and 44px on touch screens", async () => {
+    await render(<Switch aria-label="Agree" />);
+    const visible = track("Agree").getBoundingClientRect();
+    const label = track("Agree").closest("label");
+    const pressed = (reach: number) =>
+      document
+        .elementFromPoint(
+          visible.x + visible.width / 2,
+          visible.y + (visible.height + reach) / 2 - 1,
+        )
+        ?.closest("label");
+
+    expect(pressed(24)).toBe(label);
+    await emulateTouch();
+    expect(pressed(44)).toBe(label);
   });
 });

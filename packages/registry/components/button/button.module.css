@@ -1,4 +1,5 @@
 .root {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -77,4 +78,17 @@
 
 .root[data-disabled] {
   opacity: var(--dotaf-opacity-disabled);
+}
+
+/* A small button can be shorter than a fingertip. An invisible layer centered on it takes the press: at least
+   var(--dotaf-target-min), which is 24px, or 44px on touch screens. */
+.root::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, var(--dotaf-target-min));
+  height: max(100%, var(--dotaf-target-min));
+  border-radius: inherit;
+  translate: -50% -50%;
 }

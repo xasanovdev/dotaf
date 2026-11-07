@@ -7,7 +7,7 @@ import { Checkbox } from "./checkbox";
 import "virtual:dotaf.css";
 
 import { contrast, sameColor } from "../../test/browser/contrast";
-import { emulateMedia, pageColor, setTheme } from "../../test/browser/test-utils";
+import { emulateMedia, emulateTouch, pageColor, setTheme } from "../../test/browser/test-utils";
 
 // The visible box is decoration next to the real (visually hidden) input.
 function box(name: string): Element {
@@ -83,5 +83,22 @@ describe("Checkbox", () => {
 
     const fill = (name: string) => getComputedStyle(box(name)).backgroundColor;
     expect(sameColor(fill("On"), fill("Off"))).toBe(false);
+  });
+  // WCAG 2.5.8: a target is at least 24px; a fingertip needs about 44px.
+  test("without a label it still takes a press 24px tall, and 44px on touch screens", async () => {
+    await render(<Checkbox aria-label="Agree" />);
+    const visible = box("Agree").getBoundingClientRect();
+    const label = box("Agree").closest("label");
+    const pressed = (reach: number) =>
+      document
+        .elementFromPoint(
+          visible.x + visible.width / 2,
+          visible.y + (visible.height + reach) / 2 - 1,
+        )
+        ?.closest("label");
+
+    expect(pressed(24)).toBe(label);
+    await emulateTouch();
+    expect(pressed(44)).toBe(label);
   });
 });

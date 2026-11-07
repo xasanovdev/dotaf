@@ -183,7 +183,15 @@ const fixedTokens: Token[] = [
     value: "2px",
     description: "Outline offset that goes with var(--dotaf-focus-ring).",
   },
+  {
+    name: "target-min",
+    value: "24px",
+    description: "Smallest hit area of a control: 24px, 44px on touch screens.",
+  },
 ];
+
+// WCAG 2.5.8 asks for 24px targets; a fingertip needs about 44px, so touch screens get more.
+const coarsePointer = [declaration({ name: "target-min", value: "44px", description: "" })];
 
 // Components animate with the duration tokens, so zeroing them here honors reduced motion
 // everywhere without a media query in each component.
@@ -292,6 +300,7 @@ export function generateCss(config: ResolvedConfig): string {
     // Custom properties resolve var() where they are declared, so derived values are
     // redeclared on every theme root to follow that root's palette.
     block(":root,\n[data-theme]", derivedTokens.map(documented)),
+    `@media (pointer: coarse) {\n${block(":root", coarsePointer, "  ")}}\n`,
     `@media (prefers-reduced-motion: reduce) {\n${block(":root", reducedMotion, "  ")}}\n`,
   ].join("\n");
 }

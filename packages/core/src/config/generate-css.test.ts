@@ -144,6 +144,16 @@ describe("generateCss", () => {
     });
   });
 
+  // WCAG 2.5.8 asks for 24px targets; a fingertip needs about 44px (Apple HIG, Vercel).
+  test("the smallest hit area is 24px, and 44px on touch screens", () => {
+    const css = generateCss(parseConfig({}));
+
+    expect(rootTokens({})).toMatchObject({ "--dotaf-target-min": "24px" });
+    expect(declarationsOf(css, ":root", "(pointer: coarse)")).toEqual({
+      "--dotaf-target-min": "44px",
+    });
+  });
+
   test("reduced motion zeroes every duration, so components need no media query of their own", () => {
     const css = generateCss(parseConfig({}));
 

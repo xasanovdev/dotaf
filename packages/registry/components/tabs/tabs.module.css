@@ -22,6 +22,10 @@
 }
 
 .tab {
+  display: flex;
+  align-items: center;
+  min-height: var(--dotaf-target-min);
+  box-sizing: border-box;
   padding: var(--dotaf-space-2) var(--dotaf-space-3);
   /* The marker: a border on the side facing the panel that turns primary on the selected
      tab. Only .tab and .tab[data-selected] set its color. */

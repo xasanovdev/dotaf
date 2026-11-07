@@ -35,6 +35,8 @@
 
 .item {
   display: flex;
+  min-height: var(--dotaf-target-min);
+  box-sizing: border-box;
   align-items: center;
   gap: var(--dotaf-space-2);
   padding: var(--dotaf-space-2) var(--dotaf-space-3);

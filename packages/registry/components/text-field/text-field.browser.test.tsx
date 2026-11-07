@@ -13,7 +13,7 @@ import {
 import "virtual:dotaf.css";
 
 import { contrast } from "../../test/browser/contrast";
-import { pageColor, setTheme } from "../../test/browser/test-utils";
+import { emulateTouch, pageColor, setTheme } from "../../test/browser/test-utils";
 
 function EmailField() {
   return (
@@ -77,4 +77,11 @@ describe("TextField", () => {
       expect(contrast(border, pageColor())).toBeGreaterThanOrEqual(3);
     },
   );
+  // iOS zooms the page into an input whose text is under 16px.
+  test("touch screens get 16px text, so the page doesn't zoom on focus", async () => {
+    await render(<EmailField />);
+    await emulateTouch();
+
+    expect(getComputedStyle(page.getByRole("textbox").element()).fontSize).toBe("16px");
+  });
 });

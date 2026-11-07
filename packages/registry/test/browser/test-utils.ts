@@ -21,6 +21,14 @@ export async function emulateMedia(
   });
 }
 
+/** Makes the page a touch screen: `(pointer: coarse)` matches until the test ends. */
+export async function emulateTouch() {
+  await cdp().send("Emulation.setTouchEmulationEnabled", { enabled: true, maxTouchPoints: 5 });
+  onTestFinished(async () => {
+    await cdp().send("Emulation.setTouchEmulationEnabled", { enabled: false });
+  });
+}
+
 /** The page color from its token; component tests don't paint the body. */
 export function pageColor(): string {
   return getComputedStyle(document.documentElement).getPropertyValue("--dotaf-color-bg");

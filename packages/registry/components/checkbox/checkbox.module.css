@@ -13,6 +13,7 @@
 }
 
 .box {
+  position: relative;
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
@@ -86,4 +87,17 @@
 .button[data-selected]:not([data-indeterminate]) .check,
 .button[data-indeterminate] .dash {
   display: block;
+}
+
+/* The box is smaller than a fingertip. An invisible layer centered on it takes the press: at least
+   var(--dotaf-target-min), which is 24px, or 44px on touch screens. */
+.box::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, var(--dotaf-target-min));
+  height: max(100%, var(--dotaf-target-min));
+  border-radius: inherit;
+  translate: -50% -50%;
 }
