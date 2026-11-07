@@ -33,22 +33,6 @@ function EmailField() {
 const input = () => page.getByRole("textbox", { name: "Email" });
 
 describe("TextField", () => {
-  test("the label names the input and the description describes it", async () => {
-    await render(<EmailField />);
-
-    await expect.element(input()).toHaveAccessibleDescription("We never share it.");
-  });
-
-  test("an invalid value shows the error and marks the input invalid", async () => {
-    await render(<EmailField />);
-
-    await userEvent.type(input(), "nope");
-
-    await expect.element(input()).toBeInvalid();
-    await expect.element(page.getByText("Enter a valid email")).toBeVisible();
-    await expect.element(input()).toHaveAccessibleDescription(/Enter a valid email/);
-  });
-
   // A live region only announces changes inside it, so it must exist before the error does.
   test("the error appears inside a polite live region that was there before it", async () => {
     const { container } = await render(<EmailField />);

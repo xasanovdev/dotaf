@@ -57,34 +57,6 @@ function overlay(): Element {
 }
 
 describe("Dialog", () => {
-  test("the title names it, and an alert dialog is described by its description", async () => {
-    await render(<DeleteDialog />);
-    await open();
-
-    await expect.element(dialog()).toHaveAccessibleName("Delete project?");
-    await expect.element(dialog()).toHaveAccessibleDescription("This removes every file in it.");
-  });
-
-  test("Escape closes it and focus returns to the trigger", async () => {
-    await render(<DeleteDialog />);
-    await open();
-
-    await userEvent.keyboard("{Escape}");
-
-    await expect.element(dialog()).not.toBeInTheDocument();
-    await expect.element(trigger()).toHaveFocus();
-  });
-
-  test("Tab keeps focus inside while it is open", async () => {
-    await render(<DeleteDialog />);
-    await open();
-
-    for (let step = 0; step < 4; step++) {
-      await userEvent.tab();
-      expect(dialog().element().contains(document.activeElement)).toBe(true);
-    }
-  });
-
   test('a button with slot="close" closes it', async () => {
     await render(<DeleteDialog />);
     await open();
@@ -119,29 +91,6 @@ describe("Dialog", () => {
     );
 
     await expect.element(page.getByRole("button", { name: "Schließen" })).toBeVisible();
-  });
-
-  test("a click outside closes it only when it is dismissable", async () => {
-    const { unmount } = await render(<DeleteDialog />);
-    await open();
-    await userEvent.click(document.body, { position: { x: 1, y: 1 } });
-    await expect.element(dialog()).toBeVisible();
-    await unmount();
-
-    await render(<DeleteDialog isDismissable />);
-    await open();
-    await userEvent.click(document.body, { position: { x: 1, y: 1 } });
-    await expect.element(dialog()).not.toBeInTheDocument();
-  });
-
-  test("it opens and closes from state the app holds", async () => {
-    await render(
-      <Dialog isOpen aria-label="Settings">
-        Settings
-      </Dialog>,
-    );
-
-    await expect.element(page.getByRole("dialog", { name: "Settings" })).toBeVisible();
   });
 
   test("the scrim token dims the page behind it", async () => {

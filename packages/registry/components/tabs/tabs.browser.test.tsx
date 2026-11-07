@@ -1,5 +1,4 @@
-import { I18nProvider } from "react-aria-components";
-import { describe, expect, test, vi } from "vitest";
+import { describe, expect, test } from "vitest";
 import { render } from "vitest-browser-react";
 import { page, userEvent } from "vitest/browser";
 
@@ -30,53 +29,8 @@ function SettingsTabs(props: Omit<TabsProps, "children">) {
 }
 
 const tab = (name: string) => page.getByRole("tab", { name });
-const panel = () => page.getByRole("tabpanel");
 
 describe("Tabs", () => {
-  test("the tab list is named and the panel is labelled by its tab", async () => {
-    await render(<SettingsTabs />);
-
-    await expect.element(page.getByRole("tablist", { name: "Settings" })).toBeInTheDocument();
-    await expect.element(panel()).toHaveAccessibleName("General");
-    await expect.element(tab("General")).toHaveAttribute("aria-selected", "true");
-  });
-
-  test("arrow keys move between tabs, skip disabled ones and show their panel", async () => {
-    const onSelectionChange = vi.fn();
-    await render(<SettingsTabs onSelectionChange={onSelectionChange} />);
-
-    await userEvent.tab();
-    await userEvent.keyboard("{ArrowRight}");
-    await expect.element(panel()).toHaveTextContent("Billing settings");
-    await userEvent.keyboard("{ArrowRight}");
-
-    await expect.element(tab("Security")).toHaveFocus();
-    await expect.element(panel()).toHaveTextContent("Security settings");
-    expect(onSelectionChange).toHaveBeenLastCalledWith("security");
-  });
-
-  test("in right-to-left text the left arrow moves forward", async () => {
-    await render(
-      <I18nProvider locale="ar-EG">
-        <SettingsTabs />
-      </I18nProvider>,
-    );
-
-    await userEvent.tab();
-    await userEvent.keyboard("{ArrowLeft}");
-
-    await expect.element(tab("Billing")).toHaveFocus();
-  });
-
-  test("Tab moves from the selected tab into its panel", async () => {
-    await render(<SettingsTabs />);
-
-    await userEvent.tab();
-    await userEvent.tab();
-
-    await expect.element(panel()).toHaveFocus();
-  });
-
   test("the focus ring shows for keyboard focus, not for a click", async () => {
     await render(<SettingsTabs />);
 

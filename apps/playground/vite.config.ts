@@ -39,6 +39,7 @@ export default defineConfig({
             "apps/playground/src/**/*.browser.test.tsx",
             "packages/registry/components/**/*.browser.test.tsx",
           ],
+          setupFiles: ["src/browser-test-setup.ts"],
           browser: {
             enabled: true,
             headless: true,

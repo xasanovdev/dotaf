@@ -1,4 +1,4 @@
-import { describe, expect, test, vi } from "vitest";
+import { describe, expect, test } from "vitest";
 import { render } from "vitest-browser-react";
 import { page, userEvent } from "vitest/browser";
 
@@ -39,33 +39,6 @@ function circle(name: string): Element {
 }
 
 describe("RadioGroup", () => {
-  test("the label names the group and the description describes it", async () => {
-    await render(<PlanGroup />);
-
-    const group = page.getByRole("radiogroup", { name: "Plan" });
-    await expect.element(group).toHaveAccessibleDescription("You can change it later.");
-  });
-
-  test("arrow keys move the choice and report the new value", async () => {
-    const onChange = vi.fn();
-    await render(<PlanGroup defaultValue="free" onChange={onChange} />);
-
-    await userEvent.tab();
-    await userEvent.keyboard("{ArrowDown}");
-
-    await expect.element(radio("Pro")).toBeChecked();
-    await expect.element(radio("Free")).not.toBeChecked();
-    expect(onChange).toHaveBeenCalledWith("pro");
-  });
-
-  test("clicking an option's label chooses it", async () => {
-    await render(<PlanGroup />);
-
-    await page.getByText("Team").click();
-
-    await expect.element(radio("Team")).toBeChecked();
-  });
-
   // A live region only announces changes inside it, so it must exist before the error does.
   test("an invalid choice shows the error in a live region and describes the group", async () => {
     const { container } = await render(

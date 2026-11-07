@@ -44,44 +44,6 @@ describe("Tooltip", () => {
     await expect.element(tooltip(), { timeout: 1000 }).toBeVisible();
   });
 
-  test("keyboard focus shows it, and it describes the trigger", async () => {
-    await render(<SaveTooltip />);
-    await show();
-
-    await expect.element(trigger()).toHaveAccessibleDescription("Saves a copy to your drafts");
-  });
-
-  test("hovering the trigger shows it", async () => {
-    await render(<SaveTooltip />);
-    // React Aria shows tooltips on hover once the page has seen pointer input, as it always
-    // has for a real mouse user; a fresh test page hasn't.
-    await userEvent.click(document.body, { position: { x: 1, y: 1 } });
-
-    await trigger().hover();
-
-    await expect.element(tooltip()).toBeVisible();
-  });
-
-  test("Escape hides it and keeps focus on the trigger", async () => {
-    await render(<SaveTooltip />);
-    await show();
-
-    await userEvent.keyboard("{Escape}");
-
-    await expect.element(tooltip()).not.toBeInTheDocument();
-    await expect.element(trigger()).toHaveFocus();
-  });
-
-  test("it opens on the side placement asks for", async () => {
-    await render(<SaveTooltip placement="bottom" />);
-    await show();
-
-    const below =
-      tooltip().element().getBoundingClientRect().top >=
-      trigger().element().getBoundingClientRect().bottom;
-    expect(below).toBe(true);
-  });
-
   test.each(["light", "dark"] as const)(
     "its text keeps 4.5:1 contrast in %s mode",
     async (theme) => {

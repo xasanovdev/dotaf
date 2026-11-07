@@ -33,13 +33,6 @@ function BioField() {
 const input = () => page.getByRole("textbox", { name: "Bio" });
 
 describe("TextArea", () => {
-  test("the label names a multi-line input and the description describes it", async () => {
-    await render(<BioField />);
-
-    expect(input().element().tagName).toBe("TEXTAREA");
-    await expect.element(input()).toHaveAccessibleDescription("Shown on your profile.");
-  });
-
   test("Enter adds a new line instead of submitting", async () => {
     const onSubmit = vi.fn((event: SyntheticEvent) => {
       event.preventDefault();

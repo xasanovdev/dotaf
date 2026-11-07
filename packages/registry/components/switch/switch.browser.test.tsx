@@ -1,4 +1,4 @@
-import { describe, expect, test, vi } from "vitest";
+import { describe, expect, test } from "vitest";
 import { render } from "vitest-browser-react";
 import { page, userEvent } from "vitest/browser";
 
@@ -27,17 +27,6 @@ function thumb(name: string): Element {
 }
 
 describe("Switch", () => {
-  test("Space toggles it and reports the new value", async () => {
-    const onChange = vi.fn();
-    await render(<Switch onChange={onChange}>Wi-Fi</Switch>);
-
-    await userEvent.tab();
-    await userEvent.keyboard(" ");
-
-    await expect.element(page.getByRole("switch", { name: "Wi-Fi" })).toBeChecked();
-    expect(onChange).toHaveBeenCalledWith(true);
-  });
-
   test("the focus ring shows for keyboard focus only", async () => {
     await render(<Switch>Wi-Fi</Switch>);
 

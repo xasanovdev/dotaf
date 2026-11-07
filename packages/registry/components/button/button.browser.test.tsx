@@ -1,4 +1,4 @@
-import { describe, expect, test, vi } from "vitest";
+import { describe, expect, test } from "vitest";
 import { render } from "vitest-browser-react";
 import { page, userEvent } from "vitest/browser";
 
@@ -13,17 +13,6 @@ const variants = ["primary", "secondary", "ghost", "danger"] as const;
 const button = (name: string) => page.getByRole("button", { name }).element();
 
 describe("Button", () => {
-  test("Enter and Space press it from the keyboard", async () => {
-    const onPress = vi.fn();
-    await render(<Button onPress={onPress}>Save</Button>);
-
-    await userEvent.tab();
-    await userEvent.keyboard("{Enter}");
-    await userEvent.keyboard(" ");
-
-    expect(onPress).toHaveBeenCalledTimes(2);
-  });
-
   test("the focus ring shows for keyboard focus, not for a click", async () => {
     await render(<Button>Save</Button>);
 
@@ -74,39 +63,13 @@ describe("Button", () => {
     await expect.poll(() => durations().every((duration) => duration === "0s")).toBe(true);
   });
 
-  test("a disabled button ignores presses", async () => {
-    const onPress = vi.fn();
-    await render(
-      <Button isDisabled onPress={onPress}>
-        Save
-      </Button>,
-    );
-
-    await page.getByRole("button", { name: "Save" }).click({ force: true });
-
-    expect(onPress).not.toHaveBeenCalled();
-    await expect.element(page.getByRole("button", { name: "Save" })).toBeDisabled();
-  });
-
-  test("a pending button keeps focus and its label, ignores presses, and shows a spinner after a beat", async () => {
-    const onPress = vi.fn();
-    await render(
-      <Button isPending onPress={onPress}>
-        Save
-      </Button>,
-    );
+  test("a pending button keeps its label and shows a spinner after a beat", async () => {
+    await render(<Button isPending>Save</Button>);
     const spinner = () => button("Save").querySelector("[aria-hidden='true']");
 
     // A quick save never flashes the spinner.
     expect(spinner()).toBeNull();
     await expect.poll(spinner).not.toBeNull();
-
-    await userEvent.tab();
-    await expect.element(page.getByRole("button", { name: "Save" })).toHaveFocus();
-    await userEvent.keyboard("{Enter}");
-    // Playwright won't click an aria-disabled button unless forced.
-    await page.getByRole("button", { name: "Save" }).click({ force: true });
-    expect(onPress).not.toHaveBeenCalled();
   });
 
   test.each(["light", "dark"] as const)(

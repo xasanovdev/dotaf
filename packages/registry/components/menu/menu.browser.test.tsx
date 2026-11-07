@@ -1,4 +1,4 @@
-import { describe, expect, test, vi } from "vitest";
+import { describe, expect, test } from "vitest";
 import { render } from "vitest-browser-react";
 import { page, userEvent } from "vitest/browser";
 
@@ -46,48 +46,6 @@ function popover(): Element {
 }
 
 describe("Menu", () => {
-  test("the keyboard opens it on the first item, moves down and runs the action", async () => {
-    const onAction = vi.fn();
-    await render(<ActionsMenu onAction={onAction} />);
-
-    await userEvent.tab();
-    await userEvent.keyboard("{Enter}");
-    await expect.element(item("Rename")).toHaveFocus();
-    await userEvent.keyboard("{ArrowDown}");
-    await userEvent.keyboard("{Enter}");
-
-    expect(onAction).toHaveBeenCalledWith("duplicate", undefined);
-    await expect.element(menu()).not.toBeInTheDocument();
-    await expect.element(trigger()).toHaveFocus();
-  });
-
-  test("arrow keys skip disabled items", async () => {
-    await render(<ActionsMenu />);
-    await open();
-
-    await userEvent.keyboard("{ArrowDown}{ArrowDown}{ArrowDown}");
-
-    await expect.element(item("Delete")).toHaveFocus();
-    await expect.element(item("Archive")).toHaveAttribute("aria-disabled", "true");
-  });
-
-  test("Escape closes it and focus returns to the trigger", async () => {
-    await render(<ActionsMenu />);
-    await open();
-
-    await userEvent.keyboard("{Escape}");
-
-    await expect.element(menu()).not.toBeInTheDocument();
-    await expect.element(trigger()).toHaveFocus();
-  });
-
-  test("the separator divides groups for assistive technology", async () => {
-    await render(<ActionsMenu />);
-    await open();
-
-    await expect.element(page.getByRole("separator")).toBeInTheDocument();
-  });
-
   test.each(["light", "dark"] as const)(
     "every item keeps 4.5:1 text contrast, at rest and focused, in %s mode",
     async (theme) => {

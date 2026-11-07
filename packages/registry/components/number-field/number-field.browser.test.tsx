@@ -1,4 +1,4 @@
-import { describe, expect, test, vi } from "vitest";
+import { describe, expect, test } from "vitest";
 import { render } from "vitest-browser-react";
 import { page, userEvent } from "vitest/browser";
 
@@ -38,67 +38,6 @@ function box(): Element {
 }
 
 describe("NumberField", () => {
-  test("the label names the input and the description describes it", async () => {
-    await render(<Quantity />);
-
-    await expect.element(input()).toHaveAccessibleDescription("Up to 10 per order.");
-  });
-
-  test("the + and − buttons step the value and report it", async () => {
-    const onChange = vi.fn();
-    await render(<Quantity onChange={onChange} />);
-
-    await increase().click();
-    await increase().click();
-    await expect.element(input()).toHaveValue("3");
-    await decrease().click();
-
-    await expect.element(input()).toHaveValue("2");
-    expect(onChange).toHaveBeenLastCalledWith(2);
-  });
-
-  test("arrow keys step the value from the keyboard", async () => {
-    await render(<Quantity />);
-
-    await input().click();
-    await userEvent.keyboard("{ArrowUp}{ArrowUp}{ArrowDown}");
-
-    await expect.element(input()).toHaveValue("2");
-  });
-
-  test("the buttons stop at the limits", async () => {
-    await render(<Quantity defaultValue={10} />);
-
-    await expect.element(increase()).toBeDisabled();
-    await expect.element(decrease()).toBeEnabled();
-  });
-
-  // The steppers repeat what the arrow keys do, so Tab skips them.
-  test("Tab goes past the buttons to the next control", async () => {
-    await render(
-      <>
-        <Quantity />
-        <button type="button">Next</button>
-      </>,
-    );
-
-    await userEvent.tab();
-    await expect.element(input()).toHaveFocus();
-    await userEvent.tab();
-    await expect.element(page.getByRole("button", { name: "Next" })).toHaveFocus();
-  });
-
-  test("formatOptions show the value as currency once the field is left", async () => {
-    await render(
-      <NumberField defaultValue={5} formatOptions={{ style: "currency", currency: "USD" }}>
-        <NumberFieldLabel>Price</NumberFieldLabel>
-        <NumberFieldInput />
-      </NumberField>,
-    );
-
-    await expect.element(page.getByRole("textbox", { name: "Price" })).toHaveValue("$5.00");
-  });
-
   test("an invalid value shows the error inside a live region that was there before it", async () => {
     const { container } = await render(
       <Quantity

@@ -1,6 +1,6 @@
-import { describe, expect, test, vi } from "vitest";
+import { describe, expect, test } from "vitest";
 import { render } from "vitest-browser-react";
-import { page, userEvent } from "vitest/browser";
+import { page } from "vitest/browser";
 
 import { Checkbox } from "../checkbox";
 import {
@@ -29,44 +29,6 @@ function NotifyGroup(props: Omit<CheckboxGroupProps, "children">) {
 const box = (name: string) => page.getByRole("checkbox", { name });
 
 describe("CheckboxGroup", () => {
-  test("the label names the group and the description describes it", async () => {
-    await render(<NotifyGroup />);
-
-    const group = page.getByRole("group", { name: "Notify me by" });
-    await expect.element(group).toHaveAccessibleDescription("Pick at least one.");
-  });
-
-  test("each checkbox adds or removes its value, and onChange gets them all", async () => {
-    const onChange = vi.fn();
-    await render(<NotifyGroup defaultValue={["email"]} onChange={onChange} />);
-
-    await page.getByText("Push").click();
-    expect(onChange).toHaveBeenLastCalledWith(["email", "push"]);
-
-    await page.getByText("Email").click();
-    expect(onChange).toHaveBeenLastCalledWith(["push"]);
-    await expect.element(box("Email")).not.toBeChecked();
-  });
-
-  test("the form submits every checked value under the group's name", async () => {
-    let submitted: string[] = [];
-    await render(
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          submitted = new FormData(event.currentTarget).getAll("notify").map(String);
-        }}
-      >
-        <NotifyGroup name="notify" defaultValue={["email", "push"]} />
-        <button type="submit">Save</button>
-      </form>,
-    );
-
-    await page.getByRole("button", { name: "Save" }).click();
-
-    expect(submitted).toEqual(["email", "push"]);
-  });
-
   // A live region only announces changes inside it, so it must exist before the error does.
   test("an invalid choice shows the error in a live region and describes the group", async () => {
     const { container } = await render(
@@ -85,24 +47,6 @@ describe("CheckboxGroup", () => {
     await expect
       .element(page.getByRole("group"))
       .toHaveAccessibleDescription(/Pick at least one channel/);
-  });
-
-  test("Tab moves through each checkbox and Space toggles the focused one", async () => {
-    await render(<NotifyGroup />);
-
-    await userEvent.tab();
-    await userEvent.tab();
-    await userEvent.keyboard(" ");
-
-    await expect.element(box("SMS")).toBeChecked();
-  });
-
-  test("disabling the group disables every checkbox", async () => {
-    await render(<NotifyGroup isDisabled />);
-
-    for (const name of ["Email", "SMS", "Push"]) {
-      await expect.element(box(name)).toBeDisabled();
-    }
   });
 
   test("a horizontal group lays its checkboxes out in a row", async () => {

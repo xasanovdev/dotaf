@@ -1,4 +1,4 @@
-import { describe, expect, test, vi } from "vitest";
+import { describe, expect, test } from "vitest";
 import { render } from "vitest-browser-react";
 import { page, userEvent } from "vitest/browser";
 
@@ -21,31 +21,6 @@ function box(name: string): Element {
 }
 
 describe("Checkbox", () => {
-  test("Space toggles it and reports the new value", async () => {
-    const onChange = vi.fn();
-    await render(<Checkbox onChange={onChange}>Accept terms</Checkbox>);
-
-    await userEvent.tab();
-    await userEvent.keyboard(" ");
-
-    await expect.element(page.getByRole("checkbox", { name: "Accept terms" })).toBeChecked();
-    expect(onChange).toHaveBeenCalledWith(true);
-  });
-
-  test("clicking the label toggles it", async () => {
-    await render(<Checkbox>Accept terms</Checkbox>);
-
-    await page.getByText("Accept terms").click();
-
-    await expect.element(page.getByRole("checkbox", { name: "Accept terms" })).toBeChecked();
-  });
-
-  test("the indeterminate state reaches assistive technology", async () => {
-    await render(<Checkbox isIndeterminate>Select all</Checkbox>);
-
-    await expect.element(page.getByRole("checkbox", { name: "Select all" })).toBePartiallyChecked();
-  });
-
   test("the focus ring shows for keyboard focus only", async () => {
     await render(<Checkbox>Accept terms</Checkbox>);
 

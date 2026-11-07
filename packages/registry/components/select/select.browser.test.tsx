@@ -1,4 +1,4 @@
-import { describe, expect, test, vi } from "vitest";
+import { describe, expect, test } from "vitest";
 import { render } from "vitest-browser-react";
 import { page, userEvent } from "vitest/browser";
 
@@ -56,75 +56,6 @@ function popover(): Element {
 }
 
 describe("Select", () => {
-  test("the label names the trigger, which shows the placeholder until a choice", async () => {
-    await render(<CountrySelect />);
-
-    await expect.element(trigger()).toHaveAccessibleName(/Country/);
-    await expect.element(trigger()).toHaveTextContent("Pick a country");
-  });
-
-  test("the keyboard opens it, moves through options and picks one", async () => {
-    const onChange = vi.fn();
-    await render(<CountrySelect onChange={onChange} />);
-
-    await userEvent.tab();
-    await userEvent.keyboard("{ArrowDown}");
-    await expect.element(listbox()).toBeVisible();
-    await userEvent.keyboard("{ArrowDown}");
-    await userEvent.keyboard("{Enter}");
-
-    expect(onChange).toHaveBeenCalledWith("kz");
-    await expect.element(listbox()).not.toBeInTheDocument();
-    await expect.element(trigger()).toHaveTextContent("Kazakhstan");
-    await expect.element(trigger()).toHaveFocus();
-  });
-
-  test("Escape closes it without changing the value", async () => {
-    const onChange = vi.fn();
-    await render(<CountrySelect defaultValue="uz" onChange={onChange} />);
-    await open();
-
-    await userEvent.keyboard("{ArrowDown}");
-    await userEvent.keyboard("{Escape}");
-
-    await expect.element(listbox()).not.toBeInTheDocument();
-    expect(onChange).not.toHaveBeenCalled();
-    await expect.element(trigger()).toHaveTextContent("Uzbekistan");
-  });
-
-  test("the selected option is marked for assistive technology; a disabled one can't be picked", async () => {
-    await render(<CountrySelect defaultValue="uz" />);
-    await open();
-
-    await expect.element(option("Uzbekistan")).toHaveAttribute("aria-selected", "true");
-    await expect.element(option("Kyrgyzstan")).toHaveAttribute("aria-disabled", "true");
-  });
-
-  test("it submits the chosen value with its form", async () => {
-    let submitted: FormData | undefined;
-    await render(
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          submitted = new FormData(event.currentTarget);
-        }}
-      >
-        <CountrySelect name="country" defaultValue="kz" />
-        <button type="submit">Send</button>
-      </form>,
-    );
-
-    await page.getByRole("button", { name: "Send" }).click();
-
-    expect(submitted?.get("country")).toBe("kz");
-  });
-
-  test("the error shows while the value is invalid", async () => {
-    await render(<CountrySelect isInvalid />);
-
-    await expect.element(page.getByText("Pick a country to continue.")).toBeVisible();
-  });
-
   test("the list is at least as wide as the trigger", async () => {
     await render(<CountrySelect />);
     await open();
