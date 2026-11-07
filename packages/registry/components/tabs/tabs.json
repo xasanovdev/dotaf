@@ -1,0 +1,55 @@
+{
+  "name": "tabs",
+  "description": "Switches between panels of related content in one place, such as the sections of a settings page; only the selected panel shows. Compose TabList (holding Tabs) and one TabPanel per Tab inside Tabs, all exported from the tabs file; a Tab and its TabPanel share an id. Give TabList an aria-label. For navigation between pages use links, not tabs.",
+  "dependencies": ["react-aria-components"],
+  "props": [
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "description": "A TabList, then one TabPanel per Tab."
+    },
+    {
+      "name": "selectedKey",
+      "type": "Key | null",
+      "description": "Controlled selected tab id; pair with onSelectionChange."
+    },
+    {
+      "name": "defaultSelectedKey",
+      "type": "Key",
+      "description": "Initially selected tab id when uncontrolled; the first tab otherwise."
+    },
+    {
+      "name": "onSelectionChange",
+      "type": "(key: Key) => void",
+      "description": "Called with the newly selected tab's id."
+    },
+    {
+      "name": "orientation",
+      "type": "\"horizontal\" | \"vertical\"",
+      "default": "\"horizontal\"",
+      "description": "vertical puts the tab list beside the panel, for many or long tab names."
+    },
+    {
+      "name": "keyboardActivation",
+      "type": "\"automatic\" | \"manual\"",
+      "default": "\"automatic\"",
+      "description": "manual makes arrow keys only move focus, and Enter or Space select; use it when a panel is slow to render."
+    },
+    {
+      "name": "isDisabled",
+      "type": "boolean",
+      "description": "Disables every tab."
+    },
+    {
+      "name": "disabledKeys",
+      "type": "Iterable<Key>",
+      "description": "Ids of tabs that can't be selected; or set isDisabled on a Tab."
+    },
+    {
+      "name": "ref",
+      "type": "Ref<HTMLDivElement>",
+      "description": "The wrapping element."
+    }
+  ],
+  "example": "<Tabs>\n  <TabList aria-label=\"Settings\">\n    <Tab id=\"general\">General</Tab>\n    <Tab id=\"billing\">Billing</Tab>\n  </TabList>\n  <TabPanel id=\"general\">…</TabPanel>\n  <TabPanel id=\"billing\">…</TabPanel>\n</Tabs>"
+}

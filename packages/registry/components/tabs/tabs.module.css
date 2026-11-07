@@ -1,0 +1,92 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dotaf-space-4);
+  font-family: var(--dotaf-font-sans);
+}
+
+.root[data-orientation="vertical"] {
+  flex-direction: row;
+}
+
+.list {
+  display: flex;
+  gap: var(--dotaf-space-1);
+  border-bottom: 1px solid var(--dotaf-color-border);
+}
+
+.list[data-orientation="vertical"] {
+  flex-direction: column;
+  border-bottom: none;
+  border-inline-end: 1px solid var(--dotaf-color-border);
+}
+
+.tab {
+  padding: var(--dotaf-space-2) var(--dotaf-space-3);
+  /* The marker: a border on the side facing the panel that turns primary on the selected
+     tab. Only .tab and .tab[data-selected] set its color. */
+  border: 0 solid transparent;
+  border-bottom-width: 2px;
+  color: var(--dotaf-color-muted-fg);
+  font-size: var(--dotaf-text-sm);
+  font-weight: var(--dotaf-font-weight-medium);
+  white-space: nowrap;
+  cursor: default;
+  outline: none;
+  transition:
+    color var(--dotaf-duration-fast) var(--dotaf-ease-out),
+    border-color var(--dotaf-duration-fast) var(--dotaf-ease-out);
+}
+
+.list[data-orientation="vertical"] .tab {
+  border-bottom-width: 0;
+  border-inline-end-width: 2px;
+}
+
+.tab[data-hovered] {
+  color: var(--dotaf-color-fg);
+}
+
+.tab[data-selected] {
+  border-color: var(--dotaf-color-primary);
+  color: var(--dotaf-color-fg);
+}
+
+.tab[data-focus-visible] {
+  border-radius: var(--dotaf-radius-sm);
+  outline: var(--dotaf-focus-ring);
+  outline-offset: calc(var(--dotaf-focus-ring-offset) * -1);
+}
+
+.tab[data-disabled] {
+  opacity: var(--dotaf-opacity-disabled);
+}
+
+.panel {
+  color: var(--dotaf-color-fg);
+  font-size: var(--dotaf-text-sm);
+  outline: none;
+}
+
+.panel[data-focus-visible] {
+  border-radius: var(--dotaf-radius-sm);
+  outline: var(--dotaf-focus-ring);
+  outline-offset: var(--dotaf-focus-ring-offset);
+}
+
+/* High Contrast mode turns every border CanvasText; keep the marker on the selected tab only. */
+@media (forced-colors: active) {
+  .tab {
+    forced-color-adjust: none;
+    border-color: Canvas;
+    color: CanvasText;
+  }
+
+  .tab[data-selected] {
+    border-color: Highlight;
+  }
+
+  .tab[data-focus-visible] {
+    outline-color: CanvasText;
+  }
+}
