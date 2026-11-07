@@ -24,7 +24,6 @@ A change is ready for review when all of these hold:
 1. **Design.** Package interfaces follow the `codebase-design` skill; component APIs follow `vercel-composition-patterns`.
 2. **Build.** Logic in `core`, `cli`, `mcp`, `stylelint-config` is written test-first (`tdd` skill): each behaviour has a test that went red before it went green. React code follows `vercel-react-best-practices`; UI follows `web-design-guidelines`.
 3. **Checks.** `pnpm check` passes (format, lint, typecheck, test, build).
-4. **Review.** `react-review` and `code-review` run on the diff, then `simplify`. Every finding is fixed or written down with the reason it stays.
 
 Skills are used when installed; the checks in step 3 apply to everyone.
 
