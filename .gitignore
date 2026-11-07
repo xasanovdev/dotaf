@@ -10,6 +10,9 @@ coverage/
 CLAUDE.local.md
 packages/core/dotaf.schema.json
 
+# AI generated files
+_tmp
+
 # Vitest browser mode writes failure screenshots and traces here.
 .vitest/
 
