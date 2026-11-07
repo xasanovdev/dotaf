@@ -1,0 +1,33 @@
+{
+  "name": "menu",
+  "description": "A list of actions that opens from a button: row actions, an overflow \"more\" button, account menus. Put a trigger button and a Menu inside MenuTrigger, then fill the Menu with MenuItems and MenuSeparators, all exported from the menu file. Menu items run actions; to pick a value use a select. Use variant=\"danger\" on destructive items and put them last, after a separator. To open a dialog from an item, control the dialog's isOpen from onAction. The example's Button comes from the button component.",
+  "dependencies": ["react-aria-components"],
+  "props": [
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "description": "MenuItems and MenuSeparators, in order."
+    },
+    {
+      "name": "onAction",
+      "type": "(key: Key) => void",
+      "description": "Called with the chosen item's id; or give each MenuItem its own onAction."
+    },
+    {
+      "name": "disabledKeys",
+      "type": "Iterable<Key>",
+      "description": "Ids of items that show but can't be chosen; or set isDisabled on a MenuItem."
+    },
+    {
+      "name": "aria-label",
+      "type": "string",
+      "description": "Names the menu when the trigger's text doesn't describe it."
+    },
+    {
+      "name": "ref",
+      "type": "Ref<HTMLDivElement>",
+      "description": "The menu element."
+    }
+  ],
+  "example": "<MenuTrigger>\n  <Button variant=\"ghost\">Actions</Button>\n  <Menu>\n    <MenuItem onAction={rename}>Rename</MenuItem>\n    <MenuItem onAction={duplicate}>Duplicate</MenuItem>\n    <MenuSeparator />\n    <MenuItem variant=\"danger\" onAction={remove}>Delete</MenuItem>\n  </Menu>\n</MenuTrigger>"
+}

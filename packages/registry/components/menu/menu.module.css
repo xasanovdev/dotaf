@@ -1,0 +1,96 @@
+/* React Aria portals the popover to the end of <body>, so it paints above the page. */
+.popover {
+  min-width: max(var(--trigger-width), 10rem);
+  max-height: inherit;
+  overflow: auto;
+  border: 1px solid var(--dotaf-color-border);
+  border-radius: var(--dotaf-radius-md);
+  background: var(--dotaf-color-bg);
+  box-shadow: var(--dotaf-shadow-md);
+  /* Set at rest so the duration token, and with it reduced motion, always applies. */
+  animation-duration: var(--dotaf-duration-normal);
+  animation-timing-function: var(--dotaf-ease-out);
+}
+
+.popover[data-entering] {
+  animation-name: drop;
+}
+
+.popover[data-exiting] {
+  animation-name: drop;
+  animation-direction: reverse;
+}
+
+.popover[data-placement="top"][data-entering],
+.popover[data-placement="top"][data-exiting] {
+  animation-name: lift;
+}
+
+.root {
+  display: grid;
+  padding: var(--dotaf-space-1);
+  font-family: var(--dotaf-font-sans);
+  outline: none;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--dotaf-space-2);
+  padding: var(--dotaf-space-2) var(--dotaf-space-3);
+  border-radius: var(--dotaf-radius-sm);
+  color: var(--dotaf-color-fg);
+  font-size: var(--dotaf-text-sm);
+  cursor: default;
+  outline: none;
+}
+
+.item[data-focused] {
+  background: var(--dotaf-color-muted);
+}
+
+.item[data-variant="danger"] {
+  color: var(--dotaf-color-danger);
+}
+
+/* A danger color on a light fill can drop under 4.5:1; the full fill keeps it readable. */
+.item[data-variant="danger"][data-focused] {
+  background: var(--dotaf-color-danger);
+  color: var(--dotaf-color-on-danger);
+}
+
+.item[data-disabled] {
+  opacity: var(--dotaf-opacity-disabled);
+}
+
+.separator {
+  height: 1px;
+  margin: var(--dotaf-space-1) calc(var(--dotaf-space-1) * -1);
+  border: none;
+  background: var(--dotaf-color-border);
+}
+
+/* High Contrast mode drops backgrounds; mark the focused item with system colors. */
+@media (forced-colors: active) {
+  .item[data-focused],
+  .item[data-variant="danger"][data-focused] {
+    forced-color-adjust: none;
+    background: Highlight;
+    color: HighlightText;
+  }
+}
+
+/* The popover opens below the trigger, or above it when there is no room. */
+@keyframes drop {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--dotaf-space-1) * -1));
+  }
+}
+
+@keyframes lift {
+  from {
+    opacity: 0;
+    transform: translateY(var(--dotaf-space-1));
+  }
+}
