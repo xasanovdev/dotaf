@@ -1,0 +1,45 @@
+{
+  "name": "dialog",
+  "description": "A modal window over a dimmed page that takes focus until it closes: confirmations, short forms, details. Put a trigger button and a Dialog inside DialogTrigger, then compose DialogTitle, DialogDescription and DialogFooter (actions, right-aligned) inside the Dialog, all exported from the dialog file. A button with slot=\"close\" closes it; Escape always does. Add DialogClose, an X in the top-right corner, to dialogs that inform or collect input; pass aria-label to translate its \"Close\" name. Use role=\"alertdialog\" for a decision such as a delete confirmation, and leave DialogClose out of it: Cancel is the way out. To open it from code or a menu item, skip DialogTrigger and control isOpen. The example's Button comes from the button component.",
+  "dependencies": ["react-aria-components"],
+  "props": [
+    {
+      "name": "children",
+      "type": "ReactNode | ((opts: { close: () => void }) => ReactNode)",
+      "description": "DialogTitle, then the content, then DialogFooter. A function receives close."
+    },
+    {
+      "name": "role",
+      "type": "\"dialog\" | \"alertdialog\"",
+      "default": "\"dialog\"",
+      "description": "alertdialog for a decision the user must make; screen readers then also read DialogDescription."
+    },
+    {
+      "name": "isDismissable",
+      "type": "boolean",
+      "default": "false",
+      "description": "Close on a click outside. Leave off for dialogs that ask for a decision."
+    },
+    {
+      "name": "isOpen",
+      "type": "boolean",
+      "description": "Controlled open state, for a dialog opened without a DialogTrigger; pair with onOpenChange."
+    },
+    {
+      "name": "onOpenChange",
+      "type": "(isOpen: boolean) => void",
+      "description": "Called when the dialog asks to open or close: Escape, a close button, a click outside."
+    },
+    {
+      "name": "aria-label",
+      "type": "string",
+      "description": "Names a dialog that has no DialogTitle."
+    },
+    {
+      "name": "ref",
+      "type": "Ref<HTMLElement>",
+      "description": "The dialog's <section> element."
+    }
+  ],
+  "example": "<DialogTrigger>\n  <Button variant=\"danger\">Delete project</Button>\n  <Dialog role=\"alertdialog\">\n    <DialogTitle>Delete project?</DialogTitle>\n    <DialogDescription>This removes every file in it.</DialogDescription>\n    <DialogFooter>\n      <Button slot=\"close\" variant=\"secondary\">Cancel</Button>\n      <Button variant=\"danger\" onPress={remove}>Delete</Button>\n    </DialogFooter>\n  </Dialog>\n</DialogTrigger>"
+}

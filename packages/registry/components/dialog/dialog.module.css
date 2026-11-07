@@ -1,0 +1,131 @@
+/* The layer over the page: dims it and centers the panel. React Aria portals it to the end
+   of <body>, so it paints above the page without a z-index. */
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--dotaf-space-4);
+  background: var(--dotaf-color-scrim);
+  /* Set at rest so the duration token, and with it reduced motion, always applies. */
+  animation-duration: var(--dotaf-duration-normal);
+  animation-timing-function: var(--dotaf-ease-out);
+}
+
+.overlay[data-entering] {
+  animation-name: fade;
+}
+
+.overlay[data-exiting] {
+  animation-name: fade;
+  animation-direction: reverse;
+}
+
+.modal {
+  width: 100%;
+  max-width: 32rem;
+  max-height: 100%;
+  display: flex;
+  animation: inherit;
+}
+
+.overlay[data-entering] .modal,
+.overlay[data-exiting] .modal {
+  animation-name: rise;
+}
+
+.root {
+  position: relative;
+  display: grid;
+  flex: 1;
+  gap: var(--dotaf-space-2);
+  padding: var(--dotaf-space-6);
+  overflow: auto;
+  border: 1px solid var(--dotaf-color-border);
+  border-radius: var(--dotaf-radius-lg);
+  background: var(--dotaf-color-bg);
+  box-shadow: var(--dotaf-shadow-lg);
+  color: var(--dotaf-color-fg);
+  font-family: var(--dotaf-font-sans);
+  /* Focus lands on the dialog itself when it has nothing focusable; it needs no ring. */
+  outline: none;
+}
+
+/* Sits in the corner, outside the grid flow, so the title stays the first row. */
+.close {
+  position: absolute;
+  top: var(--dotaf-space-3);
+  right: var(--dotaf-space-3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--dotaf-space-2);
+  border: none;
+  border-radius: var(--dotaf-radius-md);
+  background: transparent;
+  color: var(--dotaf-color-muted-fg);
+  cursor: default;
+  outline: none;
+  transition:
+    background-color var(--dotaf-duration-fast) var(--dotaf-ease-out),
+    color var(--dotaf-duration-fast) var(--dotaf-ease-out);
+}
+
+.close[data-hovered],
+.close[data-pressed] {
+  background: var(--dotaf-color-muted);
+  color: var(--dotaf-color-fg);
+}
+
+.close[data-focus-visible] {
+  outline: var(--dotaf-focus-ring);
+  outline-offset: var(--dotaf-focus-ring-offset);
+}
+
+.icon {
+  width: var(--dotaf-space-4);
+  height: var(--dotaf-space-4);
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--dotaf-text-lg);
+  font-weight: var(--dotaf-font-weight-semibold);
+}
+
+/* Keeps a long title from running under the X. */
+.root:has(> .close) > .title {
+  padding-right: var(--dotaf-space-8);
+}
+
+.description {
+  margin: 0;
+  color: var(--dotaf-color-muted-fg);
+  font-size: var(--dotaf-text-sm);
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--dotaf-space-2);
+  margin-top: var(--dotaf-space-4);
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(var(--dotaf-space-2)) scale(0.98);
+  }
+}
