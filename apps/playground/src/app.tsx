@@ -8,6 +8,7 @@ import styles from "./app.module.css";
 import { demos } from "./demos.js";
 import { NotificationSettings } from "./examples/notification-settings.js";
 import { ProjectSettings } from "./examples/project-settings.js";
+import { SignUp } from "./examples/sign-up.js";
 
 const themes = [
   { value: "system", label: "System" },
@@ -69,6 +70,7 @@ export function App() {
           <div className={styles.examples}>
             <NotificationSettings />
             <ProjectSettings />
+            <SignUp />
           </div>
         </section>
       </main>

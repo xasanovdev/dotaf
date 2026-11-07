@@ -1,0 +1,42 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--dotaf-space-2);
+  font-family: var(--dotaf-font-sans);
+}
+
+/* Checkboxes share a row; the label, description and error each take a full line. Lines
+   stay at the top when a grid stretches the group taller than its content. */
+.root[data-orientation="horizontal"] {
+  flex-flow: row wrap;
+  align-content: flex-start;
+  column-gap: var(--dotaf-space-4);
+}
+
+.root[data-orientation="horizontal"] > .label,
+.root[data-orientation="horizontal"] > .description,
+.root[data-orientation="horizontal"] > .errorRegion > .error {
+  flex-basis: 100%;
+}
+
+.label {
+  color: var(--dotaf-color-fg);
+  font-size: var(--dotaf-text-sm);
+  font-weight: var(--dotaf-font-weight-medium);
+}
+
+.description {
+  color: var(--dotaf-color-muted-fg);
+  font-size: var(--dotaf-text-xs);
+}
+
+/* No box of its own: an empty region adds no gap, yet stays in the accessibility tree. */
+.errorRegion {
+  display: contents;
+}
+
+.error {
+  color: var(--dotaf-color-danger);
+  font-size: var(--dotaf-text-xs);
+}

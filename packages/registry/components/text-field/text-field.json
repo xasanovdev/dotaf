@@ -1,6 +1,6 @@
 {
   "name": "text-field",
-  "description": "A single-line text input with its label, optional description and validation error. Compose the parts you need inside TextField: TextFieldLabel, TextFieldInput, TextFieldDescription and TextFieldError (renders only while the value is invalid), all exported from the text-field file.",
+  "description": "A single-line text input with its label, optional description and validation error. Compose the parts you need inside TextField: TextFieldLabel, TextFieldInput, TextFieldDescription and TextFieldError (renders only while the value is invalid), all exported from the text-field file. For a password, use TextFieldPasswordInput instead of TextFieldInput: it hides the text and has a button inside the box that shows it; set autoComplete to current-password or new-password.",
   "dependencies": ["react-aria-components"],
   "props": [
     {

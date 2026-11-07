@@ -1,0 +1,66 @@
+{
+  "name": "checkbox-group",
+  "description": "Several independent choices under one label, such as notification channels or interests, where the user may pick any number. Compose the parts inside CheckboxGroup: CheckboxGroupLabel, one Checkbox (from the checkbox component) per option with a value, CheckboxGroupDescription and CheckboxGroupError (renders only while the choice is invalid). onChange reports the checked values and the form submits each under the group's name. For one on/off choice use a single checkbox; for exactly one of several use a radio-group.",
+  "dependencies": ["react-aria-components"],
+  "registryDependencies": ["checkbox"],
+  "props": [
+    {
+      "name": "ref",
+      "type": "Ref<HTMLDivElement>",
+      "description": "The wrapping element, which has the group role."
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Form field name; the form submits each checked value under it."
+    },
+    {
+      "name": "value",
+      "type": "string[]",
+      "description": "Controlled checked values; pair with onChange."
+    },
+    {
+      "name": "defaultValue",
+      "type": "string[]",
+      "description": "Initially checked values when uncontrolled."
+    },
+    {
+      "name": "onChange",
+      "type": "(value: string[]) => void",
+      "description": "Called with every checked value after each change."
+    },
+    {
+      "name": "orientation",
+      "type": "\"horizontal\" | \"vertical\"",
+      "default": "\"vertical\"",
+      "description": "vertical stacks the checkboxes; horizontal puts them in a row, for short labels only."
+    },
+    {
+      "name": "isRequired",
+      "type": "boolean",
+      "description": "Requires at least one checked value before the form submits."
+    },
+    {
+      "name": "isDisabled",
+      "type": "boolean",
+      "description": "Prevents changes and dims every checkbox."
+    },
+    {
+      "name": "isInvalid",
+      "type": "boolean",
+      "description": "Marks the choice invalid from outside, e.g. after a server error."
+    },
+    {
+      "name": "validate",
+      "type": "(value: string[]) => string | string[] | true | null | undefined",
+      "description": "Returns an error message for an invalid choice, shown by CheckboxGroupError."
+    },
+    {
+      "name": "validationBehavior",
+      "type": "\"native\" | \"aria\"",
+      "default": "\"native\"",
+      "description": "native validates on form submit; aria validates as soon as the choice changes."
+    }
+  ],
+  "example": "<CheckboxGroup name=\"notify\" defaultValue={[\"email\"]}>\n  <CheckboxGroupLabel>Notify me by</CheckboxGroupLabel>\n  <Checkbox value=\"email\">Email</Checkbox>\n  <Checkbox value=\"sms\">SMS</Checkbox>\n  <Checkbox value=\"push\">Push</Checkbox>\n  <CheckboxGroupDescription>You can change this later.</CheckboxGroupDescription>\n</CheckboxGroup>"
+}

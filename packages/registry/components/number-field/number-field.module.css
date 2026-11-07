@@ -1,0 +1,118 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dotaf-space-1);
+  font-family: var(--dotaf-font-sans);
+}
+
+.root[data-disabled] {
+  opacity: var(--dotaf-opacity-disabled);
+}
+
+.label {
+  color: var(--dotaf-color-fg);
+  font-size: var(--dotaf-text-sm);
+  font-weight: var(--dotaf-font-weight-medium);
+}
+
+/* The input and its two buttons share one box, drawn like a text input. */
+.box {
+  display: flex;
+  min-height: var(--dotaf-target-min);
+  box-sizing: border-box;
+  align-items: center;
+  border: 1px solid var(--dotaf-color-control-border);
+  border-radius: var(--dotaf-radius-md);
+  background: var(--dotaf-color-bg);
+}
+
+.box[data-hovered] {
+  border-color: var(--dotaf-color-fg);
+}
+
+/* Any focus on the input, not only keyboard focus: it is focused in order to type. */
+.box[data-focus-within] {
+  outline: var(--dotaf-focus-ring);
+  outline-offset: var(--dotaf-focus-ring-offset);
+}
+
+.root[data-invalid] .box {
+  border-color: var(--dotaf-color-danger);
+}
+
+.root[data-invalid] .box[data-focus-within] {
+  outline-color: var(--dotaf-color-danger);
+}
+
+.input {
+  flex: 1;
+  min-width: var(--dotaf-target-min);
+  align-self: stretch;
+  padding: var(--dotaf-space-2) 0;
+  border: 0;
+  background: transparent;
+  color: var(--dotaf-color-fg);
+  font: inherit;
+  font-size: var(--dotaf-text-sm);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  outline: none;
+}
+
+.step {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--dotaf-target-min);
+  min-height: var(--dotaf-target-min);
+  margin: 0 var(--dotaf-space-1);
+  padding: 0;
+  border: 0;
+  border-radius: var(--dotaf-radius-sm);
+  background: transparent;
+  color: var(--dotaf-color-muted-fg);
+  cursor: default;
+  outline: none;
+}
+
+.step[data-hovered],
+.step[data-pressed] {
+  background: var(--dotaf-color-muted);
+  color: var(--dotaf-color-fg);
+}
+
+.step[data-disabled] {
+  opacity: var(--dotaf-opacity-disabled);
+}
+
+.icon {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+.description {
+  color: var(--dotaf-color-muted-fg);
+  font-size: var(--dotaf-text-xs);
+}
+
+/* No box of its own: an empty region adds no gap, yet stays in the accessibility tree. */
+.errorRegion {
+  display: contents;
+}
+
+.error {
+  color: var(--dotaf-color-danger);
+  font-size: var(--dotaf-text-xs);
+}
+
+/* iOS zooms the page into an input whose text is under 16px; touch screens get 16px. */
+@media (pointer: coarse) {
+  .input {
+    font-size: var(--dotaf-text-base);
+  }
+}

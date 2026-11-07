@@ -1,0 +1,10 @@
+.description {
+  margin: 0;
+}
+
+.status {
+  margin-right: auto;
+  align-self: center;
+  color: var(--dotaf-color-muted-fg);
+  font-size: var(--dotaf-text-sm);
+}

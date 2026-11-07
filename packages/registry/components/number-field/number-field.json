@@ -1,0 +1,80 @@
+{
+  "name": "number-field",
+  "description": "A number input with − and + buttons, for quantities, amounts, percentages and other values the user adjusts by steps. Arrow keys step it too, it stays between minValue and maxValue, and formatOptions show currency, percent or units in the user's locale. Compose the parts inside NumberField: NumberFieldLabel, NumberFieldInput (the input between its buttons), NumberFieldDescription and NumberFieldError (renders only while the value is invalid), all exported from the number-field file. For numbers that are really text, such as a phone number, a card number or a code, use a text-field.",
+  "dependencies": ["react-aria-components"],
+  "props": [
+    {
+      "name": "ref",
+      "type": "Ref<HTMLDivElement>",
+      "description": "The wrapping element."
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Form field name; the form submits the number without formatting."
+    },
+    {
+      "name": "value",
+      "type": "number",
+      "description": "Controlled value; pair with onChange."
+    },
+    {
+      "name": "defaultValue",
+      "type": "number",
+      "description": "Initial value when uncontrolled."
+    },
+    {
+      "name": "onChange",
+      "type": "(value: number) => void",
+      "description": "Called with the new number once it is committed: on a step, or when the user leaves the field. NaN when it is empty."
+    },
+    {
+      "name": "minValue",
+      "type": "number",
+      "description": "The smallest allowed value; − is disabled there."
+    },
+    {
+      "name": "maxValue",
+      "type": "number",
+      "description": "The largest allowed value; + is disabled there."
+    },
+    {
+      "name": "step",
+      "type": "number",
+      "default": "1",
+      "description": "How much each button press or arrow key changes the value; typed values snap to it."
+    },
+    {
+      "name": "formatOptions",
+      "type": "Intl.NumberFormatOptions",
+      "description": "How the number is shown, e.g. { style: \"currency\", currency: \"USD\" } or { style: \"percent\" }."
+    },
+    {
+      "name": "isRequired",
+      "type": "boolean",
+      "description": "Requires a value before the form submits."
+    },
+    {
+      "name": "isDisabled",
+      "type": "boolean",
+      "description": "Prevents changes and dims the field."
+    },
+    {
+      "name": "isInvalid",
+      "type": "boolean",
+      "description": "Marks the value invalid from outside, e.g. after a server error."
+    },
+    {
+      "name": "validate",
+      "type": "(value: number) => string | string[] | true | null | undefined",
+      "description": "Returns an error message for an invalid value, shown by NumberFieldError."
+    },
+    {
+      "name": "validationBehavior",
+      "type": "\"native\" | \"aria\"",
+      "default": "\"native\"",
+      "description": "native validates on form submit; aria validates once the value is committed."
+    }
+  ],
+  "example": "<NumberField name=\"quantity\" defaultValue={1} minValue={1} maxValue={10}>\n  <NumberFieldLabel>Quantity</NumberFieldLabel>\n  <NumberFieldInput />\n  <NumberFieldDescription>Up to 10 per order.</NumberFieldDescription>\n</NumberField>"
+}

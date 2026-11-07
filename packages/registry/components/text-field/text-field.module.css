@@ -50,6 +50,88 @@
   outline-color: var(--dotaf-color-danger);
 }
 
+/* The password input and its toggle share one box, drawn like .input. */
+.passwordBox {
+  display: flex;
+  min-height: var(--dotaf-target-min);
+  box-sizing: border-box;
+  align-items: center;
+  border: 1px solid var(--dotaf-color-control-border);
+  border-radius: var(--dotaf-radius-md);
+  background: var(--dotaf-color-bg);
+}
+
+.passwordBox[data-hovered] {
+  border-color: var(--dotaf-color-fg);
+}
+
+/* Any focus on the input, as on .input; the toggle draws its own ring. */
+.passwordBox:has(> .passwordInput[data-focused]) {
+  outline: var(--dotaf-focus-ring);
+  outline-offset: var(--dotaf-focus-ring-offset);
+}
+
+.root[data-invalid] .passwordBox {
+  border-color: var(--dotaf-color-danger);
+}
+
+.root[data-invalid] .passwordBox:has(> .passwordInput[data-focused]) {
+  outline-color: var(--dotaf-color-danger);
+}
+
+.passwordInput {
+  flex: 1;
+  min-width: 0;
+  align-self: stretch;
+  padding: var(--dotaf-space-2) 0 var(--dotaf-space-2) var(--dotaf-space-3);
+  border: 0;
+  background: transparent;
+  color: var(--dotaf-color-fg);
+  font: inherit;
+  font-size: var(--dotaf-text-sm);
+  outline: none;
+}
+
+.passwordInput::placeholder {
+  color: var(--dotaf-color-muted-fg);
+}
+
+.reveal {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--dotaf-target-min);
+  min-height: var(--dotaf-target-min);
+  margin-right: var(--dotaf-space-1);
+  padding: 0;
+  border: 0;
+  border-radius: var(--dotaf-radius-sm);
+  background: transparent;
+  color: var(--dotaf-color-muted-fg);
+  cursor: default;
+  outline: none;
+}
+
+.reveal[data-hovered],
+.reveal[data-pressed] {
+  color: var(--dotaf-color-fg);
+}
+
+.reveal[data-focus-visible] {
+  outline: var(--dotaf-focus-ring);
+}
+
+.eye {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 .description {
   color: var(--dotaf-color-muted-fg);
   font-size: var(--dotaf-text-xs);
@@ -67,7 +149,8 @@
 
 /* iOS zooms the page into an input whose text is under 16px; touch screens get 16px. */
 @media (pointer: coarse) {
-  .input {
+  .input,
+  .passwordInput {
     font-size: var(--dotaf-text-base);
   }
 }

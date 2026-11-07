@@ -1,12 +1,14 @@
 "use client";
 
-import type { Ref } from "react";
+import { useState, type Ref } from "react";
 import {
   TextField as AriaTextField,
   FieldError,
+  Group,
   Input,
   Label,
   Text,
+  ToggleButton,
   type TextFieldProps as AriaTextFieldProps,
   type FieldErrorProps,
   type InputProps,
@@ -37,6 +39,38 @@ export type TextFieldInputProps = Omit<InputProps, "className" | "style">;
 
 export function TextFieldInput(props: TextFieldInputProps) {
   return <Input {...props} className={styles.input} />;
+}
+
+export type TextFieldPasswordInputProps = Omit<InputProps, "className" | "style" | "type">;
+
+/** A password input with a button inside its box that shows or hides the password. */
+export function TextFieldPasswordInput(props: TextFieldPasswordInputProps) {
+  const [isShown, setShown] = useState(false);
+
+  return (
+    <Group className={styles.passwordBox}>
+      <Input
+        {...props}
+        type={isShown ? "text" : "password"}
+        // Spellcheck services can send the text of a visible field to a server.
+        {...(isShown ? { spellCheck: false, autoCapitalize: "off", autoCorrect: "off" } : {})}
+        className={styles.passwordInput}
+      />
+      {/* The name stays "Show password"; aria-pressed tells whether it is shown. */}
+      <ToggleButton
+        isSelected={isShown}
+        onChange={setShown}
+        aria-label="Show password"
+        className={styles.reveal}
+      >
+        <svg viewBox="0 0 16 16" className={styles.eye} aria-hidden="true">
+          <path d="M1.5 8s2.5-4.5 6.5-4.5S14.5 8 14.5 8s-2.5 4.5-6.5 4.5S1.5 8 1.5 8z" />
+          <circle cx="8" cy="8" r="2" />
+          {isShown ? <path d="M2.5 2.5l11 11" /> : null}
+        </svg>
+      </ToggleButton>
+    </Group>
+  );
 }
 
 export type TextFieldDescriptionProps = Omit<TextProps, "className" | "style" | "slot">;

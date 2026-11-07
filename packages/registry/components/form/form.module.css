@@ -1,0 +1,15 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dotaf-space-4);
+  font-family: var(--dotaf-font-sans);
+}
+
+/* The main action sits last, where the eye ends up after the fields. */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--dotaf-space-3);
+  padding-top: var(--dotaf-space-2);
+}

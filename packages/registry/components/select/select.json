@@ -1,6 +1,6 @@
 {
   "name": "select",
-  "description": "Picks one option from a list in a popover, for 4 to about 15 choices; for 2 or 3 use radio buttons, for long lists use a combobox with search. Compose the parts inside Select: SelectLabel, SelectTrigger (shows the value or placeholder), SelectDescription, SelectError (renders only while the value is invalid) and SelectPopover holding SelectItems, all exported from the select file. Each SelectItem's id is the value onChange reports and the form submits.",
+  "description": "Picks one option from a list in a popover, for 4 to about 15 choices; for 2 or 3 use radio buttons, for long lists use a combobox, which filters as the user types. Compose the parts inside Select: SelectLabel, SelectTrigger (shows the value or placeholder), SelectDescription, SelectError (renders only while the value is invalid) and SelectPopover holding SelectItems, all exported from the select file. Each SelectItem's id is the value onChange reports and the form submits.",
   "dependencies": ["react-aria-components"],
   "props": [
     {
