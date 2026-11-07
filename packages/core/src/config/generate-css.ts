@@ -154,6 +154,11 @@ const fixedTokens: Token[] = [
     value: "0 12px 24px -4px rgb(0 0 0 / 0.12), 0 4px 8px -4px rgb(0 0 0 / 0.08)",
     description: "Overlays: dialogs and sheets.",
   },
+  {
+    name: "color-scrim",
+    value: "rgb(0 0 0 / 0.5)",
+    description: "Backdrop behind a modal dialog: dims the page in both themes.",
+  },
   { name: "font-weight-normal", value: "400", description: "Body text." },
   { name: "font-weight-medium", value: "500", description: "Labels and buttons." },
   { name: "font-weight-semibold", value: "600", description: "Titles and headings." },

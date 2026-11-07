@@ -126,6 +126,11 @@ describe("generateCss", () => {
     }
   });
 
+  // A scrim dims the page behind a modal; mixing toward fg would lighten it in dark mode.
+  test("the scrim behind a modal is a see-through black in both themes", () => {
+    expect(rootTokens({})).toMatchObject({ "--dotaf-color-scrim": "rgb(0 0 0 / 0.5)" });
+  });
+
   test("weights, motion, disabled opacity and the focus ring offset are fixed root tokens", () => {
     expect(rootTokens({})).toMatchObject({
       "--dotaf-font-weight-normal": "400",
