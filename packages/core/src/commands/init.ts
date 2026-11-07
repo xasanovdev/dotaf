@@ -85,13 +85,10 @@ export async function initProject(
 
   const writesConfig = !info.hasConfig || options.theme !== undefined;
   if (writesConfig) {
-    const input: DotafConfig = {
-      ...brand,
-      $schema: schemaUrl,
-      paths: await defaultPaths(cwd, info),
-    };
-    parseConfig(input, configFileName);
-    await writeConfig(cwd, input);
+    // Written resolved, so every brand value shows. Unset dark accents stay out of the
+    // resolved config and keep deriving from the light colors.
+    const resolved = parseConfig({ ...brand, paths: await defaultPaths(cwd, info) });
+    await writeConfig(cwd, { $schema: schemaUrl, ...resolved });
   }
 
   const config = await loadConfig(cwd);

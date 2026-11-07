@@ -122,6 +122,49 @@ describe("initProject", () => {
     });
   });
 
+  test("dotaf.json shows every brand value, so a user or agent sees each one it can change", async () => {
+    const root = await project(vite);
+    const askBrand = vi.fn().mockResolvedValue({ colors: { primary: "#16a34a" }, radius: "lg" });
+
+    await initProject(root, { askBrand });
+
+    expect(JSON.parse(await readFile(join(root, "dotaf.json"), "utf8"))).toEqual({
+      $schema: "https://unpkg.com/@dotaf/core/dotaf.schema.json",
+      colors: {
+        primary: "#16a34a",
+        background: "#ffffff",
+        foreground: "#0a0a0a",
+        danger: "#dc2626",
+        success: "#16a34a",
+        warning: "#d97706",
+      },
+      // Dark accents stay out: left unset, they keep deriving from the light colors.
+      dark: { background: "#0a0a0a", foreground: "#fafafa" },
+      font: { sans: "Inter, system-ui, sans-serif", mono: "ui-monospace, monospace" },
+      radius: "lg",
+      density: "comfortable",
+      paths: { css: "src/styles/dotaf.css", components: "src/components/ui" },
+    });
+  });
+
+  test("a dark accent the theme sets is kept", async () => {
+    const root = await project({
+      ...vite,
+      "theme.json": JSON.stringify({ dark: { primary: "#818cf8" } }),
+    });
+
+    await initProject(root, { theme: "theme.json" });
+
+    const written = JSON.parse(await readFile(join(root, "dotaf.json"), "utf8")) as {
+      dark: Record<string, string>;
+    };
+    expect(written.dark).toEqual({
+      primary: "#818cf8",
+      background: "#0a0a0a",
+      foreground: "#fafafa",
+    });
+  });
+
   test("a Next.js app keeps dotaf.css next to its root layout", async () => {
     const root = await project(nextApp);
 

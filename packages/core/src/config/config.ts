@@ -154,5 +154,6 @@ export function parseConfig(input: unknown, source = configFileName): ResolvedCo
   }
   const { colors, dark, font, radius, density, paths } = result.data;
 
-  return { font, radius, density, paths, colors, dark };
+  // Schema order: init writes this object to dotaf.json as it is.
+  return { colors, dark, font, radius, density, paths };
 }
