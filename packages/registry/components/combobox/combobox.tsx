@@ -72,7 +72,10 @@ export type ComboboxPopoverProps<T extends object = object> = Omit<
  */
 export function ComboboxPopover<T extends object>(props: ComboboxPopoverProps<T>) {
   return (
-    <Popover className={styles.popover}>
+    // React Aria keeps a popover 12px from the screen edge by default, which pushes a list as
+    // wide as a full-width trigger past the other edge. The page then scrolls sideways when the
+    // keyboard moves to an option, and React Aria closes the list on that scroll.
+    <Popover containerPadding={0} className={styles.popover}>
       <ListBox
         renderEmptyState={() => <div className={styles.empty}>No matches</div>}
         {...props}

@@ -100,6 +100,8 @@
 
 /* React Aria portals the popover to the end of <body> and sets --trigger-width on it. */
 .popover {
+  /* Border included, so a full-width list is exactly as wide as its trigger. */
+  box-sizing: border-box;
   min-width: var(--trigger-width);
   max-height: inherit;
   overflow: auto;

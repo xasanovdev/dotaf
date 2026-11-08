@@ -64,7 +64,10 @@ export type SelectPopoverProps<T extends object = object> = Omit<
 /** The list of options, in a popover under the trigger. Its children are SelectItems. */
 export function SelectPopover<T extends object>(props: SelectPopoverProps<T>) {
   return (
-    <Popover className={styles.popover}>
+    // React Aria keeps a popover 12px from the screen edge by default, which pushes a list as
+    // wide as a full-width trigger past the other edge. The page then scrolls sideways when the
+    // keyboard moves to an option, and React Aria closes the list on that scroll.
+    <Popover containerPadding={0} className={styles.popover}>
       <ListBox {...props} className={styles.list} />
     </Popover>
   );

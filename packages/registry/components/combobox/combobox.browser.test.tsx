@@ -111,6 +111,17 @@ describe("Combobox", () => {
     expect(width(popover())).toBeGreaterThanOrEqual(width(box()) - 1);
   });
 
+  // A list that pokes past the screen edge scrolls the page sideways when the keyboard moves
+  // to an option, and React Aria closes the list on that scroll.
+  test("a list under a full-width box stays inside the screen", async () => {
+    await render(<CountryBox />);
+    await open();
+
+    const { left, right } = popover().getBoundingClientRect();
+    expect(left).toBeGreaterThanOrEqual(0);
+    expect(right).toBeLessThanOrEqual(document.documentElement.clientWidth);
+  });
+
   test("the focus ring goes around the whole box while the input has focus", async () => {
     await render(<CountryBox />);
 

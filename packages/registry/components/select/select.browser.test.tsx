@@ -64,6 +64,17 @@ describe("Select", () => {
     expect(width(popover())).toBeGreaterThanOrEqual(width(trigger().element()) - 1);
   });
 
+  // A list that pokes past the screen edge scrolls the page sideways when the keyboard moves
+  // to an option, and React Aria closes the list on that scroll.
+  test("a list under a full-width trigger stays inside the screen", async () => {
+    await render(<CountrySelect />);
+    await open();
+
+    const { left, right } = popover().getBoundingClientRect();
+    expect(left).toBeGreaterThanOrEqual(0);
+    expect(right).toBeLessThanOrEqual(document.documentElement.clientWidth);
+  });
+
   test.each(["light", "dark"] as const)(
     "the trigger outline and every option keep their contrast in %s mode",
     async (theme) => {
