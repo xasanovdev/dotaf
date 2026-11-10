@@ -1,0 +1,110 @@
+/* A soft fill in the shape of the content to come, with a lighter band sweeping across it.
+   The fill sits on the lines for text, on the skeleton itself for a circle or a block. */
+.line,
+.root[data-variant="circle"],
+.root[data-variant="block"] {
+  position: relative;
+  overflow: hidden;
+  background: color-mix(in oklch, var(--dotaf-color-fg) 10%, var(--dotaf-color-bg));
+  /* Invisible here; forced colors draw it, since High Contrast mode drops the fill. An
+     outline takes no room and leaves the whole inside to the fill and the sweep. */
+  outline: 1px solid transparent;
+  outline-offset: -1px;
+}
+
+/* The shimmer moves only translate, so it runs on the compositor without repainting. It
+   waits off each edge for a beat between sweeps, runs on the duration token so reduced
+   motion holds it still, and follows the reading direction. */
+.line::after,
+.root[data-variant="circle"]::after,
+.root[data-variant="block"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(
+      in oklch,
+      color-mix(in oklch, var(--dotaf-color-bg) 85%, var(--dotaf-color-fg)) 50%,
+      transparent
+    ),
+    transparent
+  );
+  /* Screen only ever lightens, so the band reads as a shine in both themes, never as a
+     shadow. It lightens a dark fill far more than a light one; a band made mostly of the
+     page color is bright on a light page and dim on a dark one, which evens them out. */
+  mix-blend-mode: screen;
+  translate: -100% 0;
+  animation: shimmer calc(var(--dotaf-duration-normal) * 8) ease-in-out infinite;
+}
+
+.line:dir(rtl)::after,
+.root[data-variant="circle"]:dir(rtl)::after,
+.root[data-variant="block"]:dir(rtl)::after {
+  animation-direction: reverse;
+}
+
+/* Each line is one line of the text around it tall, with the bar the height of its
+   letters in the middle, so N lines take the room N lines of text will. */
+.root[data-variant="text"] {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.line {
+  height: 1em;
+  margin-block: calc((1lh - 1em) / 2);
+  border-radius: var(--dotaf-radius-sm);
+}
+
+.line:last-child:not(:first-child) {
+  width: 60%;
+}
+
+.root[data-variant="circle"] {
+  flex-shrink: 0;
+  border-radius: var(--dotaf-radius-full);
+}
+
+.root[data-size="sm"] {
+  width: var(--dotaf-space-8);
+  height: var(--dotaf-space-8);
+}
+
+.root[data-size="md"] {
+  width: var(--dotaf-space-12);
+  height: var(--dotaf-space-12);
+}
+
+.root[data-size="lg"] {
+  width: var(--dotaf-space-16);
+  height: var(--dotaf-space-16);
+}
+
+.root[data-variant="block"] {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--dotaf-radius-md);
+}
+
+@keyframes shimmer {
+  0%,
+  20% {
+    translate: -100% 0;
+  }
+
+  80%,
+  100% {
+    translate: 100% 0;
+  }
+}
+
+@media (forced-colors: active) {
+  .line,
+  .root[data-variant="circle"],
+  .root[data-variant="block"] {
+    outline-color: GrayText;
+  }
+}

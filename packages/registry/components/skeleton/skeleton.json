@@ -1,0 +1,31 @@
+{
+  "name": "skeleton",
+  "description": "A soft placeholder in the shape of content that is still loading: lines of text, an avatar, an image or a card. Use it when the layout of what's coming is known, so the page doesn't jump when it arrives; for a wait with no known shape, use a spinner. Screen readers skip it, so set aria-busy=\"true\" on the region that is loading. Mirror the real layout: the same rows, the same avatar size, the same number of lines.",
+  "dependencies": [],
+  "props": [
+    {
+      "name": "variant",
+      "type": "\"text\" | \"circle\" | \"block\"",
+      "default": "\"text\"",
+      "description": "text stands for lines of text at the size of the text around it; circle for an avatar; block for an image or card and fills the box it is put in, so give that box a size."
+    },
+    {
+      "name": "lines",
+      "type": "number",
+      "default": "1",
+      "description": "Only for text: how many lines. The last one is shorter, as a paragraph's is."
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\"",
+      "default": "\"md\"",
+      "description": "Only for circle: its diameter. Match the avatar it stands for."
+    },
+    {
+      "name": "ref",
+      "type": "Ref<HTMLDivElement>",
+      "description": "The rendered <div>."
+    }
+  ],
+  "example": "<div className={styles.row} aria-busy=\"true\">\n  <Skeleton variant=\"circle\" size=\"sm\" />\n  <Skeleton lines={2} />\n</div>"
+}

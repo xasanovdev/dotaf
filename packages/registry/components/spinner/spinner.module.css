@@ -1,0 +1,169 @@
+/* Every look draws in the text color around it, so it suits a page, a card or a button.
+   The animations run on the duration tokens: reduced motion sets them to 0ms, and each look
+   then holds still in a shape that still reads as busy. */
+.root {
+  display: inline-block;
+  position: relative;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+.root[data-size="sm"] {
+  width: var(--dotaf-space-4);
+  height: var(--dotaf-space-4);
+}
+
+.root[data-size="md"] {
+  width: var(--dotaf-space-6);
+  height: var(--dotaf-space-6);
+}
+
+.root[data-size="lg"] {
+  width: var(--dotaf-space-8);
+  height: var(--dotaf-space-8);
+}
+
+/* Ring: a faint full track with one arc running round it. */
+.ring {
+  display: block;
+  width: 100%;
+  height: 100%;
+  stroke-width: 2.5;
+  animation: spin calc(var(--dotaf-duration-normal) * 3) linear infinite;
+}
+
+.track {
+  stroke: currentcolor;
+  opacity: 0.2;
+}
+
+.arc {
+  stroke: currentcolor;
+  stroke-linecap: round;
+  stroke-dasharray: 28 100;
+}
+
+/* Dots: three dots that rise and brighten in turn. Held still, they read as an ellipsis. */
+.dots {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  height: 100%;
+}
+
+.dot {
+  width: 22%;
+  aspect-ratio: 1;
+  border-radius: var(--dotaf-radius-full);
+  background: currentcolor;
+  opacity: 0.4;
+  animation: rise calc(var(--dotaf-duration-normal) * 6) ease-in-out infinite;
+}
+
+.dot:nth-child(2) {
+  animation-delay: var(--dotaf-duration-normal);
+}
+
+.dot:nth-child(3) {
+  animation-delay: calc(var(--dotaf-duration-normal) * 2);
+}
+
+/* Petals: eight bars round a center, fading in a sweep. Each starts part-way through the
+   fade, so the sweep runs from the first frame; held still, the fade keeps the shape. */
+.petals {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.petal {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 46%;
+  width: 8%;
+  height: 28%;
+  border-radius: var(--dotaf-radius-full);
+  background: currentcolor;
+  /* The center of the spinner, measured from the bar: 0.5 / 0.28 of its height. */
+  transform-origin: 50% 178%;
+  animation: fade calc(var(--dotaf-duration-normal) * 5) linear infinite;
+}
+
+.petal:nth-child(1) {
+  rotate: 0deg;
+  opacity: 1;
+  animation-delay: calc(var(--dotaf-duration-normal) * -5);
+}
+
+.petal:nth-child(2) {
+  rotate: 45deg;
+  opacity: 0.88;
+  animation-delay: calc(var(--dotaf-duration-normal) * -35 / 8);
+}
+
+.petal:nth-child(3) {
+  rotate: 90deg;
+  opacity: 0.76;
+  animation-delay: calc(var(--dotaf-duration-normal) * -30 / 8);
+}
+
+.petal:nth-child(4) {
+  rotate: 135deg;
+  opacity: 0.64;
+  animation-delay: calc(var(--dotaf-duration-normal) * -25 / 8);
+}
+
+.petal:nth-child(5) {
+  rotate: 180deg;
+  opacity: 0.52;
+  animation-delay: calc(var(--dotaf-duration-normal) * -20 / 8);
+}
+
+.petal:nth-child(6) {
+  rotate: 225deg;
+  opacity: 0.4;
+  animation-delay: calc(var(--dotaf-duration-normal) * -15 / 8);
+}
+
+.petal:nth-child(7) {
+  rotate: 270deg;
+  opacity: 0.28;
+  animation-delay: calc(var(--dotaf-duration-normal) * -10 / 8);
+}
+
+.petal:nth-child(8) {
+  rotate: 315deg;
+  opacity: 0.16;
+  animation-delay: calc(var(--dotaf-duration-normal) * -5 / 8);
+}
+
+@keyframes spin {
+  to {
+    rotate: 1turn;
+  }
+}
+
+@keyframes rise {
+  0%,
+  60%,
+  100% {
+    opacity: 0.4;
+    translate: 0 0;
+  }
+
+  30% {
+    opacity: 1;
+    translate: 0 -40%;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0.16;
+  }
+}

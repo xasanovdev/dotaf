@@ -1,0 +1,31 @@
+{
+  "name": "spinner",
+  "description": "Shows that something is loading when you can't say how far along it is: a panel, a list or a page section waiting for data. Screen readers hear a busy progress bar named by its label, so give it one that says what is loading. Draws in the text color around it. The three looks mean the same thing: pick one for the whole product and keep it. When the shape of the coming content is known, a skeleton shows it better; inside a button, use the button's isPending instead.",
+  "dependencies": ["react-aria-components"],
+  "props": [
+    {
+      "name": "variant",
+      "type": "\"ring\" | \"dots\" | \"petals\"",
+      "default": "\"ring\"",
+      "description": "The look: a ring with a running arc, three rising dots, or eight bars fading round (iOS-like). Use the same one everywhere in a product."
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\"",
+      "default": "\"md\"",
+      "description": "sm sits next to a line of text, md fills a card or panel, lg a whole page section."
+    },
+    {
+      "name": "aria-label",
+      "type": "string",
+      "default": "\"Loading\"",
+      "description": "What screen readers hear; say what is loading, such as \"Loading invoices\"."
+    },
+    {
+      "name": "ref",
+      "type": "Ref<HTMLDivElement>",
+      "description": "The rendered <div role=\"progressbar\">."
+    }
+  ],
+  "example": "<div className={styles.loading} aria-busy=\"true\">\n  <Spinner aria-label=\"Loading invoices\" />\n</div>"
+}

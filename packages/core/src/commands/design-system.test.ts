@@ -161,6 +161,8 @@ describe("listProjectComponents", () => {
       "radio-group",
       "select",
       "separator",
+      "skeleton",
+      "spinner",
       "switch",
       "tabs",
       "text-area",

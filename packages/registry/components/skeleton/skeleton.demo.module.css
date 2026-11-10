@@ -1,0 +1,28 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: var(--dotaf-space-6);
+}
+
+.card {
+  display: grid;
+  gap: var(--dotaf-space-4);
+  padding: var(--dotaf-space-4);
+  border: 1px solid var(--dotaf-color-border);
+  border-radius: var(--dotaf-radius-lg);
+  font-size: var(--dotaf-text-sm);
+}
+
+.media {
+  aspect-ratio: 16 / 9;
+}
+
+.person {
+  display: flex;
+  align-items: center;
+  gap: var(--dotaf-space-3);
+}
+
+.name {
+  width: 50%;
+}

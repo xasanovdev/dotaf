@@ -361,6 +361,13 @@ Every name is prefixed: `color-primary` is `var(--dotaf-color-primary)`.
 | `badge`     | `Badge` with `variant` (neutral, primary, success, warning, danger) | A status label: Active, Draft, Failed  |
 | `separator` | `Separator` with `orientation` (horizontal, vertical)               | A line between groups of content       |
 
+### Loading
+
+| Component  | Parts                                                                                | Use it for                                          |
+| ---------- | ------------------------------------------------------------------------------------ | --------------------------------------------------- |
+| `spinner`  | `Spinner` with `variant` (ring, dots, petals), `size` (sm, md, lg)                   | A wait with no known shape: a panel or list loading |
+| `skeleton` | `Skeleton` with `variant` (text, circle, block), `lines` for text, `size` for circle | A placeholder in the shape of the content to come   |
+
 `dotaf add` brings the components a component uses along with it: `checkbox-group` adds
 `checkbox`. Each one is tested in a real browser: keyboard use and focus, accessible names, contrast
 in light and dark, touch-sized hit areas, and, where they apply, forced colors and right-to-left
